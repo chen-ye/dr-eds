@@ -1,93 +1,88 @@
 # EDS OX
 
+What is known so far:
+- Rear derailleur (RD) and shifter use ble to communicate with each other
+- RD fall to sleep after 20s
+- Shifter fall to sleep after 10s
 
+## Communication with the app
 
-## Getting started
+When wake up RD broadcast it's name `EDS OX` and manufacturer specifica data - 11 bytes. First 6 bytes are mac address. Last five looks like some sort of serial number (?!).
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+When app connect to RD, it become slave, phone become master device.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+After connection master discover primary service `6e400001-b5a3-f393-e0a9-e50e24dcca9e` (Nordic UART service)
 
-## Add your files
+Then it discover RX `6e400003-b5a3-f393-e0a9-e50e24dcca9e` and TX `6e400002-b5a3-f393-e0a9-e50e24dcca9e` characheristics.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Next step is to get `key` which is used for communication. This is done with command `getKey` = `0x11`. 
+
+App send: `fe 32 29 11 08 79 4f 54 6d 4b 35 30 7a 41 15`.
+
+Here is how packet is sructured:
+- offset 00 = `0xfe` - `prefix`
+- offset 01 = `0x32` - `xor byte` which is calculated (`0x32` - 0x32) & 0xff = 0x00
+- offset 02 = `0x29`- `key`
+- offset 03 = `0x11` - `command`
+- offset 04 = `0x08` - `payload length`
+- offset 05-12 = `79 4f 54 6d 4b 35 30 7a` - `payload`
+- offset 13-14 = crc16 of payload
+
+`key`,`command`, `payload length` and `payload` must be XOR-ed with `xor byte`.
+
+Example: here we have `xor byte` of zero, so `command` = 0x11 xor 0x00 = 0x11
+
+In `getCommand` we need very specific `payload`. This seems to be some hardcoded password in the app, which is `yOTmK50z` or in hex `79 4f 54 6d 4b 35 30 7a`.
+
+crc16 calculation is a bit of black magic, but with a little bit a help from the app it can be calculted. See code (when published).
+
+Here are some commands:
+- `0x11` => `getKey` - dec 17
+- `0x97` => `getCurrentGear` - dec 151
+- `0x98` => `serverReportGear` - dec 152
+- `0x99` => `rearLifting` - dec 153
+- `0xfa` => `startRead` - dec 250
+- `0xfb` => `read` - dec 251
+- `0x87` => `getFrontCurrentGear` - dec 135
+
+Unfortunatly I (still) can't manage to receive a reply from RD when send commands which must retrive info. For example app send `startRead` and then multiple times `read` command to retrive information from RD. Here is information:
 
 ```
-cd existing_repo
-git remote add origin https://git.jeckyll.net/published/personal/eds-ox.git
-git branch -M main
-git push -uf origin main
+REMOTE_V:2.58,POWER_1:292,.
+GEARS_V:2.89,POWER_2:712,.
+TOTAL_CNT:12.NUM:6,PTOTECT:2,KeySwitch:0.
+MCU_DATA:14,0,0,1,0,ErrList:0x20,0x0,0x0.
+ERRCODE:0x0.
+GEARS[1]:   0,GEARS[2]: 220,GEARS[3]: 450,GEARS[4]: 650,GEARS[5]: 860,GEARS[6]:1040,GEARS[7]:1240,GEARS[8]:1440,GEARS[9]:1680,GEARS[10]:1920,
 ```
 
-## Integrate with your tools
+As you can see here we have information about shifter firmware version, shifter battery voltage, RD firmware version, RD battery voltage, for how many gears RD is configured, current gear, how may steps RD must do for each gear and other information which is still unknown.
 
-- [ ] [Set up project integrations](https://git.jeckyll.net/published/personal/eds-ox/-/settings/integrations)
+It is interesting that RD have no problem to switch gears with command `rearLifting`. You can see demo here: [https://youtu.be/mDlyekZ2KaY](https://youtu.be/mDlyekZ2KaY)
 
-## Collaborate with your team
+## Communication with the shifter
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+Communication with the shifter is different from communication with the app. It seems that is much simple and much faster. 
 
-## Test and Deploy
+After wake up both RD and Shifter broadcast data. RD broadcast it's name (see above - Communication with the app).
 
-Use the built-in continuous integration in GitLab.
+On the other have shifter is more cryptic. It broardcast some magic numbers for a bit: `070f0014556a8437023a0124000000000000000000`. For now only know part is `0124` which seems to be shifter battery voltage. In any case `070f0014556a8437023a` seems pretty consistent and doesn't change (at least on mine OX - need more testers).
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+After couple of broadcast last part of the message (last 6 bytes) become RD mac address in reverse. It seems that shifter is listening for RD broadcasts and when it find OX device it put it's mac address in his own broadcast. 
 
-***
+Then RD make a connection to the shifter which become slave and RD become master device. 
 
-# Editing this README
+The process is still not fully decoded - work in progress.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+When shifter button is pressed it sends only 3 bytes: `0x04 0x01 0x05`. Here `0x04` is prefix, `0x01` | `0x02` seems to be button, and `0x05` looks like simpe xor checksum.
 
-## Suggestions for a good README
+After that it seems that shifter is listening for reply from thr RD with a `serverReportGear` or `rearLifting` command, because after shift is done it sends `0x04 0x0a 0x0e` which seems like conirmation for changed gear (`0x0a`).
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+## Pairing
 
-## Name
-Choose a self-explaining name for your project.
+First wake up RD (shake bike). Then attach magnetic connector. USB cable must be powered. After that RD led (side one, not top one which will be red for charging) will blink in blue. This seems to make RD to "forget" for old shifter and to try to connect to new one. Without this process RD never try to connect to new shifter.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+DISCLAIMER:
+This information is only for educational and personal use.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+I'm not responsible if you damge your EDS OX. 
