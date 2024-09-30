@@ -82,7 +82,7 @@ After that it seems that shifter is listening for reply from thr RD with a `serv
 
 First wake up RD (shake bike). Then attach magnetic connector. USB cable must be powered. After that RD led (side one, not top one which will be red for charging) will blink in blue. This seems to make RD to "forget" for old shifter and to try to connect to new one. Without this process RD never try to connect to new shifter.
 
-DISCLAIMER:
+# DISCLAIMER
 This information is only for educational and personal use.
 
 I'm not responsible if you damge your EDS OX. 
