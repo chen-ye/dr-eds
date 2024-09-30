@@ -66,7 +66,7 @@ Communication with the shifter is different from communication with the app. It 
 
 After wake up both RD and Shifter broadcast data. RD broadcast it's name (see above - Communication with the app).
 
-On the other have shifter is more cryptic. It broardcast some magic numbers for a bit: `070f0014556a8437023a0124000000000000000000`. For now only know part is `0124` which seems to be shifter battery voltage. In any case `070f0014556a8437023a` seems pretty consistent and doesn't change (at least on mine OX - need more testers).
+On the other hand shifter is more cryptic. It broardcast some magic numbers for a bit: `070f0014556a8437023a0124000000000000000000`. For now only know part is `0124` which seems to be shifter battery voltage. In any case `070f0014556a8437023a` seems pretty consistent and doesn't change (at least on mine OX - need more testers). May be it is just a fixed value which RD seek when trying to connect, or it have some encrypted meaning ...
 
 After couple of broadcast last part of the message (last 6 bytes) become RD mac address in reverse. It seems that shifter is listening for RD broadcasts and when it find OX device it put it's mac address in his own broadcast. 
 
@@ -74,7 +74,7 @@ Then RD make a connection to the shifter which become slave and RD become master
 
 The process is still not fully decoded - work in progress.
 
-When shifter button is pressed it sends only 3 bytes: `0x04 0x01 0x05`. Here `0x04` is prefix, `0x01` | `0x02` seems to be button, and `0x05` looks like simpe xor checksum.
+When shifter button is pressed it sends only 3 bytes: `0x04 0x01 0x05`. Here `0x04` is a prefix, `0x01` or `0x02` seems to be the button, and `0x05` looks like simpe xor checksum.
 
 After that it seems that shifter is listening for reply from thr RD with a `serverReportGear` or `rearLifting` command, because after shift is done it sends `0x04 0x0a 0x0e` which seems like conirmation for changed gear (`0x0a`).
 
