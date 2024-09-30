@@ -60,6 +60,9 @@ As you can see here we have information about shifter firmware version, shifter 
 
 It is interesting that RD have no problem to switch gears with command `rearLifting`. You can see demo here: [https://youtu.be/mDlyekZ2KaY](https://youtu.be/mDlyekZ2KaY)
 
+Demo uses `rearLifting` command. It just send `0xfe, 0x32, key, rearLifting, 0x01, 0x01, crc16, crc16` and then switch back to the same gear `0xfe, 0x32, key, rearLifting, 0x01, 0x02, crc16, crc16`. As you can see `0x01` and `0x02` are payloads for shift up and down.
+
+
 ## Communication with the shifter
 
 Communication with the shifter is different from communication with the app. It seems that is much simple and much faster. 
