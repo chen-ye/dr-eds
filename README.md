@@ -81,7 +81,7 @@ When shifter button is pressed it sends only 3 bytes: `0x04 0x01 0x05`. Here `0x
 
 There is also repeat command `0x03` | `0x04` which are send when button is holded down for multiple shifts. Delay between button press and repeat command is about 1/2 a second. When button is released shifter send `0x09` | `0x0a`.
 
-~~After that it seems that shifter is listening for reply from thr RD with a `serverReportGear` or `rearLifting` command, because after shift is done it sends `0x04 0x0a 0x0e` which seems like conirmation for changed gear (`0x0a`). This part of the process is still unknown.~~
+This means that shifter don't know on which gear RD is.
 
 Simple demo shifting can be found in file `shifter_up_down_on_wakeup.ino` in `demo` folder. Demo will shift up and down every time RD is waked up.
 
