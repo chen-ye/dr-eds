@@ -1,6 +1,15 @@
 /*
  * This demo will sift up and down every time RD is wakeup
  * It require ESP32 board with ble support and arduino IDE
+ * To pair: 
+ * 1. Remove battery from shifter
+ * 2. Attach magntic cable with power source
+ * 3. You must see LED light blink on the side of RD (not on the top which will be red!)
+ * 4. Power ESP32 board - after couple of secocs RD must shift up and down
+ * 5. Let RD sleep - about 3 minutes
+ * 6. Wake up RD - shake it
+ * 7. It must shift again up and down
+ * 8. ... repeat until bored ...
  */
 
 #include <BLEDevice.h>
@@ -8,7 +17,6 @@
 #include <BLEServer.h>
 #include <BLE2902.h>
 
-// name of RD which will look before broadcast
 #define RD "EDS OX"
 
 #define SERVICE_UUID "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
