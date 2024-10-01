@@ -83,7 +83,7 @@ There is also repeat command `0x03` for `0x01` button | `0x04` for `0x02` button
 
 This means that shifter don't know on which gear RD is. It just send button is pressed, holded down or released.
 
-Simple demo shifting can be found in file [shifter_up_down_on_wakeup.ino](https://git.jeckyll.net/published/personal/eds-ox/-/blob/main/demo/shifter_up_down_on_wakeup.ino?ref_type=heads)` in `demo` folder. Demo will shift up and down every time RD is waked up.
+Simple demo shifting can be found in file [shifter_up_down_on_wakeup.ino](https://git.jeckyll.net/published/personal/eds-ox/-/blob/main/demo/shifter_up_down_on_wakeup.ino?ref_type=heads) in `demo` folder. Demo will shift up and down every time RD is waked up.
 
 ## Pairing
 
