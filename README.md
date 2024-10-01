@@ -67,7 +67,7 @@ Demo uses `rearLifting` command. It just send `0xfe, 0x32, key, rearLifting, 0x0
 
 Communication with the shifter is different from communication with the app. It seems that is much simple and much faster. 
 
-After wake up both RD and Shifter broadcast data. RD broadcast it's name (see above - Communication with the app).
+After wake up both RD and Shifter broadcast data. RD broadcast it's name (see above - [Communication with the app](https://git.jeckyll.net/published/personal/eds-ox/-/blob/main/README.md?ref_type=heads#communication-with-the-app)).
 
 On the other hand shifter is more cryptic. It broardcast some magic numbers for a bit: `070f0014556a8437023a0124000000000000000000`. For now only know part is `0124` which seems to be shifter battery voltage. In any case `070f0014556a8437023a` seems pretty consistent and doesn't change (at least on mine OX - need more testers). May be it is just a fixed value which RD seek when trying to connect, or it have some encrypted meaning ...
 
