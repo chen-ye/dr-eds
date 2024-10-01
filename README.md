@@ -79,9 +79,9 @@ Next RD look for primary service `6e400001-b5a3-f393-e0a9-e50e24dcca9e` and TX c
 
 When shifter button is pressed it sends only 3 bytes: `0x04 0x01 0x05`. Here `0x04` is a prefix, `0x01` or `0x02` seems to be the button, and `0x05` looks like simpe xor checksum.
 
-There is also repeat command `0x03` | `0x04` which are send when button is holded down for multiple shifts. Delay between button press and repeat command is about 1/2 a second. When button is released shifter send `0x09` | `0x0a`.
+There is also repeat command `0x03` for `0x01` button | `0x04` for `0x02` button which is send when button is holded down for multiple shifts. Delay between button press and repeat command is about 1/2 a second. When button is released shifter send `0x09` for `0x01` button | `0x0a` for `0x02` button.
 
-This means that shifter don't know on which gear RD is.
+This means that shifter don't know on which gear RD is. It just send button is pressed, holded down or released.
 
 Simple demo shifting can be found in file `shifter_up_down_on_wakeup.ino` in `demo` folder. Demo will shift up and down every time RD is waked up.
 
