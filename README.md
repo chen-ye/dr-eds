@@ -47,7 +47,7 @@ Here is how packet is sructured (which is same as structure above):
 - offset 05 = `0x00` - `payload` - 0x00 xor 0x85 = 0x85
 - offset 06-07 = `0x33 0xc3` - crc16 of payload
 
-crc16 calculation is a bit of black magic, but with a little bit a help from the app it can be calculted. See code (when published).
+crc16 calculation is a bit of black magic, but with a little bit a help from the app it can be calculted. See code snipet here: [crc16.c](https://git.jeckyll.net/published/personal/eds-ox/-/blob/main/demo/crc16.c?ref_type=heads)
 
 Same process is valid for other commands.
 
