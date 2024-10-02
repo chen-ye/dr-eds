@@ -5,6 +5,7 @@ What is known so far:
 - RD fall to sleep after 20s when not connected
 - Shifter fall to sleep after 10s when not connected
 - RD fall to sleep after 3min when connected to shifter
+- RD never fall to sleep when connected to the app
 
 ## Communication with the app
 
@@ -61,7 +62,7 @@ Here are some commands:
 
 Using `startRead` and `read` commands we can extract information about RD. First send `startRead`, then RD will respond with a packet with same command (`startRead`) and payload similar to `00 14 a6 ce 51 00 00 00 00`. For now it is clear that offset 00 and 01 (0x00 0x14) holds how many blocks of information can be retrieved with `read` command. Then send `read` command 0x0014 times in this case. Packet must look like `fe 32 d1 fb 03 00 00 51 2d eb`:
 - offset 00 = `0xfe` - `prefix`
-- offset 01 = `0x32` - `xor byte` - if you use 0x32 there is no need to encode other fields, sice `xor byte` will be 0x00
+- offset 01 = `0x32` - `xor byte` - if you use 0x32 there will be no need to encode other fields, sice `xor byte` will be 0x00
 - offset 02 = `0xd1`- `key`
 - offset 03 = `0xfb` - read `command`
 - offset 04 = `0x03` - `payload length`
@@ -94,15 +95,6 @@ Some values are still unknown, but here is what I guess is valid:
 - `ERRCODE` - unknown - may be fatal error code - 0x0
 - `GEARS[1-TOTAL_CNT]` - number of steps or each gear (right padded with 0x00)
 
-## Demos
-
-### `rearLifting`
-
-[https://youtu.be/mDlyekZ2KaY](https://youtu.be/mDlyekZ2KaY)
-
-Demo uses `rearLifting` command. It just send `0xfe, 0x32, key, rearLifting, 0x01, 0x01, crc16, crc16` and then switch back to the same gear `0xfe, 0x32, key, rearLifting, 0x01, 0x02, crc16, crc16`. As you can see `0x01` and `0x02` are payloads for shift up and down.
-
-
 ## Communication with the shifter
 
 Communication with the shifter is different from communication with the app. It seems that is much simple and much faster. 
@@ -123,11 +115,22 @@ There is also repeat command `0x03` for `0x01` button | `0x04` for `0x02` button
 
 This means that shifter don't know on which gear RD is. It just send button is pressed, holded down or released.
 
-Simple demo shifting can be found in file [shifter_up_down_on_wakeup.ino](https://git.jeckyll.net/published/personal/eds-ox/-/blob/main/demo/shifter_up_down_on_wakeup.ino?ref_type=heads) in `demo` folder. Demo will shift up and down every time RD is waked up.
-
 ## Pairing
 
 First wake up RD (shake bike). Then attach magnetic connector. USB cable must be powered. After that RD led (side one, not top one which will be red for charging) will blink in blue. This seems to make RD to "forget" for old shifter and to try to connect to new one. Without this process RD never try to connect to new shifter.
+
+## Demos
+
+### Shifting using app protcol
+
+[https://youtu.be/mDlyekZ2KaY](https://youtu.be/mDlyekZ2KaY)
+
+Demo uses `rearLifting` command. It just send `0xfe, 0x32, key, rearLifting, 0x01, 0x01, crc16, crc16` and then switch back to the same gear `0xfe, 0x32, key, rearLifting, 0x01, 0x02, crc16, crc16`. As you can see `0x01` and `0x02` are payloads for shift up and down.
+
+### Shifting using shifter protocol
+
+Simple demo shifting can be found in file [shifter_up_down_on_wakeup.ino](https://git.jeckyll.net/published/personal/eds-ox/-/blob/main/demo/shifter_up_down_on_wakeup.ino?ref_type=heads) in `demo` folder. Demo will shift up and down every time RD is waked up.
+
 
 ## MQTT
 It worth nothing to mention, that app uses MQTT to send some statistics to WT. MQTT broker is at `121.196.97.253`, username is `WHEELTOP` and password is `le21923ks`. There are at least two main topics: `/device/notifi/WHEELTOP/` and `/app/user/notifi/WHEELTOP/`.
