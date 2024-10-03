@@ -135,6 +135,12 @@ Simple demo shifting can be found in file [shifter_up_down_on_wakeup.ino](https:
 
 This demo connects to RD and fetch available information about RD [RD_information.ino](https://git.jeckyll.net/published/personal/eds-ox/-/blob/main/demo/RD_information.ino?ref_type=heads)
 
+### Custom shifter with buttons
+
+This is custom shifter with buttons attached to ESP32 microcontroller. You can find code here: [custom_shifter.ino](https://git.jeckyll.net/published/personal/eds-ox/-/blob/main/demo/custom_shifter.ino?ref_type=heads)
+
+Video demostration: [https://www.youtube.com/watch?v=uqFBi5RrbSE](https://www.youtube.com/watch?v=uqFBi5RrbSE)
+
 ## MQTT
 It worth nothing to mention, that app uses MQTT to send some statistics to WT. MQTT broker is at `121.196.97.253`, username is `WHEELTOP` and password is `le21923ks`. There are at least two main topics: `/device/notifi/WHEELTOP/` and `/app/user/notifi/WHEELTOP/`.
 
