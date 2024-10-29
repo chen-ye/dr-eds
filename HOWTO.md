@@ -5,8 +5,8 @@ This document will help you with setup debug environment and collecting data abo
 ## What you need
 
 ### Hardware
-1. Some kind of Blutooth sniffing device. For example: [Holyiot nRF52840 USB dongle](https://vi.aliexpress.com/item/1005004708842967.html)
-2. Original magnetic charging cable or replacement like: [Magnetic Charging Cable USB](https://vi.aliexpress.com/item/1005005089724589.html)
+1. Some kind of Blutooth sniffing device. For example: [Holyiot nRF52840 USB dongle](https://vi.aliexpress.com/item/1005004708842967.html) - please contact seller to send corrected hardware dongle!
+2. Original magnetic charging cable or replacement like: [Magnetic Charging Cable USB](https://vi.aliexpress.com/item/1005005089724589.html) - be sure to purchase correct cable - 2.5mm-8mm NS! Check polarity with DMM before using it - reverse polarity may (always) damage your RD!
 3. Power bank or USB charger
 
 ### Software
@@ -21,7 +21,9 @@ There is very good video explaining setup process and sniffing here:
 ### Flashing (depends from dongle)
 Some USB dongles come preflashed with sniffer firmware, but linked above does not. Flashing is simple process, but you need [nRF Connect](https://www.nordicsemi.com/Products/Development-tools/nRF-Connect-for-Desktop/Download#infotabs)
 
-Sniffer firmware is located in `hex` folder in `nRF sniffer for Bluetooth` package (see 1 from software section)
+Sniffer firmware is located in `hex` folder in `nRF sniffer for Bluetooth` package (see 1 from software section).
+
+NOTE: My first `Holyiot nRF52840 USB dongle` was with hardware bug and doesn't work after flashing. There is patch for firmware to make it work - [https://github.com/danielstuart14/nrfsniffer_patcher/tree/master](https://github.com/danielstuart14/nrfsniffer_patcher/tree/master)
 
 More information can be found in Nordic website: [https://docs.nordicsemi.com/bundle/nrfutil/page/nrfutil-ble-sniffer/guides/overview.html](https://docs.nordicsemi.com/bundle/nrfutil/page/nrfutil-ble-sniffer/guides/overview.html)
 
