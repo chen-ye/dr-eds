@@ -30,3 +30,7 @@ NOTE: My first `Holyiot nRF52840 USB dongle` was with hardware bug and doesn't w
 ## How to sniff
 
 Sniffing process can be seen in `Part 2` video in software section.
+
+RD is very easy to be found in Wireshark list of Bluetooth devices, since it advertise it's name. 
+
+Shifter on the other hand is not so easy to be found, sice it advertise itself for a very brief time, until it is connected by the RD. If you can go to place without any or minimal Blutooth devices, to find your Shifter adres.
