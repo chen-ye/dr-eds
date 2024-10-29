@@ -23,9 +23,9 @@ Some USB dongles come preflashed with sniffer firmware, but linked above does no
 
 Sniffer firmware is located in `hex` folder in `nRF sniffer for Bluetooth` package (see 1 from software section).
 
-NOTE: My first `Holyiot nRF52840 USB dongle` was with hardware bug and doesn't work after flashing. There is patch for firmware to make it work - [https://github.com/danielstuart14/nrfsniffer_patcher/tree/master](https://github.com/danielstuart14/nrfsniffer_patcher/tree/master)
-
 More information can be found in Nordic website: [https://docs.nordicsemi.com/bundle/nrfutil/page/nrfutil-ble-sniffer/guides/overview.html](https://docs.nordicsemi.com/bundle/nrfutil/page/nrfutil-ble-sniffer/guides/overview.html)
+
+NOTE: My first `Holyiot nRF52840 USB dongle` was with hardware bug and doesn't work after flashing. There is patch for firmware to make it work - [https://github.com/danielstuart14/nrfsniffer_patcher/tree/master](https://github.com/danielstuart14/nrfsniffer_patcher/tree/master)
 
 ## How to sniff
 
