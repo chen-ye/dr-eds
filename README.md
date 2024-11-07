@@ -111,7 +111,21 @@ Next RD look for primary service `6e400001-b5a3-f393-e0a9-e50e24dcca9e` and TX c
 
 When shifter button is pressed it sends only 3 bytes: `0x04 0x01 0x05`. Here `0x04` is a prefix, `0x01` or `0x02` seems to be the button, and `0x05` looks like simpe xor checksum.
 
-There is also repeat command `0x03` for `0x01` button | `0x04` for `0x02` button which is send when button is holded down for multiple shifts. Delay between button press and repeat command is about 1/2 a second. When button is released shifter send `0x09` for `0x01` button | `0x0a` for `0x02` button.
+Meanings for position `R` for small sliding button (normal operation):
+- `0x01` - bottom shifter button is pressed - normally going to lower gear | larger cog
+- `0x02` - top shifter button is pressed - normally going to higher gear | smaller cog
+- `0x03` - bottom shifter button is holded down - sended 1/2s after `0x01` - multiple shifts
+- `0x04` - top shifter button is holded down - sended 1/2s after `0x01` - multiple shifts
+
+Meanings for position `T` for small sliding button (fine tune):
+- `0x05` - botton shifter button is pressed - move RD 0.2mm towards smaller cogs
+- `0x06` - top shifter button is pressed - move RD 0.2mm towards biggest cogs
+- `0x07` - bottom shifter button is holded down - sended 1/2s after `0x05` - currently doing nothing
+- `0x08` - top shifter button is holded down - sended 1/2s after `0x06` - currently doing nothing
+
+Common:
+- `0x09` - bottom shifter button is released
+- `0x0a` - top shifter button is releases
 
 This means that shifter don't know on which gear RD is. It just send button is pressed, holded down or released.
 
