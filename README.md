@@ -115,10 +115,10 @@ Meanings for position `R` for small sliding button (normal operation):
 - `0x01` - bottom shifter button is pressed - normally going to lower gear | larger cog
 - `0x02` - top shifter button is pressed - normally going to higher gear | smaller cog
 - `0x03` - bottom shifter button is holded down - sended 1/2s after `0x01` - multiple shifts
-- `0x04` - top shifter button is holded down - sended 1/2s after `0x01` - multiple shifts
+- `0x04` - top shifter button is holded down - sended 1/2s after `0x02` - multiple shifts
 
 Meanings for position `T` for small sliding button (fine tune):
-- `0x05` - botton shifter button is pressed - move RD 0.2mm towards smaller cogs
+- `0x05` - bottom shifter button is pressed - move RD 0.2mm towards smaller cogs
 - `0x06` - top shifter button is pressed - move RD 0.2mm towards biggest cogs
 - `0x07` - bottom shifter button is holded down - sended 1/2s after `0x05` - currently doing nothing
 - `0x08` - top shifter button is holded down - sended 1/2s after `0x06` - currently doing nothing
