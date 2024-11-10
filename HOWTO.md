@@ -34,3 +34,5 @@ Sniffing process can be seen in `Part 2` video in software section.
 RD is very easy to be found in Wireshark list of Bluetooth devices, since it advertise it's name. 
 
 Shifter on the other hand is not so easy to be found, sice it advertise itself for a very brief time, until it is connected by the RD. If you can go to place without any or minimal Blutooth devices, to find your Shifter adres.
+
+Easier way I found is to remove shifter battery and put it back. For a short time shifter mac address and broadcast will appear in wiresharl. Then select mac address to start sniffing shifter trafick and repeat remove/insert battery to get actuall traffic between shifter and RD.
