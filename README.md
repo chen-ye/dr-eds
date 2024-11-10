@@ -127,7 +127,7 @@ Common:
 - `0x09` - bottom shifter button is released
 - `0x0a` - top shifter button is releases
 
-This means that shifter don't know on which gear RD is. It just send button is pressed, holded down or released.
+This means that shifter don't know on which gear RD is. It just send which button is pressed, holded down or released.
 
 ## Pairing
 
