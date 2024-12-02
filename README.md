@@ -165,7 +165,7 @@ App seems to have several access levels which can be activated with some passwor
 - `Dealer` - `3`
 - `OE Factory` - `4`
 
-While there passwords are unknow they are validated with app connecting to WT server (`121.196.97.253`), communication is not encrypted and don't even use TLS. This open atack vector with using a simple MITM proxy.
+While these passwords are unknow they are validated against WT server (`121.196.97.253`). Communication is not encrypted and don't even use TLS. This open atack vector with using a simple MITM proxy.
 
 ## How to elevate account permissions
 
@@ -185,7 +185,7 @@ def response(flow: http.HTTPFlow) -> None:
 
 Run the proxy: `mitmproxy -s mitm_wheeltop.py`. If you want to use proxy on non local addresses run it with `--set block_global=false` option. You can also set `--proxyauth username:password` to enable proxy authentication.
 
-Then setup your phone to use proxy and point it to your mitm proxy.
+Then setup your phone to use proxy and point it to your MITM proxy.
 
 Please note that Android don't allow you to set global proxy settings for all apps. You can use some app like [Super proxy](https://play.google.com/store/apps/details?id=com.scheler.superproxy).
 
