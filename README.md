@@ -187,7 +187,7 @@ Run the proxy: `mitmproxy -s mitm_wheeltop.py`. If you want to use proxy on non 
 
 Then setup your phone to use proxy and point it to your mitm proxy.
 
-Please note that Android don't allow you to set global proxy settings for all apps. You can use some app like `Super proxy` (https://play.google.com/store/apps/details?id=com.scheler.superproxy)
+Please note that Android don't allow you to set global proxy settings for all apps. You can use some app like [Super proxy](https://play.google.com/store/apps/details?id=com.scheler.superproxy).
 
 After that you will be granted `R&D` access. No need to enter any password in the app. You can check access level by going to `User menu` -> `Account permissions`.
 
