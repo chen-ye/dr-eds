@@ -169,7 +169,7 @@ While there passwords are unknow they are validated with app connecting to WT se
 
 ## How to elevate account permissions
 
-You will need to install `mitmproxy` (https://mitmproxy.org/) and run it with simple script like that:
+You will need to install [mitmproxy](https://mitmproxy.org/) and run it with simple script like that [mitm_wheeltop.py]:
 
 ```python
 from mitmproxy import ctx
