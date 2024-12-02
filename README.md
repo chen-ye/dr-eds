@@ -182,7 +182,7 @@ App seems to have several access levels which can be activated with some passwor
 - `Dealer` - `3`
 - `OE Factory` - `4`
 
-While there passwords are unknow they are validated with app connecting to WT server (121.196.97.253), communication is not encrypted and don't even use TLS. This open atack vector with using a simple MITM proxy.
+While there passwords are unknow they are validated with app connecting to WT server (`121.196.97.253`), communication is not encrypted and don't even use TLS. This open atack vector with using a simple MITM proxy.
 
 ## How to elevate account permissions
 
