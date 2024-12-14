@@ -89,7 +89,7 @@ Some values are still unknown, but here is what I guess is valid:
 - `TOTAL_CNT` - total number of gears - 12
 - `NUM` - current gear
 - `PTOTECT` - unknown - 2
-- `KeySwitch` - unknown - 0
+- `KeySwitch` - shifter buttons function - 0 = bottom +, top -, 1 = bottom -, top +
 - `MCU_DATA` - unknown - 14,0,0,1,0
 - `ErrList` - unknown - some kind array of errors? - 0x20,0x0,0x0
 - `ERRCODE` - unknown - may be fatal error code - 0x0
