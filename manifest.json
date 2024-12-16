@@ -1,0 +1,29 @@
+{
+    "icons": [{
+	"src": "/images/automatico_notify.png"
+    },
+    {
+	"src": "/images/automatico.png"
+    },
+    {
+	"src": "/images/automatico_512.png",
+	"sizes": "512x512"
+    }],
+    "id": "drWheeltop",
+    "background_color": "#fff",
+    "theme_color": "#800080",
+    "launch_handler": {
+	"client_mode": "auto"
+    },
+    "name": "drWheeltop",
+    "short_name": "drWheeltop",
+    "description": "Open source WEB/PWA app for Wheeltop OX",
+    "orientation": "any",
+    "screenshots": [],
+    "display": "fullscreen",
+    "dir": "ltr",
+    "lang": "en",
+    "start_url": "https://wheeltop.jeckyl.net/",
+    "scope": "/",
+    "prefer_related_applications": false
+}
