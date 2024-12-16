@@ -52,6 +52,7 @@ function setup()
     $('.section').hide();
     $('.section.scan').show();
     $('.debug').html('');
+    $('.section.info .content').hide();
     info = {};
     raw_info = [];
 }
@@ -294,14 +295,15 @@ function parsePacket(hex, check_confirm = 0)
 	    endBlock();
 	    $('.section').show();
 	    $('.section.scan').hide();
+	    $('.section.info .content').show();
 
 	    var t = parseInt(info['NUM']);
 	    t = parseInt(info['TOTAL_CNT']) - t + 1;
 	    $('.section.action_buttons .button.gear').html(t);
 	    $('.section.action_buttons .button.gears select').val(parseInt(info['TOTAL_CNT']));//.change();
 
-	    $('.section.info .content').html('Battery: RD: ' + (parseInt(info['POWER_2']) / 100).toFixed(2) + 'V, Shifter: ' + (parseInt(info['POWER_1']) / 100).toFixed(2) + 'V<br />');
-	    $('.section.info .content').append('Firmware: RD: ' + info['GEARS_V'] + ', Shifter: ' + info['REMOTE_V'] + '<br />');
+	    $('.section.info .content .left').html('RD[' + info['GEARS_V'] + ']:' + (parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
+	    $('.section.info .content .right').html('Shifter[' + info['REMOTE_V'] + ']:' + (parseInt(info['POWER_1']) / 100).toFixed(2) + 'V');
 
 	    $('.section.gear_values .content').html('');
 	    for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
@@ -336,7 +338,7 @@ function parsePacket(hex, check_confirm = 0)
 
 		ctimeout = setTimeout(timeoutCheck, 1000);
 	    });
-	    buildGears();
+	    buildPresets();
 
 	    $('.section.buttons_function .button').removeClass('selected');
 	    if (parseInt(info['KeySwitch']) == 0) {
@@ -369,7 +371,7 @@ function timeoutCheck()
     error("Command failed");
 }
 
-function buildGears()
+function buildPresets()
 {
     var gears = localStorage.getItem('gears');
     if (gears != null)
@@ -379,7 +381,7 @@ function buildGears()
 
     var s = '';
     for (var t in gears) {
-	s += '<div><div class="button preset" preset="' + t + '">' + t + '</div><div class="button del" preset="' + t + '">x</div></div>';
+	s += '<div class="preset_wrap"><div class="button preset" preset="' + t + '">' + t + '</div><div class="button del" preset="' + t + '">x</div></div>';
     }
     $('.section.gear_values .presets').html(s);
 
@@ -392,16 +394,23 @@ function buildGears()
 		$('.section.gear_values .content .gear[gear="' + a[$(this).attr('preset')][t].gear + '"] input').val(a[$(this).attr('preset')][t].value);
 	    }
 	}
+
+	qalert('Gear values loaded from preset "' + $(this).attr('preset') + '"<br />Click "Set all" to upload then to RD');
     });
     $('.section.gear_values .presets .del').off('click').on('click', function() {
-	var a = localStorage.getItem('gears');
-	a = JSON.parse(a);
-	if (a != null) {
-	    delete a[$(this).attr('preset')];
-	}
-	localStorage.setItem('gears', JSON.stringify(a));
+	var pname =  $(this).attr('preset');
+	if (confirm('Delete preset ' + pname + '?')) {
+	    var a = localStorage.getItem('gears');
+	    a = JSON.parse(a);
+	    if (a != null) {
+		delete a[$(this).attr('preset')];
+	    }
+	    localStorage.setItem('gears', JSON.stringify(a));
 
-	buildGears();
+	    buildPresets();
+
+	    qalert('Preset "' + pname + '" deleted');
+	}
     });
 }
 
@@ -649,7 +658,7 @@ $(document).ready(function() {
     });
     // save as gear values
     $('.gear_values .button.save').on('click', function() {
-	var n = prompt('Enter gear values name:');
+	var n = prompt('Enter gear values preset name (only letters and numbers):');
 	if ((n != null) && (n != "")) {
 	    var s = localStorage.getItem('gears');
 	    if (s == null) s = {}; else s = JSON.parse(s);
@@ -668,38 +677,49 @@ $(document).ready(function() {
 
 	    localStorage.setItem('gears', JSON.stringify(s));
 
-	    buildGears();
+	    buildPresets();
 	}
     });
     // export
     $('.gear_values .button.export').on('click', function() {
-	var exp = {
-	    'current': []
-	};
-	$('.gear_values .content input').each(function() {
-	    var g = $(this).parent().attr('gear');
-	    var v = $(this).val();
-
-	    exp.current.push({
-		'gear': g,
-		'value': v
-	    });
-	});
-
-	var gears = localStorage.getItem('gears');
-	if (gears != null)
-	    exp.gears = JSON.parse(gears);
-
-	var json = JSON.stringify(exp);
-	var blob = new Blob([json], {type: "octet/stream"});
-	var url = window.URL.createObjectURL(blob);
-	var a = document.createElement("a");
-	a.href = url;
 	var d = new Date();
-	a.download = 'drWheeltop-gears-' + d.getFullYear() + (d.getMonth() + 1).toString().padStart(2, 0) + d.getDate().toString().padStart(2, 0) + d.getHours().toString().padStart(2, 0) + d.getMinutes().toString().padStart(2, 0) + d.getSeconds().toString().padStart(2, 0) + '.json';
-	a.click();
+	var fname = 'drWheeltop-gears-' +
+	    d.getFullYear() +
+	    (d.getMonth() + 1).toString().padStart(2, 0) +
+	    d.getDate().toString().padStart(2, 0) +
+	    d.getHours().toString().padStart(2, 0) +
+	    d.getMinutes().toString().padStart(2, 0) +
+	    d.getSeconds().toString().padStart(2, 0) +
+	    '.json';
 
-	qalert('Values saved');
+	if (confirm('Export values and presets to file ' + fname + '?')) {
+	    var exp = {
+		'current': []
+	    };
+	    $('.gear_values .content input').each(function() {
+		var g = $(this).parent().attr('gear');
+		var v = $(this).val();
+
+		exp.current.push({
+		    'gear': g,
+		    'value': v
+		});
+	    });
+
+	    var gears = localStorage.getItem('gears');
+	    if (gears != null)
+		exp.gears = JSON.parse(gears);
+
+	    var json = JSON.stringify(exp);
+	    var blob = new Blob([json], {type: "octet/stream"});
+	    var url = window.URL.createObjectURL(blob);
+	    var a = document.createElement("a");
+	    a.href = url;
+	    a.download = fname;
+	    a.click();
+
+	    qalert('Values saved');
+	}
     });
     // import
     $('.gear_values .button.import').on('click', function() {
@@ -726,6 +746,10 @@ $(document).ready(function() {
 		    if (g.hasOwnProperty('gears')) {
 			localStorage.setItem('gears', JSON.stringify(g.gears));
 		    }
+
+		    buildPresets();
+
+		    qalert('Values and presets are restored');
 		}
 	    }
 	    reader.readAsText(evt.target.files[0]);

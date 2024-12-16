@@ -11,9 +11,11 @@
 </head>
 <body>
 
-<div class="section info" style="display: none">
-    <h2>Device information</h2>
-    <div class="content"></div>
+<div class="section info">
+    <div class="content" style="display: none;">
+	<div class="left"></div>
+	<div class="right"></div>
+    </div>
 </div>
 
 <div class="section scan">
@@ -42,20 +44,26 @@
     <div class="button down">Down</div>
 </div>
 
+<div class="section micro" style="display: none;">
+    <div class="button up">Up</div>
+    <div class="button down">Down</div>
+</div>
+
 <div class="section gear_values" style="display: none;">
-    <h2>Gear values</h2>
-    <div class="content"></div>
-    <div class="button set_all">Set all</div>
-    <br />
-    <div class="button save">Save as</div>
-    <br />
+    <div class="vcontent">
+	<div class="content"></div>
+	<div class="buttons">
+	    <div class="fake"></div>
+	    <div class="button set_all">Set all</div>
+	    <div class="button save">Save as</div>
+	</div>
+    </div>
+    <div class="presets"></div>
     <div class="button import">Import</div>
     <div class="button export">Export</div>
-    <div class="presets"></div>
 </div>
 
 <div class="section buttons_function" style="display: none;">
-    <h2>Buttons function</h2>
     <div class="content">
 	<div class="vbox">
 	    <div class="vbutton top">Up</div>

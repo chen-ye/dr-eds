@@ -9,33 +9,53 @@ body {
     font-family:'Open Sans', sans-serif;
     background: #fff;
     color: #000;
-    padding-bottom: 15em;
-}
-.section {
-    .margin-bottom: 2em;
-}
-.section h2 {
-    font-size: 1.2em;
     margin: 0;
-    padding: 0;
-    border-button: 1px solid purple;
+    padding: 0 0 15em 0;
 }
-.info {
+
+.section.info {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+.section.info .content {
+    background: purple;
+    color: #fff;
+    font-family: "Courier New", monospace;
+    font-size: 0.8em;
+    padding: 0.5em 0.5em 0.3em 0.5em;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+.section.info .content .right {
+    margin-left: auto;
+}
+
+.section.scan {
     text-align: center;
+    margin-top: 5em;
 }
-.scan {
-    text-align: center;
-}
-.scan .button.scan {
+.section.scan .button.scan {
     position: relative;
 }
-.action_buttons {
+
+.section.action_buttons {
     text-align: center;
+    margin-top: 4em;
 }
-.action_buttons .button {
+.section.action_buttons .button {
     position: relative;
 }
-.action_buttons .button:after {
+.section.action_buttons .button:after {
     color: MediumPurple;
     position: absolute;
     bottom: 0;
@@ -44,7 +64,7 @@ body {
     margin: 0 auto;
     font-size: 0.7em;
 }
-.action_buttons .button:before {
+.section.action_buttons .button:before {
     color: MediumPurple;
     position: absolute;
     top: 0;
@@ -53,36 +73,106 @@ body {
     margin: 0 auto;
     font-size: 0.7em;
 }
-.action_buttons .button.gear:before {
+.section.action_buttons .button.gear:before {
     content: "current";
 }
-.action_buttons .button.gears:before {
+.section.action_buttons .button.gears:before {
     content: "total";
 }
-.action_buttons .button.up:after,
-.action_buttons .button.down:after {
+.section.action_buttons .button.up:after,
+.section.action_buttons .button.down:after {
     content: "shift";
 }
-.action_buttons .button.gear:after {
+.section.action_buttons .button.gear:after {
     content: "gear";
 }
-.action_buttons .button.gears:after {
+.section.action_buttons .button.gears:after {
     content: "gears";
 }
 
-.gear_values {
+.section.micro {
     text-align: center;
+    margin-top: 0.2em;
 }
-.gear_values .gear {
-    margin-bottom: 0.2em;
-}
-.gear_values .content {
-    margin-bottom: 1em;
-}
-.gear_values .content .button.plus {
+.section.micro .button {
     position: relative;
 }
-.gear_values .content .button.plus:after {
+.section.micro .button:after {
+    color: MediumPurple;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    font-size: 0.7em;
+}
+.section.micro .button:before {
+    color: MediumPurple;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    font-size: 0.7em;
+}
+.section.micro .button.up:before,
+.section.micro .button.down:before {
+    content: "micro";
+}
+.section.micro .button.up:after,
+.section.micro .button.down:after {
+    content: "shift";
+}
+
+.section.gear_values {
+    text-align: center;
+    margin-top: 2em;
+}
+.section.gear_values .gear {
+    margin-bottom: 0.2em;
+    white-space: nowrap;
+}
+.section.gear_values .vcontent {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    /*-webkit-flex-wrap: wrap;
+    flex-wrap: wrap;*/
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    justify-content: center;
+}
+.section.gear_values .content {
+}
+.section.gear_values .buttons {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    /*-webkit-flex-wrap: wrap;
+    flex-wrap: wrap;*/
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    /*align-items: flex-start;*/
+    justify-content: space-between;
+    margin-left: 1em;
+}
+.section.gear_values .buttons .button {
+    margin-bottom: 0.2em;
+}
+.section.gear_values .buttons .fake {
+}
+.section.gear_values .buttons .set_all {
+}
+.section.gear_values .buttons .save {
+}
+.section.gear_values .content .button.plus {
+    position: relative;
+}
+.section.gear_values .content .button.plus:after {
     color: MediumPurple;
     position: absolute;
     bottom: 0;
@@ -94,14 +184,50 @@ body {
     margin-left: calc(-7em);
     z-index: -1;
 }
+.section.gear_values .presets {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.section.gear_values .preset_wrap {
+    white-space: nowrap;
+    display: inline-block;
+    margin: 0 0.1em;
+}
+.section.gear_values .preset_wrap .preset {
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-right: 0.2em;
+}
+.section.gear_values .preset_wrap .del {
+    border-left: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding-left: 0;
+    padding: 0.6em 1em;
+    width: 0.5em;
+}
+
 .buttons_function {
     text-align: center;
+    margin-top: 2em;
 }
 .buttons_function .vbutton {
     position: relative;
     background: red;
 }
+.buttons_function .vbutton:before {
+    content: "function";
+    color: MediumPurple;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    font-size: 0.7em;
+}
 .buttons_function .vbutton:after {
+    content: "shift";
     color: MediumPurple;
     position: absolute;
     bottom: 0;
@@ -110,11 +236,10 @@ body {
     margin: 0 auto;
     font-size: 0.7em;
 }
-.buttons_function .vbutton:after {
-    content: "shift";
-}
-.disconnect {
+
+.section.disconnect {
     text-align: center;
+    margin-top: 2em;
 }
 
 .button {
@@ -279,6 +404,7 @@ select {
     bottom: 1em;
     z-index: 100;
     white-space: nowrap;
+    text-align: center;
 }
 
 .dim {
