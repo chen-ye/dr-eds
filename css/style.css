@@ -1,0 +1,292 @@
+
+* {
+    outline: none;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    -webkit-tap-highlight-color: transparent;
+}
+body {
+    font-size: 1em;
+    font-family:'Open Sans', sans-serif;
+    background: #fff;
+    color: #000;
+    padding-bottom: 15em;
+}
+.section {
+    .margin-bottom: 2em;
+}
+.section h2 {
+    font-size: 1.2em;
+    margin: 0;
+    padding: 0;
+    border-button: 1px solid purple;
+}
+.info {
+    text-align: center;
+}
+.scan {
+    text-align: center;
+}
+.scan .button.scan {
+    position: relative;
+}
+.action_buttons {
+    text-align: center;
+}
+.action_buttons .button {
+    position: relative;
+}
+.action_buttons .button:after {
+    color: MediumPurple;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    font-size: 0.7em;
+}
+.action_buttons .button:before {
+    color: MediumPurple;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    font-size: 0.7em;
+}
+.action_buttons .button.gear:before {
+    content: "current";
+}
+.action_buttons .button.gears:before {
+    content: "total";
+}
+.action_buttons .button.up:after,
+.action_buttons .button.down:after {
+    content: "shift";
+}
+.action_buttons .button.gear:after {
+    content: "gear";
+}
+.action_buttons .button.gears:after {
+    content: "gears";
+}
+
+.gear_values {
+    text-align: center;
+}
+.gear_values .gear {
+    margin-bottom: 0.2em;
+}
+.gear_values .content {
+    margin-bottom: 1em;
+}
+.gear_values .content .button.plus {
+    position: relative;
+}
+.gear_values .content .button.plus:after {
+    color: MediumPurple;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    font-size: 0.7em;
+    text-align: center;
+    margin-left: calc(-7em);
+    z-index: -1;
+}
+.buttons_function {
+    text-align: center;
+}
+.buttons_function .vbutton {
+    position: relative;
+    background: red;
+}
+.buttons_function .vbutton:after {
+    color: MediumPurple;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    font-size: 0.7em;
+}
+.buttons_function .vbutton:after {
+    content: "shift";
+}
+.disconnect {
+    text-align: center;
+}
+
+.button {
+    display: inline-block;
+    cursor: pointer;
+    background: #fff;
+    padding: 0.6em 1.5em;
+    border-radius: 2em;
+    border: 2px solid purple;
+    color: purple;
+    font-size: 0.9em;
+    font-family:'Open Sans', sans-serif;
+}
+.button.selected {
+    background: purple;
+    color: #fff;
+}
+.button_debug {
+    position: absolute;
+    padding: 0.9em;
+    width: 0.9em;
+    height: 0.8em;
+    text-align: center;
+    line-height: 0.85em;
+    font-weight: bold;
+}
+.vbox {
+    display: inline-block;
+}
+.vbutton:first-child {
+    display: block;
+    cursor: pointer;
+    background: #fff;
+    padding: 0.6em 1.5em;
+    border-top-left-radius: 2em;
+    border-top-right-radius: 2em;
+    border: 2px solid purple;
+    border-bottom: 1px solid purple;
+    color: purple;
+    font-size: 0.9em;
+    font-family:'Open Sans', sans-serif;
+}
+.vbutton:last-child {
+    display: block;
+    cursor: pointer;
+    background: #fff;
+    padding: 0.6em 1.5em;
+    border-bottom-left-radius: 2em;
+    border-bottom-right-radius: 2em;
+    border: 2px solid purple;
+    border-top: 1px solid purple;
+    color: purple;
+    font-size: 0.9em;
+    font-family:'Open Sans', sans-serif;
+}
+select {
+    appearance: none;
+    outline: none;
+    border: 0;
+    cursor: pointer;
+    background: transparent;
+    color: purple;
+    font-size: 0.9em;
+    font-family:'Open Sans', sans-serif;
+    text-align: center;
+}
+.section.gear_values .button.minus {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 0;
+    padding: 0.6em 1em;
+    width: 0em;
+}
+.section.gear_values .button.plus {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: 0;
+    padding: 0.6em 1em;
+    width: 0em;
+}
+.section.gear_values .button.set {
+    margin-left: 0.2em;
+}
+.section.gear_values input[type="text"] {
+    width: 3em;
+    border: 2px solid purple;
+    border-left: 0;
+    border-right: 0;
+    padding: 0.6em 0;
+    color: purple;
+    font-size: 0.9em;
+    font-family:'Open Sans', sans-serif;
+    text-align: center;
+    background: transparent;
+}
+
+.debug {
+    border: none;
+    resize: none;
+    font-family: "Courier New", monospace;
+    font-size: 0.7em;
+    height: 15em;
+    overflow: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    z-index: 10;
+}
+.button_debug {
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+    z-index: 11;
+}
+
+.gear1:after { content: "gear 1"; }
+.gear2:after { content: "gear 2"; }
+.gear3:after { content: "gear 3"; }
+.gear4:after { content: "gear 4"; }
+.gear5:after { content: "gear 5"; }
+.gear6:after { content: "gear 6"; }
+.gear7:after { content: "gear 7"; }
+.gear8:after { content: "gear 8"; }
+.gear9:after { content: "gear 9"; }
+.gear10:after { content: "gear 10"; }
+.gear11:after { content: "gear 11"; }
+.gear12:after { content: "gear 12"; }
+.gear13:after { content: "gear 13"; }
+.gear14:after { content: "gear 14"; }
+
+.error {
+    color: #fff;
+    background: red;
+    cursor: pointer;
+    display: inline-block;
+    left: 50%;
+    padding: 0.6em 1.5em;
+    border-radius: 2em;
+    border: 2px solid red;
+    font-size: 0.9em;
+    font-family:'Open Sans', sans-serif;
+    position: fixed;
+    transform: translateX(-50%);
+    bottom: 1em;
+    z-index: 100;
+    white-space: nowrap;
+}
+.qalert {
+    color: #fff;
+    background: purple;
+    cursor: pointer;
+    display: inline-block;
+    left: 50%;
+    padding: 0.6em 1.5em;
+    border-radius: 2em;
+    border: 2px solid purple;
+    font-size: 0.9em;
+    font-family:'Open Sans', sans-serif;
+    position: fixed;
+    transform: translateX(-50%);
+    bottom: 1em;
+    z-index: 100;
+    white-space: nowrap;
+}
+
+.dim {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.3);
+}
