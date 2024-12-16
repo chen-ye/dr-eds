@@ -7,6 +7,37 @@ What is known so far:
 - RD fall to sleep after 3min when connected to shifter
 - RD never fall to sleep when connected to the app
 
+# Open source WEB/PWA app
+This repo now contain open source WEB/PWA app which is hosted at https://wheeltop.jeckyll.net.
+
+You can clone repo and host it yourself or use it from supplied URL.
+
+What's working:
+
+- Displaying battery voltages - RD and shifter
+- Displaying firmware versions - RD and shifter
+- Up/Down shifting - click on Up/Down shift buttons
+- Set number of gears (3/14) - click on `total gears` button and select from drop down - allow to set number of gears only if you are on lower than selected gear to prevent errors
+- Adjust every gear value - use `+` and `-` buttons or enter value - click `Set`
+- Set all gear values - click `Set all` button
+- Save values as preset - click `Save as` - enter name - use only letters and numbers - you will see new button with that name to appear
+- Export - click `Export` button - file with all current values and all presets will be saved on your device with file name `drWheeltop-gears-[date/time].json`
+- Import - Click on `Import` button to import exported file - all current and saved as preset values will be overwritten, but not uploaded to a RD - use `Set all` to upload to RD
+- Presets - all saved presets are displayed as buttons with option to be deleted - clicking on preset will put all values from it, on edit boxes, but not will be uploaded to RD - click `Set all` to upload them to RD
+- Button functions - normal (top button up shift/bottom button downshift) and reverse (top button down shift/bottom button up shift) buttons functions
+
+What's missing:
+- Initial calibration - not implemented yet, but will show up/down buttons only when RD is on smallest gear to prevent user errors
+- Offline mode - at that point app load all need files from Internet. On later stage it may become entirely offline
+- Please, feel free to add more ...
+
+Requirements:
+
+- Google chrome/Brave/Vivaldi browser (may be other Chromium based browsers) installed on the device - Firefox don't support WEB Bluetooth, Opera don't work for some reason
+- Enabled WEB Bluetooth on the browser - check for WEB Bluetooth in `chrome://flags`, `brave://flags` & etc (new Chrome and Vivaldi versions have flag enabled, Brave have it disabled) and enable flag if needed
+- Internet access - at least for now
+- Bluetooth
+
 ## Communication with the app
 
 When wake up RD broadcast it's name `EDS OX` and manufacturer specifica data - 11 bytes. First 6 bytes are mac address. Last five looks like some sort of serial number (?!).
