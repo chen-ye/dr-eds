@@ -30,6 +30,7 @@ You can clone repo and host it yourself or use it from supplied URL.
 ### What's missing:
 
 - Offline mode - at that point app load all need files from Internet. On later stage it may become entirely offline
+- Firmware upgrade - if it is even possible, since it require some AES encryption
 - Please, feel free to add more ...
 
 ### Requirements:
