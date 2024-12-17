@@ -1,29 +1,58 @@
 {
-    "icons": [{
-	"src": "/images/automatico_notify.png"
-    },
-    {
-	"src": "/images/automatico.png"
-    },
-    {
-	"src": "/images/automatico_512.png",
-	"sizes": "512x512"
-    }],
-    "id": "drWheeltop",
+    "icons": [
+	{
+	    "src": "/images/drWtOX-512.png",
+	    "sizes": "512x512",
+	    "type": "image/png",
+	    "purpose": "any"
+	}
+    ],
+    "screenshots": [
+	{
+	    "src": "https://drwtox.jeckyll.net/images/shot1.png",
+	    "type": "image/png",
+	    "platform": "wide",
+	    "sizes": "1080x2520"
+	},
+	{
+	    "src": "images/shot2.png",
+	    "type": "image/png",
+	    "platform": "wide",
+	    "sizes": "1080x2520"
+	},
+	{
+	    "src": "images/shot3.png",
+	    "type": "image/png",
+	    "platform": "wide",
+	    "sizes": "1080x2520"
+	},
+	{
+	    "src": "images/shot4.png",
+	    "type": "image/png",
+	    "platform": "wide",
+	    "sizes": "1080x2520"
+	}
+    ],
+    "id": "drWtOX",
     "background_color": "#fff",
     "theme_color": "#800080",
     "launch_handler": {
 	"client_mode": "auto"
     },
-    "name": "drWheeltop",
-    "short_name": "drWheeltop",
-    "description": "Open source WEB/PWA app for Wheeltop OX",
+    "name": "drWtOX",
+    "short_name": "drWtOX",
+    "description": "Open source WEB/PWA app for EDS OX",
     "orientation": "any",
     "screenshots": [],
     "display": "fullscreen",
     "dir": "ltr",
     "lang": "en",
-    "start_url": "https://wheeltop.jeckyl.net/",
+    "start_url": "https://wtox.jeckyl.net/",
     "scope": "/",
-    "prefer_related_applications": false
+    "scope_extensions": [
+	{ "origin": "*.jeckyl.net" }
+    ],
+    "related_applications": [],
+    "prefer_related_applications": false,
+    "categories": ["sports", "fitness"]
 }
