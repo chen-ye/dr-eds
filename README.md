@@ -12,12 +12,13 @@ This repo now contain open source WEB/PWA app which is hosted at https://wheelto
 
 You can clone repo and host it yourself or use it from supplied URL.
 
-What's working:
+### What's working:
 
 - Displaying battery voltages - RD and shifter
 - Displaying firmware versions - RD and shifter
 - Up/Down shifting - click on Up/Down shift buttons
 - Set number of gears (3/14) - click on `total gears` button and select from drop down - allow to set number of gears only if you are on lower than selected gear to prevent errors
+- Initial calibration - will show up/down buttons only when RD is on smallest gear to prevent user errors
 - Adjust every gear value - use `+` and `-` buttons or enter value - click `Set`
 - Set all gear values - click `Set all` button
 - Save values as preset - click `Save as` - enter name - use only letters and numbers - you will see new button with that name to appear
@@ -26,20 +27,26 @@ What's working:
 - Presets - all saved presets are displayed as buttons with option to be deleted - clicking on preset will put all values from it, on edit boxes, but not will be uploaded to RD - click `Set all` to upload them to RD
 - Button functions - normal (top button up shift/bottom button downshift) and reverse (top button down shift/bottom button up shift) buttons functions
 
-What's missing:
-- Initial calibration - not implemented yet, but will show up/down buttons only when RD is on smallest gear to prevent user errors
+### What's missing:
+
 - Offline mode - at that point app load all need files from Internet. On later stage it may become entirely offline
 - Please, feel free to add more ...
 
-Requirements:
+### Requirements:
 
 - Google chrome/Brave/Vivaldi browser (may be other Chromium based browsers) installed on the device - Firefox don't support WEB Bluetooth, Opera don't work for some reason
 - Enabled WEB Bluetooth on the browser - check for WEB Bluetooth in `chrome://flags`, `brave://flags` & etc (new Chrome and Vivaldi versions have flag enabled, Brave have it disabled) and enable flag if needed
 - Internet access - at least for now
 - Bluetooth
 
-Sreenshots:
-![https://drwtox.jeckyll.net/images/shot1.png](https://drwtox.jeckyll.net/images/shot1.png)
+### Something not working: 
+
+Make sure `X` button is pressed and debug messages are visible, then douple tap on then and they will be copied to clipboard. Open new issue here and paste debug information, so they can be analized and problem to be fixes.
+
+
+### Sreenshots:
+![Main screen with debug info](https://drwtox.jeckyll.net/images/shot1.png){width: 25%}
+
 
 ## Communication with the app
 
