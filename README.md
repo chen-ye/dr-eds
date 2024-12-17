@@ -8,7 +8,7 @@ What is known so far:
 - RD never fall to sleep when connected to the app
 
 # Open source WEB/PWA app
-This repo now contain open source WEB/PWA app which is hosted at https://wheeltop.jeckyll.net.
+This repo now contain open source WEB/PWA app which is hosted at https://drwtox.jeckyll.net/.
 
 APK file can be downloaed from: https://drwtox.jeckyll.net/releases/0.0.0.1/drWtOX-0.0.0.1.apk (buld from published source trough APK Builder)
 
