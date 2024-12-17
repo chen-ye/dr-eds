@@ -38,6 +38,9 @@ Requirements:
 - Internet access - at least for now
 - Bluetooth
 
+Sreenshots:
+![https://drwtox.jeckyll.net/images/shot1.png](https://drwtox.jeckyll.net/images/shot1.png)
+
 ## Communication with the app
 
 When wake up RD broadcast it's name `EDS OX` and manufacturer specifica data - 11 bytes. First 6 bytes are mac address. Last five looks like some sort of serial number (?!).
