@@ -18,6 +18,7 @@ const cmd_getPowerInfo = 0x42;
 const cmd_getDeviceMac = 0x86;
 const cmd_setTotalGear = 0x91;
 const cmd_setGearUpValue = 0x92;
+const cmd_fineTuneGear = 0x95;
 const cmd_getCurrentGear = 0x97;
 const cmd_serverReportGear = 0x98;
 const cmd_switchFingerOrder = 0x9c;
@@ -114,6 +115,12 @@ function handleCharacteristicValueChanged(event)
 	    log("RD start rearLifting to gear " + t, 1);
 	else
 	    log("RD finish rearLifting to gear " + t, 1);
+
+	// show micro shift only on lowest gear
+	if (info['NUM'] == 1)
+	    $('.section.micro').show();
+	else
+	    $('.section.micro').hide();
 
 	$('.section.action_buttons .button.gear').html(t);
 	$('.section.action_buttons .button.gears select').val(parseInt(info['TOTAL_CNT']));//.change();
@@ -312,6 +319,12 @@ function parsePacket(hex, check_confirm = 0)
 		$('.section.gear_values .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['GEARS[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
 	    }
 
+	    // show micro shift only on lowest gear
+	    if (info['NUM'] == 1)
+		$('.section.micro').show();
+	    else
+		$('.section.micro').hide();
+
 	    // set gear values
 	    $('.section.gear_values .content .button.minus').off('click').on('click', function() {
 		var v = $(this).next().val();
@@ -400,7 +413,7 @@ function buildPresets()
     });
     $('.section.gear_values .presets .del').off('click').on('click', function() {
 	var pname =  $(this).attr('preset');
-	if (confirm('Delete preset ' + pname + '?')) {
+	if (confirm('Delete preset "' + pname + '"?')) {
 	    var a = localStorage.getItem('gears');
 	    a = JSON.parse(a);
 	    if (a != null) {
@@ -629,6 +642,27 @@ $(document).ready(function() {
 	}
     });
 
+    // micro shift up
+    $('.section.micro .up').on('click', function() {
+	qalert("Up micro shift");
+
+	var f = 0x02;
+	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_fineTuneGear, 0x01, f, 0x00, 0x00 ]);
+	a = setCRC16(a);
+	characteristic_TX.writeValueWithoutResponse(a);
+	log("Send: fineTuneGear -> " + f.toString(16));
+    });
+    // micro shift down
+    $('.section.micro .down').on('click', function() {
+	qalert("Down micro shift");
+
+	var f = 0x01;
+	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_fineTuneGear, 0x01, f, 0x00, 0x00 ]);
+	a = setCRC16(a);
+	characteristic_TX.writeValueWithoutResponse(a);
+	log("Send: fineTuneGear -> " + f.toString(16));
+    });
+
     // set all gear values
     $('.gear_values .button.set_all').on('click', function() {
 	startBlock("Update gears values");
@@ -657,6 +691,7 @@ $(document).ready(function() {
 
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
+
     // save as gear values
     $('.gear_values .button.save').on('click', function() {
 	var n = prompt('Enter gear values preset name (only letters and numbers):');
@@ -681,10 +716,11 @@ $(document).ready(function() {
 	    buildPresets();
 	}
     });
+
     // export
     $('.gear_values .button.export').on('click', function() {
 	var d = new Date();
-	var fname = 'drWheeltop-gears-' +
+	var fname = 'drWtOX-gears-' +
 	    d.getFullYear() +
 	    (d.getMonth() + 1).toString().padStart(2, 0) +
 	    d.getDate().toString().padStart(2, 0) +
