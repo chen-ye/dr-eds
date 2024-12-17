@@ -295,6 +295,7 @@ function parsePacket(hex, check_confirm = 0)
 	    endBlock();
 	    $('.section').show();
 	    $('.section.scan').hide();
+	    $('.section.micro').hide();
 	    $('.section.info .content').show();
 
 	    var t = parseInt(info['NUM']);
