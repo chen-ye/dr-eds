@@ -10,7 +10,7 @@ What is known so far:
 # Open source WEB/PWA app
 This repo now contain open source WEB/PWA app which is hosted at https://wheeltop.jeckyll.net.
 
-APK file can be downloaed from: https://git.jeckyll.net/published/personal/eds-ox/-/blob/main/README.md (buld from published source trough APK Builder)
+APK file can be downloaed from: https://drwtox.jeckyll.net/releases/0.0.0.1/drWtOX-0.0.0.1.apk (buld from published source trough APK Builder)
 
 You can clone repo and host it yourself or use it from supplied URL.
 
