@@ -45,7 +45,11 @@ Make sure `X` button is pressed and debug messages are visible, then douple tap 
 
 
 ### Sreenshots:
-![Main screen with debug info](https://drwtox.jeckyll.net/images/shot1.png){width: 25%}
+![Main screen without debug info](https://drwtox.jeckyll.net/images/shot1.png){width=25%}
+![Main screen with debug info](https://drwtox.jeckyll.net/images/shot1.png){width=25%}
+![Main screen (bottom part) withou debug info](https://drwtox.jeckyll.net/images/shot1.png){width=25%}
+![Main screen (bottom part) with debug info](https://drwtox.jeckyll.net/images/shot1.png){width=25%}
+
 
 
 ## Communication with the app
