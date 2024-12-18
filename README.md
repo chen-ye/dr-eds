@@ -24,7 +24,7 @@ You can clone repo and host it yourself or use it from supplied URL.
 - Adjust every gear value - use `+` and `-` buttons or enter value - click `Set`
 - Set all gear values - click `Set all` button
 - Save values as preset - click `Save as` - enter name - use only letters and numbers - you will see new button with that name to appear
-- Export - click `Export` button - file with all current values and all presets will be saved on your device with file name `drWheeltop-gears-[date/time].json`
+- Export - click `Export` button - file with all current values and all presets will be saved on your device with file name `drWtOX-gears-[date/time].json`
 - Import - Click on `Import` button to import exported file - all current and saved as preset values will be overwritten, but not uploaded to a RD - use `Set all` to upload to RD
 - Presets - all saved presets are displayed as buttons with option to be deleted - clicking on preset will put all values from it, on edit boxes, but not will be uploaded to RD - click `Set all` to upload them to RD
 - Button functions - normal (top button up shift/bottom button downshift) and reverse (top button down shift/bottom button up shift) buttons functions
@@ -44,7 +44,7 @@ You can clone repo and host it yourself or use it from supplied URL.
 
 ### Something not working: 
 
-Make sure `X` button is pressed and debug messages are visible, then douple tap on then and they will be copied to clipboard. Open new issue here and paste debug information, so they can be analized and problem to be fixes.
+Make sure `X` button is pressed and debug messages are visible, then douple tap on them and they will be copied to the clipboard. Open new issue here and paste debug information, so they can be analized and problem to be fixed.
 
 
 ### Sreenshots:
