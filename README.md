@@ -28,6 +28,7 @@ You can clone repo and host it yourself or use it from supplied URL.
 - Import - Click on `Import` button to import exported file - all current and saved as preset values will be overwritten, but not uploaded to a RD - use `Set all` to upload to RD
 - Presets - all saved presets are displayed as buttons with option to be deleted - clicking on preset will put all values from it, on edit boxes, but not will be uploaded to RD - click `Set all` to upload them to RD
 - Button functions - normal (top button up shift/bottom button downshift) and reverse (top button down shift/bottom button up shift) buttons functions
+- Light and Dark theme support - follow device preferences
 
 ### What's missing:
 
