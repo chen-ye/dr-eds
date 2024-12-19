@@ -76,9 +76,10 @@ function handleCharacteristicValueChanged(event)
     }
     log("Received: " + s);
 
+    var r = parsePacket(payload);
+
     if (r.ascii) return;
 
-    var r = parsePacket(payload);
     if (r.cmd == cmd_getKey) {
 	key = r.key;
 
