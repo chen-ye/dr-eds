@@ -1,4 +1,46 @@
 
+:root {
+    color-scheme: light;
+
+    --background-color: #fff;
+    --text-color: #000;
+
+    --main-font: 'Open Sans', sans-serif;
+    --main-background-color: transparent;
+    --main-color: purple;
+    --main-text-color: purple;
+    --main-text-light-color: MediumPurple;
+
+    --selected-background-color: purple;
+    --selected-text-color: #fff;
+
+    --error-background-color: red;
+    --error-text-color: #fff;
+
+    --debug-font: "Courier New", monospace;
+
+    @media (prefers-color-scheme: dark) {
+	color-scheme: dark;
+
+	--background-color: #000;
+	--text-color: #ccc;
+
+	--main-font: 'Open Sans', sans-serif;
+	--main-background-color: transparent;
+	--main-color: purple;
+        --main-text-color: #ccc;
+	--main-text-light-color: MediumPurple;
+
+	--selected-background-color: purple;
+	--selected-text-color: #fff;
+
+	--error-background-color: red;
+	--error-text-color: #fff;
+
+	--debug-font: "Courier New", monospace;
+    }
+}
+
 * {
     outline: none;
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
@@ -6,9 +48,9 @@
 }
 body {
     font-size: 1em;
-    font-family:'Open Sans', sans-serif;
-    background: #fff;
-    color: #000;
+    font-family: var(--main-font);
+    background: var(--background-color);
+    color: var(--text-color);
     margin: 0;
     padding: 0 0 15em 0;
 }
@@ -21,9 +63,9 @@ body {
     z-index: 100;
 }
 .section.info .content {
-    background: purple;
-    color: #fff;
-    font-family: "Courier New", monospace;
+    background: var(--selected-background-color);
+    color: var(--selected-text-color);
+    font-family: var(--debug-font);
     font-size: 0.8em;
     padding: 0.5em 0.5em 0.3em 0.5em;
     display: -webkit-box;
@@ -56,7 +98,7 @@ body {
     position: relative;
 }
 .section.action_buttons .button:after {
-    color: MediumPurple;
+    color: var(--main-text-light-color);
     position: absolute;
     bottom: 0;
     left: 0;
@@ -65,7 +107,7 @@ body {
     font-size: 0.7em;
 }
 .section.action_buttons .button:before {
-    color: MediumPurple;
+    color: var(--main-text-light-color);
     position: absolute;
     top: 0;
     left: 0;
@@ -98,7 +140,7 @@ body {
     position: relative;
 }
 .section.micro .button:after {
-    color: MediumPurple;
+    color: var(--main-text-light-color);
     position: absolute;
     bottom: 0;
     left: 0;
@@ -107,7 +149,7 @@ body {
     font-size: 0.7em;
 }
 .section.micro .button:before {
-    color: MediumPurple;
+    color: var(--main-text-light-color);
     position: absolute;
     top: 0;
     left: 0;
@@ -173,7 +215,7 @@ body {
     position: relative;
 }
 .section.gear_values .content .button.plus:after {
-    color: MediumPurple;
+    color: var(--main-text-light-color);
     position: absolute;
     bottom: 0;
     left: 0;
@@ -182,7 +224,8 @@ body {
     font-size: 0.7em;
     text-align: center;
     margin-left: calc(-7em);
-    z-index: -1;
+    z-index: 1;
+    pointer-events: none;
 }
 .section.gear_values .presets {
     margin-top: 1em;
@@ -214,11 +257,10 @@ body {
 }
 .buttons_function .vbutton {
     position: relative;
-    background: red;
 }
 .buttons_function .vbutton:before {
     content: "function";
-    color: MediumPurple;
+    color: var(--main-text-light-color);
     position: absolute;
     top: 0;
     left: 0;
@@ -228,7 +270,7 @@ body {
 }
 .buttons_function .vbutton:after {
     content: "shift";
-    color: MediumPurple;
+    color: var(--main-text-light-color);
     position: absolute;
     bottom: 0;
     left: 0;
@@ -245,17 +287,17 @@ body {
 .button {
     display: inline-block;
     cursor: pointer;
-    background: #fff;
+    background: var(--main-background-color);
     padding: 0.6em 1.5em;
     border-radius: 2em;
-    border: 2px solid purple;
-    color: purple;
+    border: 2px solid var(--main-color);
+    color: var(--main-text-color);
     font-size: 0.9em;
-    font-family:'Open Sans', sans-serif;
+    font-family: var(--main-font);
 }
 .button.selected {
-    background: purple;
-    color: #fff;
+    background: var(--selected-background-color);
+    color: var(--selected-text-color);
 }
 .button_debug {
     position: absolute;
@@ -272,38 +314,38 @@ body {
 .vbutton:first-child {
     display: block;
     cursor: pointer;
-    background: #fff;
+    background: var(--main-background-color);
     padding: 0.6em 1.5em;
     border-top-left-radius: 2em;
     border-top-right-radius: 2em;
-    border: 2px solid purple;
-    border-bottom: 1px solid purple;
-    color: purple;
+    border: 2px solid var(--main-color);
+    border-bottom: 1px solid var(--main-color);
+    color: var(--main-text-color);
     font-size: 0.9em;
-    font-family:'Open Sans', sans-serif;
+    font-family: var(--main-font);
 }
 .vbutton:last-child {
     display: block;
     cursor: pointer;
-    background: #fff;
+    background: var(--main-background-color);
     padding: 0.6em 1.5em;
     border-bottom-left-radius: 2em;
     border-bottom-right-radius: 2em;
-    border: 2px solid purple;
-    border-top: 1px solid purple;
-    color: purple;
+    border: 2px solid var(--main-color);
+    border-top: 1px solid var(--main-color);
+    color: var(--main-text-color);
     font-size: 0.9em;
-    font-family:'Open Sans', sans-serif;
+    font-family: var(--main-font);
 }
 select {
     appearance: none;
     outline: none;
     border: 0;
     cursor: pointer;
-    background: transparent;
-    color: purple;
+    background: var(--main-background-color);
+    color: var(--main-text-color);
     font-size: 0.9em;
-    font-family:'Open Sans', sans-serif;
+    font-family: var(--main-font);
     text-align: center;
 }
 .section.gear_values .button.minus {
@@ -325,21 +367,22 @@ select {
 }
 .section.gear_values input[type="text"] {
     width: 3em;
-    border: 2px solid purple;
+    border: 2px solid var(--main-color);
+    color: var(--main-text-color);
     border-left: 0;
     border-right: 0;
     padding: 0.6em 0;
-    color: purple;
     font-size: 0.9em;
-    font-family:'Open Sans', sans-serif;
+    font-family: var(--main-font);
     text-align: center;
-    background: transparent;
+    background: var(--main-background-color);
+    box-sizing: border-box;
 }
 
 .debug {
     border: none;
     resize: none;
-    font-family: "Courier New", monospace;
+    font-family: var(--debug-font);
     font-size: 0.7em;
     height: 15em;
     overflow: auto;
@@ -348,6 +391,8 @@ select {
     right: 0;
     position: fixed;
     z-index: 10;
+    background: var(--background-color);
+    color: var(--text-color);
 }
 .button_debug {
     position: fixed;
@@ -372,8 +417,8 @@ select {
 .gear14:after { content: "gear 14"; }
 
 .error {
-    color: #fff;
-    background: red;
+    color: var(--error-text-color);
+    background: var(--error-background-color);;
     cursor: pointer;
     display: inline-block;
     left: 50%;
@@ -381,7 +426,7 @@ select {
     border-radius: 2em;
     border: 2px solid red;
     font-size: 0.9em;
-    font-family:'Open Sans', sans-serif;
+    font-family: var(--main-font);
     position: fixed;
     transform: translateX(-50%);
     bottom: 1em;
@@ -389,16 +434,16 @@ select {
     white-space: nowrap;
 }
 .qalert {
-    color: #fff;
-    background: purple;
+    color: var(--selected-text-color);
+    background: var(--selected-background-color);
     cursor: pointer;
     display: inline-block;
     left: 50%;
     padding: 0.6em 1.5em;
     border-radius: 2em;
-    border: 2px solid purple;
+    border: 2px solid var(--main-color);
     font-size: 0.9em;
-    font-family:'Open Sans', sans-serif;
+    font-family: var(--main-font);
     position: fixed;
     transform: translateX(-50%);
     bottom: 1em;
