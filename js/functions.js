@@ -15,6 +15,7 @@ var show_debug = 1;
 const cmd_getKey = 0x11;
 const cmd_getLockInfo = 0x31;
 const cmd_getPowerInfo = 0x42;
+const cmd_backSetting = 0x67;
 const cmd_getDeviceMac = 0x86;
 const cmd_setTotalGear = 0x91;
 const cmd_setGearUpValue = 0x92;
@@ -74,6 +75,8 @@ function handleCharacteristicValueChanged(event)
 	s += value.getUint8(t) + ' ';
     }
     log("Received: " + s);
+
+    if (r.ascii) return;
 
     var r = parsePacket(payload);
     if (r.cmd == cmd_getKey) {
@@ -213,7 +216,7 @@ function parsePacket(hex, check_confirm = 0)
     var r = { };
     r.payload = [];
     r.payload_length = 0;
-    var ascii = false;
+    r.ascii = false;
 
     r.error = 0;
     var crc = hex[hex.byteLength - 2] << 8 | hex[hex.byteLength - 1];
@@ -236,10 +239,10 @@ function parsePacket(hex, check_confirm = 0)
 
 	    // plain ascii
 	    log("CRC: skip - ASCII content\n");
-	    ascii = true;
+	    r.ascii = true;
 	}
     }
-    if (!ascii) {
+    if (!r.ascii) {
 	log("prefix: " + hex[0]);
 	log("u8: " + u8);
 	log("key: " + r.key);
