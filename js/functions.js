@@ -338,7 +338,11 @@ function parsePacket(hex, check_confirm = 0)
 	    $('.section.action_buttons .button.gear').html(t);
 	    $('.section.action_buttons .button.gears select').val(parseInt(info['TOTAL_CNT']));//.change();
 
-	    $('.section.info .content .left').html('RD[' + info['GEARS_V'] + ']:' + (parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
+	    var b = localStorage.getItem('battery');
+	    if (b == 'percent')
+		$('.section.info .content .left').html('RD[' + info['GEARS_V'] + ']:' + percentage(info['POWER_2']) + '%');
+	    else
+		$('.section.info .content .left').html('RD[' + info['GEARS_V'] + ']:' + (parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
 	    $('.section.info .content .right').html('Shifter[' + info['REMOTE_V'] + ']:' + (parseInt(info['POWER_1']) / 100).toFixed(2) + 'V');
 
 	    $('.section.gear_values .content').html('');
@@ -638,6 +642,7 @@ $(document).ready(function() {
 	    $('.section.info .content .left').html('RD[' + info['GEARS_V'] + ']:' + (parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
 	    $(this).attr('type', 'volts');
 	}
+	localStorage.setItem('battery', $(this).attr('type'));
     });
 
     // shift up
