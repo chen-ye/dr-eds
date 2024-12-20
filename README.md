@@ -54,6 +54,7 @@ Make sure `X` button is pressed and debug messages are visible, then douple tap 
 ![Main screen with debug info](https://drwtox.jeckyll.net/images/shot2.png){width=24%}
 ![Main screen (bottom part) withou debug info](https://drwtox.jeckyll.net/images/shot4.png){width=24%}
 ![Main screen (bottom part) with debug info](https://drwtox.jeckyll.net/images/shot3.png){width=24%}
+![Main screen dark theme without debug info](https://drwtox.jeckyll.net/images/shot5.png){width=24%}
 
 
 
