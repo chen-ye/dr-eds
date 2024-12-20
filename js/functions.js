@@ -65,6 +65,30 @@ function onDisconnect()
     setup();
 }
 
+function percentage(v)
+{
+    if (v >= 820) return 100;
+    if ((v < 820) && (v >= 816)) return 95;
+    if ((v < 816) && (v >= 812)) return 90;
+    if ((v < 812) && (v >= 808)) return 85;
+    if ((v < 808) && (v >= 800)) return 80;
+    if ((v < 800) && (v >= 792)) return 75;
+    if ((v < 792) && (v >= 780)) return 70;
+    if ((v < 780) && (v >= 776)) return 65;
+    if ((v < 776) && (v >= 770)) return 60;
+    if ((v < 770) && (v >= 766)) return 55;
+    if ((v < 766) && (v >= 760)) return 50;
+    if ((v < 760) && (v >= 750)) return 40;
+    if ((v < 750) && (v >= 746)) return 35;
+    if ((v < 746) && (v >= 740)) return 30;
+    if ((v < 740) && (v >= 736)) return 25;
+    if ((v < 736) && (v >= 730)) return 20;
+    if ((v < 730) && (v >= 710)) return 10;
+    if ((v < 710) && (v >= 690)) return 5;
+    if ((v < 690) && (v >= 660)) return 0;
+    return 0;
+}
+
 function handleCharacteristicValueChanged(event)
 {
     const value = event.target.value;
@@ -603,6 +627,17 @@ $(document).ready(function() {
 	    return queue;
 	})
 	.catch(error => { console.error(error); });
+    });
+
+    // V/%
+    $('.section.info .content .left').on('click', function() {
+	if ($(this).attr('type') == 'volts') {
+	    $('.section.info .content .left').html('RD[' + info['GEARS_V'] + ']:' + percentage(parseInt(info['POWER_2'])) + '%');
+	    $(this).attr('type', 'percent');
+	} else {
+	    $('.section.info .content .left').html('RD[' + info['GEARS_V'] + ']:' + (parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
+	    $(this).attr('type', 'volts');
+	}
     });
 
     // shift up
