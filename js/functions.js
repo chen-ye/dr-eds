@@ -776,6 +776,7 @@ $(document).ready(function() {
 	if (confirm('Export settings, values and presets to file ' + fname + '?')) {
 	    var exp = {
 		'debug': $('.button_debug').hasClass('selected'),
+		'battery': localStorage.getItem('battery'),
 		'current': []
 	    };
 	    $('.gear_values .content input').each(function() {
@@ -829,6 +830,14 @@ $(document).ready(function() {
 			    $('.debug').hide();
 			    $('.button_debug').removeClass('selected');
 			    localStorage.setItem('show_debug', 0);
+			}
+		    if (g.hasOwnProperty('battery'))
+			if (g.battery == 'percent') {
+			    $('.section.info .content .left').html('RD[' + info['GEARS_V'] + ']:' + percentage(parseInt(info['POWER_2'])) + '%');
+			    $(this).attr('type', 'percent');
+			} else {
+			    $('.section.info .content .left').html('RD[' + info['GEARS_V'] + ']:' + (parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
+			    $(this).attr('type', 'volts');
 			}
 
 		    if (g.hasOwnProperty('current')) {
