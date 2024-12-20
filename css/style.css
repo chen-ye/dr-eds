@@ -399,6 +399,7 @@ select {
     bottom: 1em;
     right: 1em;
     z-index: 11;
+    background: var(--background-color);
 }
 
 .gear1:after { content: "gear 1"; }
