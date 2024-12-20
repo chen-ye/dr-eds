@@ -29,6 +29,7 @@ You can clone repo and host it yourself or use it from supplied URL.
 - Presets - all saved presets are displayed as buttons with option to be deleted - clicking on preset will put all values from it, on edit boxes, but not will be uploaded to RD - click `Set all` to upload them to RD
 - Button functions - normal (top button up shift/bottom button downshift) and reverse (top button down shift/bottom button up shift) buttons functions
 - Light and Dark theme support - follow device preferences
+- battery voltage/percentage display - click on title bar to switch
 
 ### What's missing:
 
