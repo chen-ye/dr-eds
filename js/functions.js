@@ -733,8 +733,9 @@ $(document).ready(function() {
 	    d.getSeconds().toString().padStart(2, 0) +
 	    '.json';
 
-	if (confirm('Export values and presets to file ' + fname + '?')) {
+	if (confirm('Export settings, values and presets to file ' + fname + '?')) {
 	    var exp = {
+		'debug': $('.button_debug').hasClass('selected'),
 		'current': []
 	    };
 	    $('.gear_values .content input').each(function() {
@@ -779,6 +780,17 @@ $(document).ready(function() {
 
 		var g = JSON.parse(filecontent);
 		if (g != null) {
+		    if (g.hasOwnProperty('debug'))
+			if (g.debug) {
+			    $('.debug').show();
+			    $('.button_debug').addClass('selected');
+			    localStorage.setItem('show_debug', 1);
+			} else {
+			    $('.debug').hide();
+			    $('.button_debug').removeClass('selected');
+			    localStorage.setItem('show_debug', 0);
+			}
+
 		    if (g.hasOwnProperty('current')) {
 			for (var t in g.current) {
 			    $('.section.gear_values .content .gear[gear="' + g.current[t].gear + '"] input').val(g.current[t].value);
@@ -790,7 +802,7 @@ $(document).ready(function() {
 
 		    buildPresets();
 
-		    qalert('Values and presets are restored');
+		    qalert('Settings, values and presets are restored');
 		}
 	    }
 	    reader.readAsText(evt.target.files[0]);
