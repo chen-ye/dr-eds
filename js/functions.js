@@ -54,6 +54,8 @@ function setup()
     $('.live').hide();
     $('.button_page').hide();
     $('.button_power').hide();
+    $('.button_export').hide();
+    $('.button_import').hide();
     info = {};
     raw_info = [];
 }
@@ -335,6 +337,8 @@ function parsePacket(hex, check_confirm = 0)
 	    $('.info').show();
 	    $('.button_page').show();
 	    $('.button_power').show();
+	    $('.button_export').show();
+	    $('.button_import').show();
 
 	    show_page = localStorage.getItem('show_page');
 	    // set show_page by default
@@ -788,7 +792,7 @@ $(document).ready(function() {
     });
 
     // export
-    $('.gear_values .button.export').on('click', function() {
+    $('.button_export').on('click', function() {
 	var d = new Date();
 	var fname = 'drWtOX-gears-' +
 	    d.getFullYear() +
@@ -832,7 +836,7 @@ $(document).ready(function() {
 	}
     });
     // import
-    $('.gear_values .button.import').on('click', function() {
+    $('.button_import').on('click', function() {
 	document.forms['uploadform'].elements['gearsfile'].onchange = function(evt) {
 	    if (!window.FileReader) return;
 
