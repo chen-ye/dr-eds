@@ -347,12 +347,12 @@ function parsePacket(hex, check_confirm = 0)
 		$('.settings').show();
 		$('.live').hide();
 		$('.info').removeClass('big');
-		$('.button_page').removeClass('icon-bike').addClass('icon-wrench');
+		$('.button_page').removeClass('icon-wrench').addClass('icon-bike');
 	    } else {
 		$('.settings').hide();
 		$('.live').show();
 		$('.info').addClass('big');
-		$('.button_page').removeClass('icon-wrench').addClass('icon-bike');
+		$('.button_page').removeClass('icon-bike').addClass('icon-wrench');
 	    }
 
 	    var t = parseInt(info['NUM']);
@@ -867,13 +867,13 @@ $(document).ready(function() {
 			    $('.settings').show();
 			    $('.live').hide();
 			    $('.info').removeClass('big');
-			    $('.button_page').removeClass('icon-bike').addClass('icon-wrench');
+			    $('.button_page').removeClass('icon-wrench').addClass('icon-bike');
 			    localStorage.setItem('show_page', "settings");
 			} else {
 			    $('.settings').hide();
 			    $('.live').show();
 			    $('.info').addClass('big');
-			    $('.button_page').removeClass('icon-wrench').addClass('icon-bike');
+			    $('.button_page').removeClass('icon-bike').addClass('icon-wrench');
 			    localStorage.setItem('show_page', "live");
 			}
 		    if (g.hasOwnProperty('battery')) {
@@ -950,17 +950,17 @@ $(document).ready(function() {
 
     // switch live / settings page
     $('.button_page').on('click', function() {
-	if ($(this).hasClass('icon-bike')) {
+	if ($(this).hasClass('icon-wrench')) {
 	    $('.settings').show();
 	    $('.live').hide();
 	    $('.info').removeClass('big');
-	    $(this).removeClass('icon-bike').addClass('icon-wrench');
+	    $(this).removeClass('icon-wrench').addClass('icon-bike');
 	    localStorage.setItem('show_page', 'settings');
 	} else {
 	    $('.settings').hide();
 	    $('.live').show();
 	    $('.info').addClass('big');
-	    $(this).removeClass('icon-wrench').addClass('icon-bike');
+	    $(this).removeClass('icon-bike').addClass('icon-wrench');
 	    localStorage.setItem('show_page', 'live');
 	}
     });
