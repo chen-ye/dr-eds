@@ -1,16 +1,12 @@
 
 /*
     TODO:
-	1. done - change cassette - select from 3 to 14
-	2. initial calibration - up/down + gear shift
-	3. done - gear shift with current step value change
-	4. done - fine tune gear
-	5. done - buttons settings - which button up and down shift
-	6. presets
+	1. Firmware upgrade
 */
 
 var debug = 1;
 var show_debug = 1;
+var show_page = 'settings';
 
 const cmd_getKey = 0x11;
 const cmd_getLockInfo = 0x31;
@@ -51,10 +47,13 @@ function log(s, force)
 
 function setup()
 {
-    $('.section').hide();
-    $('.section.scan').show();
+    $('.settings').hide();
+    $('.scan').show();
     $('.debug').html('');
-    $('.section.info .content').hide();
+    $('.info').hide();
+    $('.live').hide();
+    $('.button_page').hide();
+    $('.button_power').hide();
     info = {};
     raw_info = [];
 }
@@ -146,12 +145,14 @@ function handleCharacteristicValueChanged(event)
 
 	// show micro shift only on lowest gear
 	if (info['NUM'] == 1)
-	    $('.section.micro').show();
+	    $('.settings .micro').show();
 	else
-	    $('.section.micro').hide();
+	    $('.settings .micro').hide();
 
-	$('.section.action_buttons .button.gear').html(t);
-	$('.section.action_buttons .button.gears select').val(parseInt(info['TOTAL_CNT']));//.change();
+	$('.settings .action_buttons .button.gear').html(t);
+	$('.settings .action_buttons .button.gears select').val(parseInt(info['TOTAL_CNT']));//.change();
+	$('.live .gear').html(t);
+	$('.live .gears').html('/' + info['TOTAL_CNT']);
     } else
     if (r.cmd == cmd_switchFingerOrder) {
 	// for some reason this always return 0 after change which may indicate OK,
@@ -160,7 +161,7 @@ function handleCharacteristicValueChanged(event)
 	if (r.payload[0] == 0x00) {
 	    clearTimeout(ctimeout);
 
-	    if ($('.section.buttons_function .vbutton:first-child').html() == "Up") {
+	    if ($('.settings .buttons_function .vbutton:first-child').html() == "Up") {
 		var f = 0x01;
 	    } else {
 		var f = 0x00;
@@ -168,12 +169,12 @@ function handleCharacteristicValueChanged(event)
 	    endBlock();
 	    qalert((f == 0 ? "Normal buttons" : "Reversed buttons"));
 
-	    if ($('.section.buttons_function .vbutton:first-child').html() == "Up") {
-		$('.section.buttons_function .vbutton:first-child').html("Down");
-		$('.section.buttons_function .vbutton:last-child').html("Up");
+	    if ($('.settings .buttons_function .vbutton:first-child').html() == "Up") {
+		$('.settings .buttons_function .vbutton:first-child').html("Down");
+		$('.settings .buttons_function .vbutton:last-child').html("Up");
 	    } else {
-		$('.section.buttons_function .vbutton:first-child').html("Up");
-		$('.section.buttons_function .vbutton:last-child').html("Down");
+		$('.settings .buttons_function .vbutton:first-child').html("Up");
+		$('.settings .buttons_function .vbutton:last-child').html("Down");
 	    }
 	} else {
 	    error('Command failed');
@@ -193,7 +194,7 @@ function handleCharacteristicValueChanged(event)
 	    clearTimeout(ctimeout);
 	    qalert("Changed number of gears");
 	} else {
-	    $('.section.action_buttons .button.gears select').val(info['TOTAL_CNT']);
+	    $('.settings .action_buttons .button.gears select').val(info['TOTAL_CNT']);
 
 	    error('Command failed');
 	}
@@ -328,47 +329,69 @@ function parsePacket(hex, check_confirm = 0)
 	    }
 
 	    endBlock();
-	    $('.section').show();
-	    $('.section.scan').hide();
-	    $('.section.micro').hide();
-	    $('.section.info .content').show();
+	    $('.settings').show();
+	    $('.scan').hide();
+	    $('.settings .micro').hide();
+	    $('.info').show();
+	    $('.button_page').show();
+	    $('.button_power').show();
+
+	    show_page = localStorage.getItem('show_page');
+	    // set show_page by default
+	    if (show_page == null) show_page = 'settings';
+	    if (show_page == 'settings') {
+		$('.settings').show();
+		$('.live').hide();
+		$('.info').removeClass('big');
+		$('.button_page').removeClass('icon-bike').addClass('icon-wrench');
+	    } else {
+		$('.settings').hide();
+		$('.live').show();
+		$('.info').addClass('big');
+		$('.button_page').removeClass('icon-wrench').addClass('icon-bike');
+	    }
 
 	    var t = parseInt(info['NUM']);
 	    t = parseInt(info['TOTAL_CNT']) - t + 1;
-	    $('.section.action_buttons .button.gear').html(t);
-	    $('.section.action_buttons .button.gears select').val(parseInt(info['TOTAL_CNT']));//.change();
+	    $('.settings .action_buttons .button.gear').html(t);
+	    $('.settings .action_buttons .button.gears select').val(parseInt(info['TOTAL_CNT']));//.change();
+	    $('.live .gear').html(t);
+	    $('.live .gears').html('/' + info['TOTAL_CNT']);
 
 	    var b = localStorage.getItem('battery');
+	    $('.info .content .left .left_ver').html(info['GEARS_V']);
 	    if (b == 'percent')
-		$('.section.info .content .left').html('RD[' + info['GEARS_V'] + ']:' + percentage(info['POWER_2']) + '%');
+		$('.info .content .left .left_val').html(percentage(info['POWER_2']) + '%');
 	    else
-		$('.section.info .content .left').html('RD[' + info['GEARS_V'] + ']:' + (parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
-	    $('.section.info .content .right').html('Shifter[' + info['REMOTE_V'] + ']:' + (parseInt(info['POWER_1']) / 100).toFixed(2) + 'V');
+		$('.info .content .left .left_val').html((parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
 
-	    $('.section.gear_values .content').html('');
+	    $('.info .content .right .right_ver').html(info['REMOTE_V']);
+	    $('.info .content .right .right_val').html((parseInt(info['POWER_1']) / 100).toFixed(2) + 'V');
+
+	    $('.settings .gear_values .content').html('');
 	    for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
 		var r = parseInt(info['TOTAL_CNT']) - t;
-		$('.section.gear_values .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['GEARS[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
+		$('.settings .gear_values .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['GEARS[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
 	    }
 
 	    // show micro shift only on lowest gear
 	    if (info['NUM'] == 1)
-		$('.section.micro').show();
+		$('.settings .micro').show();
 	    else
-		$('.section.micro').hide();
+		$('.settings .micro').hide();
 
 	    // set gear values
-	    $('.section.gear_values .content .button.minus').off('click').on('click', function() {
+	    $('.settings .gear_values .content .button.minus').off('click').on('click', function() {
 		var v = $(this).next().val();
 		if (v > 0) v--;
 		$(this).next().val(v);
 	    });
-	    $('.section.gear_values .content .button.plus').off('click').on('click', function() {
+	    $('.settings .gear_values .content .button.plus').off('click').on('click', function() {
 		var v = $(this).prev().val();
 		v++;
 		$(this).prev().val(v);
 	    });
-	    $('.section.gear_values .content .button.set').off('click').on('click', function() {
+	    $('.settings .gear_values .content .button.set').off('click').on('click', function() {
 		startBlock("Update gear value");
 
 		var g = $(this).parent().attr('gear');
@@ -386,13 +409,13 @@ function parsePacket(hex, check_confirm = 0)
 	    });
 	    buildPresets();
 
-	    $('.section.buttons_function .button').removeClass('selected');
+	    $('.settings .buttons_function .button').removeClass('selected');
 	    if (parseInt(info['KeySwitch']) == 0) {
-	    	$('.section.buttons_function .vbutton.top').html('Up');
-	    	$('.section.buttons_function .vbutton.bottom').html('Down');
+	    	$('.settings .buttons_function .vbutton.top').html('Up');
+	    	$('.settings .buttons_function .vbutton.bottom').html('Down');
 	    } else {
-	    	$('.section.buttons_function .vbutton.top').html('Down');
-	    	$('.section.buttons_function .vbutton.bottom').html('Up');
+	    	$('.settings .buttons_function .vbutton.top').html('Down');
+	    	$('.settings .buttons_function .vbutton.bottom').html('Up');
 	    }
 	}
     }
@@ -429,21 +452,21 @@ function buildPresets()
     for (var t in gears) {
 	s += '<div class="preset_wrap"><div class="button preset" preset="' + t + '">' + t + '</div><div class="button del" preset="' + t + '">x</div></div>';
     }
-    $('.section.gear_values .presets').html(s);
+    $('.settings .gear_values .presets').html(s);
 
-    $('.section.gear_values .presets .preset').off('click').on('click', function() {
+    $('.settings .gear_values .presets .preset').off('click').on('click', function() {
 	var a = localStorage.getItem('gears');
 	a = JSON.parse(a);
 	if (a != null) {
 	    for (var t in a[$(this).attr('preset')])
 	    {
-		$('.section.gear_values .content .gear[gear="' + a[$(this).attr('preset')][t].gear + '"] input').val(a[$(this).attr('preset')][t].value);
+		$('.settings .gear_values .content .gear[gear="' + a[$(this).attr('preset')][t].gear + '"] input').val(a[$(this).attr('preset')][t].value);
 	    }
 	}
 
 	qalert('Gear values loaded from preset "' + $(this).attr('preset') + '"<br />Click "Set all" to upload then to RD');
     });
-    $('.section.gear_values .presets .del').off('click').on('click', function() {
+    $('.settings .gear_values .presets .del').off('click').on('click', function() {
 	var pname =  $(this).attr('preset');
 	if (confirm('Delete preset "' + pname + '"?')) {
 	    var a = localStorage.getItem('gears');
@@ -580,15 +603,17 @@ $(document).ready(function() {
 	$('.button_debug').removeClass('selected');
     }
 
+    
+
     document.addEventListener('pointerup', detectDoubleTap(500));
 
     // scan
-    $('.section.scan .button.scan').on('click', function() {
+    $('.scan .button.edsscan').on('click', function() {
 	navigator.bluetooth.requestDevice({ filters: [{ name: ['EDS OX'] }], optionalServices: [ "6e400001-b5a3-f393-e0a9-e50e24dcca9e" ] })
 	.then(device => {
 	    setup();
 	    startBlock("Connected");
-	    $('.section.scan').hide();
+	    $('.scan').hide();
 
 	    log('Connected');
 
@@ -634,19 +659,20 @@ $(document).ready(function() {
     });
 
     // V/%
-    $('.section.info .content .left').on('click', function() {
+    $('.info .content .left').on('click', function() {
+	$('.info .content .left .left_ver').html(info['GEARS_V']);
 	if ($(this).attr('type') == 'volts') {
-	    $('.section.info .content .left').html('RD[' + info['GEARS_V'] + ']:' + percentage(parseInt(info['POWER_2'])) + '%');
+	    $('.info .content .left .left_val').html(percentage(parseInt(info['POWER_2'])) + '%');
 	    $(this).attr('type', 'percent');
 	} else {
-	    $('.section.info .content .left').html('RD[' + info['GEARS_V'] + ']:' + (parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
+	    $('.info .content .left .left_val').html((parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
 	    $(this).attr('type', 'volts');
 	}
 	localStorage.setItem('battery', $(this).attr('type'));
     });
 
     // shift up
-    $('.section.action_buttons .button.up').on('click', function() {
+    $('.settings .action_buttons .button.up, .live .action_buttons .button.up').on('click', function() {
 	qalert("Up shift");
 
 	var f = 0x02;
@@ -656,7 +682,7 @@ $(document).ready(function() {
 	log("Send: rearLifting -> " + f.toString(16));
     });
     // shift down
-    $('.section.action_buttons .button.down').on('click', function() {
+    $('.settings .action_buttons .button.down, .live .action_buttons .button.down').on('click', function() {
 	qalert("Down shift");
 
 	var f = 0x01;
@@ -667,13 +693,13 @@ $(document).ready(function() {
     });
 
     // number of gears
-    $('.section.action_buttons .button.gears select').on('change', function() {
+    $('.settings .action_buttons .button.gears select').on('change', function() {
 	var t = $(this).val();
 	if (t < parseInt(info['NUM']) + 1) {
 	    endBlock();
 	    qalert('Selected total number of gears is<br />less than current gear!<br /><br />Please, shift on gear less or<br />equal of total number of gears.', 0);
 
-	    $('.section.action_buttons .button.gears select').val(info['TOTAL_CNT']);
+	    $('.settings .action_buttons .button.gears select').val(info['TOTAL_CNT']);
 	} else {
 	    startBlock("Change number of gears");
 	    var f = t;
@@ -687,7 +713,7 @@ $(document).ready(function() {
     });
 
     // micro shift up
-    $('.section.micro .up').on('click', function() {
+    $('.settings .micro .up').on('click', function() {
 	qalert("Up micro shift");
 
 	var f = 0x02;
@@ -697,7 +723,7 @@ $(document).ready(function() {
 	log("Send: fineTuneGear -> " + f.toString(16));
     });
     // micro shift down
-    $('.section.micro .down').on('click', function() {
+    $('.settings .micro .down').on('click', function() {
 	qalert("Down micro shift");
 
 	var f = 0x01;
@@ -776,6 +802,7 @@ $(document).ready(function() {
 	if (confirm('Export settings, values and presets to file ' + fname + '?')) {
 	    var exp = {
 		'debug': $('.button_debug').hasClass('selected'),
+		'page': $('.button_page').hasClass('icon-wrench') ? "settings" : "live",
 		'battery': localStorage.getItem('battery'),
 		'current': []
 	    };
@@ -831,18 +858,34 @@ $(document).ready(function() {
 			    $('.button_debug').removeClass('selected');
 			    localStorage.setItem('show_debug', 0);
 			}
-		    if (g.hasOwnProperty('battery'))
+		    if (g.hasOwnProperty('page'))
+			if (g.page == "settings") {
+			    $('.settings').show();
+			    $('.live').hide();
+			    $('.info').removeClass('big');
+			    $('.button_page').removeClass('icon-bike').addClass('icon-wrench');
+			    localStorage.setItem('show_page', "settings");
+			} else {
+			    $('.settings').hide();
+			    $('.live').show();
+			    $('.info').addClass('big');
+			    $('.button_page').removeClass('icon-wrench').addClass('icon-bike');
+			    localStorage.setItem('show_page', "live");
+			}
+		    if (g.hasOwnProperty('battery')) {
+			$('.info .content .left .left_ver').html(info['GEARS_V']);
 			if (g.battery == 'percent') {
-			    $('.section.info .content .left').html('RD[' + info['GEARS_V'] + ']:' + percentage(parseInt(info['POWER_2'])) + '%');
+			    $('.info .content .left .left_val').html(percentage(parseInt(info['POWER_2'])) + '%');
 			    $(this).attr('type', 'percent');
 			} else {
-			    $('.section.info .content .left').html('RD[' + info['GEARS_V'] + ']:' + (parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
+			    $('.info .content .left .left_val').html((parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
 			    $(this).attr('type', 'volts');
 			}
+		    }
 
 		    if (g.hasOwnProperty('current')) {
 			for (var t in g.current) {
-			    $('.section.gear_values .content .gear[gear="' + g.current[t].gear + '"] input').val(g.current[t].value);
+			    $('.settings .gear_values .content .gear[gear="' + g.current[t].gear + '"] input').val(g.current[t].value);
 			}
 		    }
 		    if (g.hasOwnProperty('gears')) {
@@ -860,8 +903,8 @@ $(document).ready(function() {
     });
 
     // set buttons function
-    $('.section.buttons_function .vbutton').on('click', function() {
-	if ($('.section.buttons_function .vbutton:first-child').html() == "Up") {
+    $('.settings .buttons_function .vbutton').on('click', function() {
+	if ($('.settings .buttons_function .vbutton:first-child').html() == "Up") {
 	    var f = 0x01;
 	} else {
 	    var f = 0x00;
@@ -890,9 +933,40 @@ $(document).ready(function() {
 	}
     });
 
+    // menu
+    $('.button_menu').on('click', function() {
+	if ($(this).hasClass('selected')) {
+	    $('.menus .bmenus').hide();
+	    $(this).removeClass('selected');
+	} else {
+	    $('.menus .bmenus').show();
+	    $(this).addClass('selected');
+	}
+    });
+
+    // switch live / settings page
+    $('.button_page').on('click', function() {
+	if ($(this).hasClass('icon-bike')) {
+	    $('.settings').show();
+	    $('.live').hide();
+	    $('.info').removeClass('big');
+	    $(this).removeClass('icon-bike').addClass('icon-wrench');
+	    localStorage.setItem('show_page', 'settings');
+	} else {
+	    $('.settings').hide();
+	    $('.live').show();
+	    $('.info').addClass('big');
+	    $(this).removeClass('icon-wrench').addClass('icon-bike');
+	    localStorage.setItem('show_page', 'live');
+	}
+    });
+
     // disconnect
-    $('.section.disconnect .button.disconnect').on('click', function() {
+    $('.button_power').on('click', function() {
 	qalert("Disconnected");
+
+	$('.button_menu').removeClass('selected');
+	$('.bmenus').hide();
 
 	dev.gatt.disconnect();
     });

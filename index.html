@@ -11,73 +11,90 @@
 </head>
 <body>
 
-<div class="section info">
-    <div class="content" style="display: none;">
-	<div class="left" type="volts"></div>
-	<div class="right"></div>
-    </div>
-</div>
-
-<div class="section scan">
-    <div class="button scan">Scan for EDS OX</div>
-</div>
-
-<div class="section action_buttons" style="display: none;">
-    <div class="button up">Up</div>
-    <div class="button gear"></div>
-    <div class="button gears">
-	<select>
-	    <option value="3">3</option>
-	    <option value="4">4</option>
-	    <option value="5">5</option>
-	    <option value="6">6</option>
-	    <option value="7">7</option>
-	    <option value="8">8</option>
-	    <option value="9">9</option>
-	    <option value="10">10</option>
-	    <option value="11">11</option>
-	    <option value="12">12</option>
-	    <option value="13">13</option>
-	    <option value="14">14</option>
-	</select>
-    </div>
-    <div class="button down">Down</div>
-</div>
-
-<div class="section micro" style="display: none;">
-    <div class="button up">Up</div>
-    <div class="button down">Down</div>
-</div>
-
-<div class="section gear_values" style="display: none;">
-    <div class="vcontent">
-	<div class="content"></div>
-	<div class="buttons">
-	    <div class="fake"></div>
-	    <div class="button set_all">Set all</div>
-	    <div class="button save">Save as</div>
-	</div>
-    </div>
-    <div class="presets"></div>
-    <div class="button import">Import</div>
-    <div class="button export">Export</div>
-</div>
-
-<div class="section buttons_function" style="display: none;">
+<div class="info" style="display: none;">
     <div class="content">
-	<div class="vbox">
-	    <div class="vbutton top">Up</div>
-	    <div class="vbutton bottom">Down</div>
-	</div>
+	<div class="left" type="volts"><span class="left_rd">RD[<span class="left_ver"></span>]:</span> <span class="left_val"></span></div>
+	<div class="right"><span class="right_shifter">Shifter[<span class="right_ver"></span>]:</span> <span class="right_val"></span></div>
     </div>
 </div>
 
-<div class="section disconnect" style="display: none;">
-    <div class="button disconnect">Disconnect</div>
+<div class="scan">
+    <div class="button edsscan">Scan for EDS OX</div>
+</div>
+
+<div class="live" style="display: none;">
+    <div class="cgear">
+	<div class="gear"></div>
+	<div class="gears"></div>
+    </div>
+
+    <div class="action_buttons">
+	<div class="button down">Down</div>
+	<div class="button up">Up</div>
+    </div>
+</div>
+
+<div class="settings" style="display: none;">
+    <div class="action_buttons">
+	<div class="button down">Down</div>
+	<div class="button gear"></div>
+	<div class="button gears">
+	    <select>
+		<option value="3">3</option>
+		<option value="4">4</option>
+		<option value="5">5</option>
+		<option value="6">6</option>
+		<option value="7">7</option>
+		<option value="8">8</option>
+		<option value="9">9</option>
+		<option value="10">10</option>
+		<option value="11">11</option>
+		<option value="12">12</option>
+		<option value="13">13</option>
+		<option value="14">14</option>
+	    </select>
+	</div>
+	<div class="button up">Up</div>
+    </div>
+
+    <div class="micro" style="display: none;">
+	<div class="button up">Up</div>
+	<div class="button down">Down</div>
+    </div>
+
+    <div class="gear_values">
+	<div class="vcontent">
+	    <div class="content"></div>
+	    <div class="buttons">
+		<div class="fake"></div>
+		<div class="button set_all">Set all</div>
+		<div class="button save">Save as</div>
+	    </div>
+	</div>
+	<div class="presets"></div>
+	<div class="button import">Import</div>
+	<div class="button export">Export</div>
+    </div>
+
+    <div class="buttons_function">
+	<div class="content">
+	    <div class="vbox">
+		<div class="vbutton top">Up</div>
+		<div class="vbutton bottom">Down</div>
+	    </div>
+	</div>
+    </div>
 </div>
 
 <textarea class="debug" readonly></textarea>
-<div class="button button_debug selected">X</div>
+<div class="menus">
+    <div class="bmenus" style="display: none;">
+	<div class="button button_power icon-power" style="display: none;"></div>
+	<div class="button button_debug icon-logs selected"></div>
+	<div class="button button_page icon-wrench" style="display: none;"></div>
+    </div>
+    <div class="button button_menu icon-gear"></div>
+</div>
 
 <div class="error" style="display: none;"></div>
 <div class="qalert" style="display: none;"></div>
