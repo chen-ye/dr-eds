@@ -601,13 +601,13 @@ $(document).ready(function() {
     if (show_debug == null) show_debug = 1;
     if (show_debug == 1) {
 	$('.debug').show();
+	$('body').addClass('logs');
 	$('.button_debug').addClass('selected');
     } else {
 	$('.debug').hide();
+	$('body').removeClass('logs');
 	$('.button_debug').removeClass('selected');
     }
-
-    
 
     document.addEventListener('pointerup', detectDoubleTap(500));
 
@@ -855,10 +855,12 @@ $(document).ready(function() {
 		    if (g.hasOwnProperty('debug'))
 			if (g.debug) {
 			    $('.debug').show();
+			    $('body').addClass('logs');
 			    $('.button_debug').addClass('selected');
 			    localStorage.setItem('show_debug', 1);
 			} else {
 			    $('.debug').hide();
+			    $('body').removeClass('logs');
 			    $('.button_debug').removeClass('selected');
 			    localStorage.setItem('show_debug', 0);
 			}
@@ -928,10 +930,12 @@ $(document).ready(function() {
     $('.button_debug').on('click', function() {
 	if ($(this).hasClass('selected')) {
 	    $('.debug').hide();
+	    $('body').removeClass('logs');
 	    $(this).removeClass('selected');
 	    localStorage.setItem('show_debug', 0);
 	} else {
 	    $('.debug').show();
+	    $('body').addClass('logs');
 	    $(this).addClass('selected');
 	    localStorage.setItem('show_debug', 1);
 	}
