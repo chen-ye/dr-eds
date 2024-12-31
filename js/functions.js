@@ -7,6 +7,7 @@
 var debug = 1;
 var show_debug = 1;
 var show_page = 'settings';
+var device_type = "";
 
 const cmd_getKey = 0x11;
 const cmd_getLockInfo = 0x31;
@@ -238,6 +239,39 @@ function handleCharacteristicValueChanged(event)
 	} else {
 	    error('Command failed');
 	}
+    } else
+    if (r.cmd == cmd_frontStatusReport)
+    {
+        log("Received: frontStatusReport");
+
+        //var a = new Uint8Array([ 0xfe, 0x32, key, cmd_getFrontAndRearDerailleurGearValuesInfo, 0x03, 0x02, 0x01, 0x06, 0x00, 0x00 ]);
+        //a = setCRC16(a);
+	//characteristic_TX.writeValueWithoutResponse(a);
+	//log("Send: getFrontAndRearDerailleurGearValuesInfo");
+    } else
+    if (r.cmd == cmd_getFrontAndRearDerailleurGearValuesInfo)
+    {
+        log("Received: getFrontAndRearDerailleurGearValuesInfo");
+
+        var s = "FD:";
+        for (var t = 0; t < r.payload_length; t = t + 1)
+        {
+	    s += ' ' + r.payload[t];
+	}
+	log(s);
+
+	// start read all the data
+	//var a = new Uint8Array([ 0xfe, 0x32, key, cmd_startRead, 0x00, 0x00, 0x00 ]);
+	//a = setCRC16(a);
+	//characteristic_TX.writeValueWithoutResponse(a);
+	//log("Send: startRead");
+
+	// let's read all the data
+	//current_block = 0;
+	//var a = new Uint8Array([ 0xfe, 0x32, key, cmd_read, 0x03, 0x00, current_block, 0x51, 0x00, 0x00 ]);
+	//a = setCRC16(a);
+	//characteristic_TX.writeValueWithoutResponse(a);
+	//log("Send: read block " + current_block + "[" + blocks + "]");
     }
 }
 
@@ -615,10 +649,11 @@ $(document).ready(function() {
 
     // scan
     $('.scan .button.edsscan').on('click', function() {
-	navigator.bluetooth.requestDevice({ filters: [{ name: ['EDS OX'] }], optionalServices: [ "6e400001-b5a3-f393-e0a9-e50e24dcca9e" ] })
+	navigator.bluetooth.requestDevice({ filters: [{ namePrefix: ['EDS'] }], optionalServices: [ "6e400001-b5a3-f393-e0a9-e50e24dcca9e" ] })
 	.then(device => {
+	    device_type = device.name;
 	    setup();
-	    startBlock("Connected");
+	    startBlock("Connected to " + device.name);
 	    $('.scan').hide();
 
 	    log('Connected');
