@@ -97,7 +97,8 @@ body.logs {
     right: 0;
     z-index: 100;
 }
-.info .content {
+.info .content,
+.info .txcontent {
     background: var(--selected-background-color);
     color: var(--selected-text-color);
     font-family: var(--debug-font);

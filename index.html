@@ -11,10 +11,20 @@
 </head>
 <body>
 
-<div class="info" style="display: none;">
-    <div class="content">
+<div class="info">
+    <div class="content" style="display: none;">
 	<div class="left" type="volts"><span class="left_rd">RD[<span class="left_ver"></span>]:</span> <span class="left_val"></span></div>
 	<div class="right"><span class="right_shifter">Shifter[<span class="right_ver"></span>]:</span> <span class="right_val"></span></div>
+    </div>
+    <div class="txcontent" style="display: none;">
+	<div class="left" type="volts">
+	    <span class="left_rd">RD[<span class="left_rver"></span>]:</span> <span class="left_rval"></span>&nbsp;
+	    <span class="left_rd">FD[<span class="left_fver"></span>]:</span> <span class="left_fval"></span>
+	</div>
+	<div class="right">
+	    <span class="right_shifter">L[<span class="right_lver"></span>]:</span> <span class="right_lval"></span>
+	    <span class="right_shifter">R[<span class="right_rver"></span>]:</span> <span class="right_rval"></span>
+	</div>
     </div>
 </div>
 
@@ -124,10 +134,10 @@
     </div>
 
     <div class="gear_values">
-	<div class="fvcontent" style="border: 1px solid red;">
+	<div class="fvcontent">
 	    <div class="content"></div>
 	</div>
-	<div class="vcontent" style="border: 1px solid red;">
+	<div class="vcontent">
 	    <div class="content"></div>
 	    <div class="buttons">
 		<div class="fake"></div>
