@@ -134,15 +134,24 @@ body.logs {
     position: relative;
 }
 
-.settings .action_buttons {
+.settings .action_buttons,
+.txsettings .front_buttons {
     text-align: center;
     margin-top: 4em;
 }
+.txsettings .action_buttons {
+    text-align: center;
+    margin-top: 2em;
+}
 .settings .action_buttons .button,
+.txsettings .action_buttons .button,
+.txsettings .front_buttons .button,
 .live .action_buttons .button {
     position: relative;
 }
 .settings .action_buttons .button:after,
+.txsettings .action_buttons .button:after,
+.txsettings .front_buttons .button:after,
 .live .action_buttons .button:after {
     color: var(--main-text-light-color);
     position: absolute;
@@ -152,7 +161,9 @@ body.logs {
     margin: 0 auto;
     font-size: 0.7em;
 }
-.settings .action_buttons .button:before {
+.settings .action_buttons .button:before,
+.txsettings .front_buttons .button:before,
+.txsettings .action_buttons .button:before {
     color: var(--main-text-light-color);
     position: absolute;
     top: 0;
@@ -161,33 +172,48 @@ body.logs {
     margin: 0 auto;
     font-size: 0.7em;
 }
-.settings .action_buttons .button.gear:before {
+.settings .action_buttons .button.gear:before,
+.txsettings .front_buttons .button.gear:before,
+.txsettings .action_buttons .button.gear:before {
     content: "current";
 }
-.settings .action_buttons .button.gears:before {
+.settings .action_buttons .button.gears:before,
+.txsettings .action_buttons .button.gears:before {
     content: "total";
 }
 .settings .action_buttons .button.up:after,
 .settings .action_buttons .button.down:after,
+.txsettings .front_buttons .button.up:after,
+.txsettings .front_buttons .button.down:after,
+.txsettings .action_buttons .button.up:after,
+.txsettings .action_buttons .button.down:after,
 .live .action_buttons .button.up:after,
 .live .action_buttons .button.down:after {
     content: "shift";
 }
-.settings .action_buttons .button.gear:after {
+.settings .action_buttons .button.gear:after,
+.txsettings .front_buttons .button.gear:after,
+.txsettings .action_buttons .button.gear:after {
     content: "gear";
 }
-.settings .action_buttons .button.gears:after {
+.settings .action_buttons .button.gears:after,
+.txsettings .action_buttons .button.gears:after {
     content: "gears";
 }
-
-.settings .micro {
+.settings .micro,
+.txsettings .front_micro,
+.txsettings .micro {
     text-align: center;
     margin-top: 0.2em;
 }
-.settings .micro .button {
+.settings .micro .button,
+.txsettings .front_micro .button,
+.txsettings .micro .button {
     position: relative;
 }
-.settings .micro .button:after {
+.settings .micro .button:after,
+.txsettings .front_micro .button:after,
+.txsettings .micro .button:after {
     color: var(--main-text-light-color);
     position: absolute;
     bottom: 0;
@@ -196,7 +222,9 @@ body.logs {
     margin: 0 auto;
     font-size: 0.7em;
 }
-.settings .micro .button:before {
+.settings .micro .button:before,
+.txsettings .front_micro .button:before,
+.txsettings .micro .button:before {
     color: var(--main-text-light-color);
     position: absolute;
     top: 0;
@@ -206,23 +234,34 @@ body.logs {
     font-size: 0.7em;
 }
 .settings .micro .button.up:before,
-.settings .micro .button.down:before {
+.settings .micro .button.down:before,
+.txsettings .front_micro .button.up:before,
+.txsettings .front_micro .button.down:before,
+.txsettings .micro .button.up:before,
+.txsettings .micro .button.down:before {
     content: "micro";
 }
 .settings .micro .button.up:after,
-.settings .micro .button.down:after {
+.settings .micro .button.down:after,
+.txsettings .front_micro .button.up:after,
+.txsettings .front_micro .button.down:after,
+.txsettings .micro .button.up:after,
+.txsettings .micro .button.down:after {
     content: "shift";
 }
-
-.settings .gear_values {
+.settings .gear_values,
+.txsettings .gear_values {
     text-align: center;
     margin-top: 2em;
 }
-.settings .gear_values .gear {
+.settings .gear_values .gear,
+.txsettings .gear_values .gear {
     margin-bottom: 0.2em;
     white-space: nowrap;
 }
-.settings .gear_values .vcontent {
+.settings .gear_values .vcontent,
+.txsettings .gear_values .fvcontent,
+.txsettings .gear_values .vcontent {
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
@@ -234,9 +273,11 @@ body.logs {
     flex-direction: row;
     justify-content: center;
 }
-.settings .gear_values .content {
+.settings .gear_values .content,
+.txsettings .gear_values .content {
 }
-.settings .gear_values .buttons {
+.settings .gear_values .buttons,
+.txsettings .gear_values .buttons {
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
@@ -250,19 +291,25 @@ body.logs {
     justify-content: space-between;
     margin-left: 1em;
 }
-.settings .gear_values .buttons .button {
+.settings .gear_values .buttons .button,
+.txsettings .gear_values .buttons .button {
     margin-bottom: 0.2em;
 }
-.settings .gear_values .buttons .fake {
+.settings .gear_values .buttons .fake,
+.txsettings .gear_values .buttons .fake {
 }
-.settings .gear_values .buttons .set_all {
+.settings .gear_values .buttons .set_all,
+.txsettings .gear_values .buttons .set_all {
 }
-.settings .gear_values .buttons .save {
+.settings .gear_values .buttons .save,
+.txsettings .gear_values .buttons .save {
 }
-.settings .gear_values .content .button.plus {
+.settings .gear_values .content .button.plus,
+.txsettings .gear_values .content .button.plus {
     position: relative;
 }
-.settings .gear_values .content .button.plus:after {
+.settings .gear_values .content .button.plus:after,
+.txsettings .gear_values .content .button.plus:after {
     color: var(--main-text-light-color);
     position: absolute;
     bottom: 0;
@@ -275,22 +322,26 @@ body.logs {
     z-index: 1;
     pointer-events: none;
 }
-.settings .gear_values .presets {
+.settings .gear_values .presets,
+.txsettings .gear_values .presets {
     margin-top: 1em;
     margin-bottom: 1em;
 }
-.settings .gear_values .preset_wrap {
+.settings .gear_values .preset_wrap,
+.txsettings .gear_values .preset_wrap {
     white-space: nowrap;
     display: inline-block;
     margin: 0 0.1em;
 }
-.settings .gear_values .preset_wrap .preset {
+.settings .gear_values .preset_wrap .preset,
+.txsettings .gear_values .preset_wrap .preset {
     border-right: none;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     padding-right: 0.2em;
 }
-.settings .gear_values .preset_wrap .del {
+.settings .gear_values .preset_wrap .del,
+.txsettings .gear_values .preset_wrap .del {
     border-left: none;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;

@@ -408,10 +408,10 @@ function parsePacket(hex, check_confirm = 0)
 	    $('.info .content .right .right_ver').html(info['REMOTE_V']);
 	    $('.info .content .right .right_val').html((parseInt(info['POWER_1']) / 100).toFixed(2) + 'V');
 
-	    $('.settings .gear_values .content').html('');
+	    $('.settings .gear_values .vcontent .content').html('');
 	    for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
 		var r = parseInt(info['TOTAL_CNT']) - t;
-		$('.settings .gear_values .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['GEARS[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
+		$('.settings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['GEARS[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
 	    }
 
 	    // show micro shift only on lowest gear
@@ -421,17 +421,17 @@ function parsePacket(hex, check_confirm = 0)
 		$('.settings .micro').hide();
 
 	    // set gear values
-	    $('.settings .gear_values .content .button.minus').off('click').on('click', function() {
+	    $('.settings .gear_values .vcontent .content .button.minus').off('click').on('click', function() {
 		var v = $(this).next().val();
 		if (v > 0) v--;
 		$(this).next().val(v);
 	    });
-	    $('.settings .gear_values .content .button.plus').off('click').on('click', function() {
+	    $('.settings .gear_values .vcontent .content .button.plus').off('click').on('click', function() {
 		var v = $(this).prev().val();
 		v++;
 		$(this).prev().val(v);
 	    });
-	    $('.settings .gear_values .content .button.set').off('click').on('click', function() {
+	    $('.settings .gear_values .vcontent .content .button.set').off('click').on('click', function() {
 		startBlock("Update gear value");
 
 		var g = $(this).parent().attr('gear');
@@ -500,7 +500,7 @@ function buildPresets()
 	if (a != null) {
 	    for (var t in a[$(this).attr('preset')])
 	    {
-		$('.settings .gear_values .content .gear[gear="' + a[$(this).attr('preset')][t].gear + '"] input').val(a[$(this).attr('preset')][t].value);
+		$('.settings .gear_values .vcontent .content .gear[gear="' + a[$(this).attr('preset')][t].gear + '"] input').val(a[$(this).attr('preset')][t].value);
 	    }
 	}
 
@@ -617,7 +617,7 @@ function endBlock()
 $(document).ready(function() {
     var bt_supported = 0;
 
-    if (navigator.bluetooth == null) {
+    /*if (navigator.bluetooth == null) {
 	log('Sorry, no web bluetooth support');
 	log('Try to install Chrome browser on your device first and try this app again');
 	return;
@@ -630,7 +630,7 @@ $(document).ready(function() {
 	    log('Vivaldi: open vivaldi://flags and enable web bluetooth support');
 	    return;
 	}
-    });
+    });*/
 
     show_debug = localStorage.getItem('show_debug');
     // set show_debug by default
