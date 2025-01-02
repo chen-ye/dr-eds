@@ -459,24 +459,28 @@ select {
     font-family: var(--main-font);
     text-align: center;
 }
-.settings .gear_values .button.minus {
+.settings .gear_values .button.minus,
+.txsettings .gear_values .button.minus {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-right: 0;
     padding: 0.6em 1em;
     width: 0em;
 }
-.settings .gear_values .button.plus {
+.settings .gear_values .button.plus,
+.txsettings .gear_values .button.plus {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     border-left: 0;
     padding: 0.6em 1em;
     width: 0em;
 }
-.settings .gear_values .button.set {
+.settings .gear_values .button.set,
+.txsettings .gear_values .button.set {
     margin-left: 0.2em;
 }
-.settings .gear_values input[type="text"] {
+.settings .gear_values input[type="text"],
+.txsettings .gear_values input[type="text"] {
     width: 3em;
     border: 2px solid var(--main-color);
     color: var(--main-text-color);

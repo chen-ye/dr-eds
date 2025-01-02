@@ -16,6 +16,7 @@ const cmd_getFrontAndRearDerailleurGearValuesInfo = 0x61;
 const cmd_backSetting = 0x67;
 const cmd_getDeviceMac = 0x86;
 const cmd_frontStatusReport = 0x88;
+const cmd_frontLifting = 0x89;
 const cmd_setTotalGear = 0x91;
 const cmd_setGearUpValue = 0x92;
 const cmd_fineTuneGear = 0x95;
@@ -51,6 +52,7 @@ function log(s, force)
 function setup()
 {
     $('.settings').hide();
+    $('.txsettings').hide();
     $('.scan').show();
     $('.debug').html('');
     $('.info .content').hide();
@@ -134,7 +136,7 @@ function handleCharacteristicValueChanged(event)
 	log("RD received rearLifting", 1);
     } else
     if (r.cmd == cmd_serverReportGear) {
-	// sfifted to gear
+	// shifted to gear
 	var s = "";
 	for (var t = 0; t < r.payload_length; t++)
 	{
@@ -150,15 +152,31 @@ function handleCharacteristicValueChanged(event)
 	    log("RD finish rearLifting to gear " + t, 1);
 
 	// show micro shift only on lowest gear
+	var pr = "";
+	if (device_type == "EDS TX") pr = "tx";
 	if (info['NUM'] == 1)
-	    $('.settings .micro').show();
+	    $('.' + pr + 'settings .micro').show();
 	else
-	    $('.settings .micro').hide();
+	    $('.' + pr + 'settings .micro').hide();
 
-	$('.settings .action_buttons .button.gear').html(t);
-	$('.settings .action_buttons .button.gears select').val(parseInt(info['TOTAL_CNT']));//.change();
+	$('.settings .action_buttons .button.gear, .txsettings .action_buttons .button.gear').html(t);
+	$('.settings .action_buttons .button.gears select, .txsettings .action_buttons .button.gears select').val(parseInt(info['TOTAL_CNT']));//.change();
 	$('.live .gear').html(t);
 	$('.live .gears').html('/' + info['TOTAL_CNT']);
+    } else
+    if (r.cmd == cmd_frontStatusReport) {
+	// shifted front
+	var s = "";
+	for (var t = 0; t < r.payload_length; t++)
+	{
+	    s += r.payload[t] + ' ';
+	}
+	log(s, 1);
+
+	info['Q_NUM'] = r.payload[4];
+	if ((info['Q_NUM'] == 1) || (info['Q_NUM'] == 2) || (info['Q_NUM'] == 3)) t = 1;
+	if ((info['Q_NUM'] == 4) || (info['Q_NUM'] == 5) || (info['Q_NUM'] == 6)) t = 2;
+	$('.txsettings .front_buttons .button.gear').html(t);
     } else
     if (r.cmd == cmd_switchFingerOrder) {
 	// for some reason this always return 0 after change which may indicate OK,
@@ -368,7 +386,11 @@ function parsePacket(hex, check_confirm = 0)
 	    }
 
 	    endBlock();
-	    $('.settings').show();
+	    if (device_type == "EDS OX")
+		$('.settings').show();
+	    else
+	    if (device_type == "EDS TX")
+		$('.txsettings').show();
 	    $('.scan').hide();
 	    $('.settings .micro').hide();
 	    if (device_type == "EDS OX")
@@ -385,12 +407,17 @@ function parsePacket(hex, check_confirm = 0)
 	    // set show_page by default
 	    if (show_page == null) show_page = 'settings';
 	    if (show_page == 'settings') {
-		$('.settings').show();
+		if (device_type == "EDS OX")
+		    $('.settings').show();
+		else
+		if (device_type == "EDS TX")
+		    $('.txsettings').show();
 		$('.live').hide();
 		$('.info').removeClass('big');
 		$('.button_page').removeClass('icon-wrench').addClass('icon-bike');
 	    } else {
 		$('.settings').hide();
+		$('.txsettings').hide();
 		$('.live').show();
 		$('.info').addClass('big');
 		$('.button_page').removeClass('icon-bike').addClass('icon-wrench');
@@ -398,10 +425,17 @@ function parsePacket(hex, check_confirm = 0)
 
 	    var t = parseInt(info['NUM']);
 	    t = parseInt(info['TOTAL_CNT']) - t + 1;
-	    $('.settings .action_buttons .button.gear').html(t);
-	    $('.settings .action_buttons .button.gears select').val(parseInt(info['TOTAL_CNT']));//.change();
+	    $('.settings .action_buttons .button.gear, .txsettings .action_buttons .button.gear').html(t);
+	    $('.settings .action_buttons .button.gears select, .txsettings .action_buttons .button.gears select').val(parseInt(info['TOTAL_CNT']));//.change();
 	    $('.live .gear').html(t);
 	    $('.live .gears').html('/' + info['TOTAL_CNT']);
+
+	    if (device_type == "EDS TX") {
+		t = 1;
+		if ((info['Q_NUM'] == 1) || (info['Q_NUM'] == 2) || (info['Q_NUM'] == 3)) t = 1;
+		if ((info['Q_NUM'] == 4) || (info['Q_NUM'] == 5) || (info['Q_NUM'] == 6)) t = 2;
+		$('.txsettings .front_buttons .button.gear').html(t);
+	    }
 
 	    var b = localStorage.getItem('battery');
 	    if (device_type == "EDS OX") {
@@ -431,30 +465,41 @@ function parsePacket(hex, check_confirm = 0)
 		$('.info .txcontent .right .right_rval').html((parseInt(info['R_POWER']) / 100).toFixed(2) + 'V');
 	    }
 
-	    $('.settings .gear_values .vcontent .content').html('');
-	    for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
-		var r = parseInt(info['TOTAL_CNT']) - t;
-		$('.settings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['GEARS[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
+	    if (device_type == "EDS OX") {
+		$('.settings .gear_values .vcontent .content').html('');
+		for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
+		    var r = parseInt(info['TOTAL_CNT']) - t;
+		    $('.settings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
+		}
+	    } else 
+	    if (device_type == "EDS TX") {
+		$('.txsettings .gear_values .vcontent .content').html('');
+		for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
+		    var r = parseInt(info['TOTAL_CNT']) - t;
+		    $('.txsettings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
+		}
 	    }
 
 	    // show micro shift only on lowest gear
+	    var pr = "";
+	    if (device_type == "EDS TX") pr = "tx";
 	    if (info['NUM'] == 1)
-		$('.settings .micro').show();
+		$('.' + pr + 'settings .micro').show();
 	    else
-		$('.settings .micro').hide();
+		$('.' + pr + 'settings .micro').hide();
 
 	    // set gear values
-	    $('.settings .gear_values .vcontent .content .button.minus').off('click').on('click', function() {
+	    $('.settings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .vcontent .content .button.minus').off('click').on('click', function() {
 		var v = $(this).next().val();
 		if (v > 0) v--;
 		$(this).next().val(v);
 	    });
-	    $('.settings .gear_values .vcontent .content .button.plus').off('click').on('click', function() {
+	    $('.settings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .vcontent .content .button.plus').off('click').on('click', function() {
 		var v = $(this).prev().val();
 		v++;
 		$(this).prev().val(v);
 	    });
-	    $('.settings .gear_values .vcontent .content .button.set').off('click').on('click', function() {
+	    $('.settings .gear_values .vcontent .content .button.set, .txsettings .gear_values .vcontent .content .button.set').off('click').on('click', function() {
 		startBlock("Update gear value");
 
 		var g = $(this).parent().attr('gear');
@@ -640,7 +685,7 @@ function endBlock()
 $(document).ready(function() {
     var bt_supported = 0;
 
-    /*if (navigator.bluetooth == null) {
+    if (navigator.bluetooth == null) {
 	log('Sorry, no web bluetooth support');
 	log('Try to install Chrome browser on your device first and try this app again');
 	return;
@@ -653,7 +698,7 @@ $(document).ready(function() {
 	    log('Vivaldi: open vivaldi://flags and enable web bluetooth support');
 	    return;
 	}
-    });*/
+    });
 
     show_debug = localStorage.getItem('show_debug');
     // set show_debug by default
@@ -750,7 +795,7 @@ $(document).ready(function() {
     });
 
     // shift up
-    $('.settings .action_buttons .button.up, .live .action_buttons .button.up').on('click', function() {
+    $('.settings .action_buttons .button.up, .txsettings .action_buttons .button.up, .live .action_buttons .button.up').on('click', function() {
 	qalert("Up shift");
 
 	var f = 0x02;
@@ -760,7 +805,7 @@ $(document).ready(function() {
 	log("Send: rearLifting -> " + f.toString(16));
     });
     // shift down
-    $('.settings .action_buttons .button.down, .live .action_buttons .button.down').on('click', function() {
+    $('.settings .action_buttons .button.down, .txsettings .action_buttons .button.down, .live .action_buttons .button.down').on('click', function() {
 	qalert("Down shift");
 
 	var f = 0x01;
@@ -771,7 +816,7 @@ $(document).ready(function() {
     });
 
     // number of gears
-    $('.settings .action_buttons .button.gears select').on('change', function() {
+    $('.settings .action_buttons .button.gears select, .txsettings .action_buttons .button.gears select').on('change', function() {
 	var t = $(this).val();
 	if (t < parseInt(info['NUM']) + 1) {
 	    endBlock();
@@ -791,7 +836,7 @@ $(document).ready(function() {
     });
 
     // micro shift up
-    $('.settings .micro .up').on('click', function() {
+    $('.settings .micro .up, .txsettings .micro .up').on('click', function() {
 	qalert("Up micro shift");
 
 	var f = 0x02;
@@ -801,7 +846,7 @@ $(document).ready(function() {
 	log("Send: fineTuneGear -> " + f.toString(16));
     });
     // micro shift down
-    $('.settings .micro .down').on('click', function() {
+    $('.settings .micro .down, .txsettings .micro .down').on('click', function() {
 	qalert("Down micro shift");
 
 	var f = 0x01;
@@ -940,13 +985,18 @@ $(document).ready(function() {
 			}
 		    if (g.hasOwnProperty('page'))
 			if (g.page == "settings") {
-			    $('.settings').show();
+			    if (device_type == "EDS OX")
+				$('.settings').show();
+			    else
+			    if (device_type == "EDS TX")
+				$('.txsettings').show();
 			    $('.live').hide();
 			    $('.info').removeClass('big');
 			    $('.button_page').removeClass('icon-wrench').addClass('icon-bike');
 			    localStorage.setItem('show_page', "settings");
 			} else {
 			    $('.settings').hide();
+			    $('.txsettings').hide();
 			    $('.live').show();
 			    $('.info').addClass('big');
 			    $('.button_page').removeClass('icon-bike').addClass('icon-wrench');
@@ -1029,13 +1079,18 @@ $(document).ready(function() {
     // switch live / settings page
     $('.button_page').on('click', function() {
 	if ($(this).hasClass('icon-wrench')) {
-	    $('.settings').show();
+	    if (device_type == "EDS OX")
+		$('.settings').show();
+	    else
+	    if (device_type == "EDS TX")
+		$('.txsettings').show();
 	    $('.live').hide();
 	    $('.info').removeClass('big');
 	    $(this).removeClass('icon-wrench').addClass('icon-bike');
 	    localStorage.setItem('show_page', 'settings');
 	} else {
 	    $('.settings').hide();
+	    $('.txsettings').hide();
 	    $('.live').show();
 	    $('.info').addClass('big');
 	    $(this).removeClass('icon-bike').addClass('icon-wrench');
