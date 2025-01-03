@@ -2,6 +2,9 @@
 /*
     TODO:
 	1. Firmware upgrade
+	2. casual/performance mode
+	3. shutdown
+	4. buttons settings
 */
 
 var debug = 1;
@@ -216,12 +219,6 @@ function handleCharacteristicValueChanged(event)
 	} else {
 	    error('Command failed');
 	}
-	//info = {};
-	//raw_info = [];
-	//var a = new Uint8Array([ 0xfe, 0x32, key, cmd_startRead, 0x00, 0x00, 0x00 ]);
-	//a = setCRC16(a);
-	//characteristic_TX.writeValueWithoutResponse(a);
-	//log("Send: startRead");
     } else
     if (r.cmd == cmd_setTotalGear) {
 	// for some reason this always return 0 after change which may indicate OK,
@@ -304,11 +301,6 @@ function handleCharacteristicValueChanged(event)
     if (r.cmd == cmd_frontStatusReport)
     {
         log("Received: frontStatusReport");
-
-        //var a = new Uint8Array([ 0xfe, 0x32, key, cmd_getFrontAndRearDerailleurGearValuesInfo, 0x03, 0x02, 0x01, 0x06, 0x00, 0x00 ]);
-        //a = setCRC16(a);
-	//characteristic_TX.writeValueWithoutResponse(a);
-	//log("Send: getFrontAndRearDerailleurGearValuesInfo");
     } else
     if (r.cmd == cmd_getFrontAndRearDerailleurGearValuesInfo)
     {
@@ -321,18 +313,16 @@ function handleCharacteristicValueChanged(event)
 	}
 	log(s);
 
-	// start read all the data
-	//var a = new Uint8Array([ 0xfe, 0x32, key, cmd_startRead, 0x00, 0x00, 0x00 ]);
-	//a = setCRC16(a);
-	//characteristic_TX.writeValueWithoutResponse(a);
-	//log("Send: startRead");
+	$('.txsettings .gear_values .fvcontent .content').html('');
+	for (var t = 0; t < r.payload_length; t = t + 2) {
+	    var v = r.payload[t] * 256;
+	    v += r.payload[t + 1];
+	    info['Q_GEA[' + ((t / 2) + 1) + ']'] = v;
+	}
+	info['Q_TOTAL'] = r.payload_length / 2;
 
-	// let's read all the data
-	//current_block = 0;
-	//var a = new Uint8Array([ 0xfe, 0x32, key, cmd_read, 0x03, 0x00, current_block, 0x51, 0x00, 0x00 ]);
-	//a = setCRC16(a);
-	//characteristic_TX.writeValueWithoutResponse(a);
-	//log("Send: read block " + current_block + "[" + blocks + "]");
+	buildFrontValues();
+	bindActionButtons();
     }
 }
 
@@ -473,6 +463,17 @@ function parsePacket(hex, check_confirm = 0)
 	    $('.live .gears').html('/' + info['TOTAL_CNT']);
 
 	    if (device_type == "EDS TX") {
+		// for some reason TX don't always initialize Q values at first
+		if (parseInt(info['Q_TOTAL']) == 0) {
+		    var f1 = 0x01;
+		    var f2 = 0x01;
+		    var f3 = 0x06;
+		    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_getFrontAndRearDerailleurGearValuesInfo, 0x03, f1, f2, f3, 0x00, 0x00 ]);
+		    a = setCRC16(a);
+		    characteristic_TX.writeValueWithoutResponse(a);
+		    log("Send: getFrontAndRearDerailleurGearValuesInfo, -> " + f1.toString(16) + ' ' + f2.toString(16) + ' ' + f3.toString(16));
+		}
+
 		t = 1;
 		if ((info['Q_NUM'] == 1) || (info['Q_NUM'] == 2) || (info['Q_NUM'] == 3)) t = 1;
 		if ((info['Q_NUM'] == 4) || (info['Q_NUM'] == 5) || (info['Q_NUM'] == 6)) t = 2;
@@ -522,12 +523,9 @@ function parsePacket(hex, check_confirm = 0)
 		    var r = parseInt(info['TOTAL_CNT']) - t;
 		    $('.settings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
 		}
-	    } else 
+	    } else
 	    if (device_type == "EDS TX") {
-		$('.txsettings .gear_values .fvcontent .content').html('');
-		for (var t = 1; t <= parseInt(info['Q_TOTAL']); t++) {
-		    $('.txsettings .gear_values .fvcontent .content').append('<div class="front" front="' + t + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['Q_GEA[' + t + ']']) + '"><div class="button plus front' + t + '">+</div><div class="button set">Set</div></div>');
-		}
+		buildFrontValues();
 
 		$('.txsettings .gear_values .vcontent .content').html('');
 		for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
@@ -544,49 +542,7 @@ function parsePacket(hex, check_confirm = 0)
 	    else
 		$('.' + pr + 'settings .micro').hide();
 
-	    // set gear values
-	    $('.settings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .fvcontent .content .button.minus').off('click').on('click', function() {
-		var v = $(this).next().val();
-		if (v > 0) v--;
-		$(this).next().val(v);
-	    });
-	    $('.settings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .fvcontent .content .button.plus').off('click').on('click', function() {
-		var v = $(this).prev().val();
-		v++;
-		$(this).prev().val(v);
-	    });
-	    $('.settings .gear_values .vcontent .content .button.set, .txsettings .gear_values .vcontent .content .button.set').off('click').on('click', function() {
-		startBlock("Update gear value");
-
-		var g = $(this).parent().attr('gear');
-		var v = $(this).prev().prev().val();
-
-		var v2 = (v & 0xFF);
-		var v1 = ((v >> 8) & 0xFF);
-
-		var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setGearUpValue, 0x03, g, v1, v2, 0x00, 0x00 ]);
-		a = setCRC16(a);
-		characteristic_TX.writeValueWithoutResponse(a);
-		log("Send: setGearUpValue -> " + g.toString(16) + ' = ' + v);
-
-		ctimeout = setTimeout(timeoutCheck, 1000);
-	    });
-	    $('.txsettings .gear_values .fvcontent .content .button.set').off('click').on('click', function() {
-		startBlock("Update front gear value");
-
-		var g = $(this).parent().attr('front');
-		var v = $(this).prev().prev().val();
-
-		var v2 = (v & 0xFF);
-		var v1 = ((v >> 8) & 0xFF);
-
-		var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setFrontGearLimit, 0x03, g, v1, v2, 0x00, 0x00 ]);
-		a = setCRC16(a);
-		characteristic_TX.writeValueWithoutResponse(a);
-		log("Send: setFrontGearLimit -> " + g.toString(16) + ' = ' + v);
-
-		ctimeout = setTimeout(timeoutCheck, 1000);
-	    });
+	    bindActionButtons();
 	    buildPresets();
 
 	    $('.settings .buttons_function .button').removeClass('selected');
@@ -660,6 +616,61 @@ function buildPresets()
 
 	    qalert('Preset "' + pname + '" deleted');
 	}
+    });
+}
+
+function buildFrontValues()
+{
+    $('.txsettings .gear_values .fvcontent .content').html('');
+    for (var t = 1; t <= parseInt(info['Q_TOTAL']); t++) {
+        $('.txsettings .gear_values .fvcontent .content').append('<div class="front" front="' + t + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['Q_GEA[' + t + ']']) + '"><div class="button plus front' + t + '">+</div><div class="button set">Set</div></div>');
+    }
+}
+
+function bindActionButtons()
+{
+    // set gear values
+    $('.settings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .fvcontent .content .button.minus').off('click').on('click', function() {
+	var v = $(this).next().val();
+	if (v > 0) v--;
+	$(this).next().val(v);
+    });
+    $('.settings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .fvcontent .content .button.plus').off('click').on('click', function() {
+	var v = $(this).prev().val();
+	v++;
+	$(this).prev().val(v);
+    });
+    $('.settings .gear_values .vcontent .content .button.set, .txsettings .gear_values .vcontent .content .button.set').off('click').on('click', function() {
+	startBlock("Update gear value");
+
+	var g = $(this).parent().attr('gear');
+	var v = $(this).prev().prev().val();
+
+	var v2 = (v & 0xFF);
+	var v1 = ((v >> 8) & 0xFF);
+
+	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setGearUpValue, 0x03, g, v1, v2, 0x00, 0x00 ]);
+	a = setCRC16(a);
+	characteristic_TX.writeValueWithoutResponse(a);
+	log("Send: setGearUpValue -> " + g.toString(16) + ' = ' + v);
+
+	ctimeout = setTimeout(timeoutCheck, 1000);
+    });
+    $('.txsettings .gear_values .fvcontent .content .button.set').off('click').on('click', function() {
+	startBlock("Update front gear value");
+
+	var g = $(this).parent().attr('front');
+	var v = $(this).prev().prev().val();
+
+	var v2 = (v & 0xFF);
+	var v1 = ((v >> 8) & 0xFF);
+
+	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setFrontGearLimit, 0x03, g, v1, v2, 0x00, 0x00 ]);
+	a = setCRC16(a);
+	characteristic_TX.writeValueWithoutResponse(a);
+	log("Send: setFrontGearLimit -> " + g.toString(16) + ' = ' + v);
+
+	ctimeout = setTimeout(timeoutCheck, 1000);
     });
 }
 
@@ -823,8 +834,7 @@ $(document).ready(function() {
 			}
 		    });
 		    // give it some time
-		    var timeout = 150;
-		    if (device_type == "EDS TX") timeout = 250;
+		    var timeout = 500;
 		    setTimeout(function() {
 			startBlock("Get key");
 
@@ -980,6 +990,33 @@ $(document).ready(function() {
 
 	all_gears = [];
 	$('.settings .gear_values .vcontent .content input').each(function() {
+	    var g = $(this).parent().attr('gear');
+	    var v = $(this).val();
+
+	    all_gears.push({
+		'gear': g,
+		'value': v
+	    });
+	});
+
+	// start iteration of all_gears
+	var v = all_gears.shift();
+
+	var v2 = (v.value & 0xFF);
+	var v1 = ((v.value >> 8) & 0xFF);
+
+	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setGearUpValue, 0x03, v.gear, v1, v2, 0x00, 0x00 ]);
+	a = setCRC16(a);
+	characteristic_TX.writeValueWithoutResponse(a);
+	log("Send: setGearUpValue -> " + v.gear.toString(16) + ' = ' + v.value);
+
+	ctimeout = setTimeout(timeoutCheck, 1000);
+    });
+    $('.txsettings .gear_values .vcontent .button.set_all').on('click', function() {
+	startBlock("Update gears values");
+
+	all_gears = [];
+	$('.txsettings .gear_values .vcontent .content input').each(function() {
 	    var g = $(this).parent().attr('gear');
 	    var v = $(this).val();
 
