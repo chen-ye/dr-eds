@@ -1,10 +1,9 @@
 
 /*
     TODO:
-	1. Firmware upgrade
+	1. firmware upgrade
 	2. casual/performance mode
-	3. shutdown
-	4. buttons settings
+	3. buttons settings
 */
 
 var debug = 1;
@@ -22,6 +21,7 @@ const cmd_fineTuneFrontGear = 0x85;
 const cmd_getDeviceMac = 0x86;
 const cmd_frontStatusReport = 0x88;
 const cmd_frontLifting = 0x89;
+const cmd_shutdown = 0x90;
 const cmd_setTotalGear = 0x91;
 const cmd_setGearUpValue = 0x92;
 const cmd_fineTuneGear = 0x95;
@@ -64,7 +64,8 @@ function setup()
     $('.info .txcontent').hide();
     $('.live').hide();
     $('.button_page').hide();
-    $('.button_power').hide();
+    $('.button_shutdown').hide();
+    $('.button_disconnect').hide();
     $('.button_export').hide();
     $('.button_import').hide();
     info = {};
@@ -431,7 +432,9 @@ function parsePacket(hex, check_confirm = 0)
 	    if (device_type == "EDS TX")
 		$('.info .txcontent').show();
 	    $('.button_page').show();
-	    $('.button_power').show();
+	    $('.button_disconnect').show();
+	    if (device_type == "EDS TX")
+		$('.button_shutdown').show();
 	    $('.button_export').show();
 	    $('.button_import').show();
 
@@ -1281,8 +1284,22 @@ $(document).ready(function() {
 	}
     });
 
+    // shutdown
+    $('.button_shutdown').on('click', function() {
+	qalert("Device shutdown");
+
+	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_shutdown, 0x00, 0x00, 0x00 ]);
+	a = setCRC16(a);
+	characteristic_TX.writeValueWithoutResponse(a);
+	log("Send: shutdown");
+
+	$('.bmenus').hide();
+
+	dev.gatt.disconnect();
+    });
+
     // disconnect
-    $('.button_power').on('click', function() {
+    $('.button_disconnect').on('click', function() {
 	qalert("Disconnected");
 
 	$('.button_menu').removeClass('selected');
