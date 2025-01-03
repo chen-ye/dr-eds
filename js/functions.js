@@ -440,10 +440,13 @@ function parsePacket(hex, check_confirm = 0)
 	    var b = localStorage.getItem('battery');
 	    if (device_type == "EDS OX") {
 		$('.info .content .left .left_ver').html(info['GEARS_V']);
-		if (b == 'percent')
+		if (b == 'percent') {
+		    $('.info .content').attr('type', 'percent');
 		    $('.info .content .left .left_val').html(percentage(info['POWER_2']) + '%');
-		else
+		} else {
+		    $('.info .content').attr('type', 'battery');
 		    $('.info .content .left .left_val').html((parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
+		}
 
 		$('.info .content .right .right_ver').html(info['REMOTE_V']);
 		$('.info .content .right .right_val').html((parseInt(info['POWER_1']) / 100).toFixed(2) + 'V');
@@ -452,11 +455,17 @@ function parsePacket(hex, check_confirm = 0)
 		$('.info .txcontent .left .left_rver').html(info['H_Ver']);
 		$('.info .txcontent .left .left_fver').html(info['Q_Ver']);
 		if (b == 'percent') {
+		    $('.info .txcontent').attr('type', 'percent');
+
 		    $('.info .txcontent .left .left_fval').html(percentage(info['Q_POWER']) + '%');
 		    $('.info .txcontent .left .left_rval').html(percentage(info['H_POWER']) + '%');
 		} else {
+		    $('.info .txcontent').attr('type', 'volts');
+
 		    $('.info .txcontent .left .left_fval').html((parseInt(info['Q_POWER']) / 100).toFixed(2) + 'V');
 		    $('.info .txcontent .left .left_rval').html((parseInt(info['H_POWER']) / 100).toFixed(2) + 'V');
+
+		    if (b == null) localStorage.setItem('battery', 'volts');
 		}
 
 		$('.info .txcontent .right .right_lver').html(info['L_Ver']);
@@ -473,6 +482,11 @@ function parsePacket(hex, check_confirm = 0)
 		}
 	    } else 
 	    if (device_type == "EDS TX") {
+		$('.txsettings .gear_values .fvcontent .content').html('');
+		for (var t = 1; t <= parseInt(info['Q_TOTAL']); t++) {
+		    $('.txsettings .gear_values .fvcontent .content').append('<div class="front" front="' + t + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['Q_GEA[' + t + ']']) + '"><div class="button plus front' + t + '">+</div><div class="button set">Set</div></div>');
+		}
+
 		$('.txsettings .gear_values .vcontent .content').html('');
 		for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
 		    var r = parseInt(info['TOTAL_CNT']) - t;
@@ -770,7 +784,7 @@ $(document).ready(function() {
     });
 
     // V/%
-    $('.info .content .left').on('click', function() {
+    $('.info .content').on('click', function() {
 	//$('.info .content .left .left_ver').html(info['GEARS_V']);
 	if ($(this).attr('type') == 'volts') {
 	    $('.info .content .left .left_val').html(percentage(parseInt(info['POWER_2'])) + '%');
@@ -1006,10 +1020,10 @@ $(document).ready(function() {
 			$('.info .content .left .left_ver').html(info['GEARS_V']);
 			if (g.battery == 'percent') {
 			    $('.info .content .left .left_val').html(percentage(parseInt(info['POWER_2'])) + '%');
-			    $(this).attr('type', 'percent');
+			    $('.info .content, .info .txcontent').attr('type', 'percent');
 			} else {
 			    $('.info .content .left .left_val').html((parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
-			    $(this).attr('type', 'volts');
+			    $('.info .content, .info .txcontent').attr('type', 'volts');
 			}
 		    }
 

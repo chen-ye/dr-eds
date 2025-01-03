@@ -256,6 +256,7 @@ body.logs {
     margin-top: 2em;
 }
 .settings .gear_values .gear,
+.txsettings .gear_values .front,
 .txsettings .gear_values .gear {
     margin-bottom: 0.2em;
     white-space: nowrap;
@@ -274,8 +275,8 @@ body.logs {
     flex-direction: row;
     justify-content: center;
 }
-.settings .gear_values .content,
-.txsettings .gear_values .content {
+.txsettings .gear_values .fvcontent {
+    margin-bottom: 1em;
 }
 .settings .gear_values .buttons,
 .txsettings .gear_values .buttons {
@@ -295,15 +296,6 @@ body.logs {
 .settings .gear_values .buttons .button,
 .txsettings .gear_values .buttons .button {
     margin-bottom: 0.2em;
-}
-.settings .gear_values .buttons .fake,
-.txsettings .gear_values .buttons .fake {
-}
-.settings .gear_values .buttons .set_all,
-.txsettings .gear_values .buttons .set_all {
-}
-.settings .gear_values .buttons .save,
-.txsettings .gear_values .buttons .save {
 }
 .settings .gear_values .content .button.plus,
 .txsettings .gear_values .content .button.plus {
@@ -590,6 +582,13 @@ select {
 .menus .bmenus>div {
     margin-right: 0.8em;
 }
+
+.front1:after { content: "front 1"; }
+.front2:after { content: "front 2"; }
+.front3:after { content: "front 3"; }
+.front4:after { content: "front 4"; }
+.front5:after { content: "front 5"; }
+.front6:after { content: "front 6"; }
 
 .gear1:after { content: "gear 1"; }
 .gear2:after { content: "gear 2"; }
