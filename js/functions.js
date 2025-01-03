@@ -14,6 +14,7 @@ const cmd_getLockInfo = 0x31;
 const cmd_getPowerInfo = 0x42;
 const cmd_getFrontAndRearDerailleurGearValuesInfo = 0x61;
 const cmd_backSetting = 0x67;
+const cmd_setFrontGearLimit = 0x82;
 const cmd_fineTuneFrontGear = 0x85;
 const cmd_getDeviceMac = 0x86;
 const cmd_frontStatusReport = 0x88;
@@ -271,6 +272,35 @@ function handleCharacteristicValueChanged(event)
 	    error('Command failed');
 	}
     } else
+    if (r.cmd == cmd_setFrontGearLimit) {
+	// for some reason this always return 0 after change which may indicate OK,
+	// but we ignore it since we already have it in input field
+	if (all_gears.length == 0) {
+	    endBlock();
+	}
+	if (r.payload[0] == 0x00) {
+	    clearTimeout(ctimeout);
+
+	    // iterate on all remaining items into all_gears until all are gone
+	    if (all_gears.length > 0) {
+		var v = all_gears.shift();
+
+		var v2 = (v.value & 0xFF);
+		var v1 = ((v.value >> 8) & 0xFF);
+
+		var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setFrontGearLimit, 0x03, v.gear, v1, v2, 0x00, 0x00 ]);
+		a = setCRC16(a);
+		characteristic_TX.writeValueWithoutResponse(a);
+		log("Send: setFrontGearLimit -> " + v.gear.toString(16) + ' = ' + v.value);
+
+		ctimeout = setTimeout(timeoutCheck, 1000);
+	    } else {
+		qalert("Updated front gear value");
+	    }
+	} else {
+	    error('Command failed');
+	}
+    } else
     if (r.cmd == cmd_frontStatusReport)
     {
         log("Received: frontStatusReport");
@@ -515,12 +545,12 @@ function parsePacket(hex, check_confirm = 0)
 		$('.' + pr + 'settings .micro').hide();
 
 	    // set gear values
-	    $('.settings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .vcontent .content .button.minus').off('click').on('click', function() {
+	    $('.settings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .fvcontent .content .button.minus').off('click').on('click', function() {
 		var v = $(this).next().val();
 		if (v > 0) v--;
 		$(this).next().val(v);
 	    });
-	    $('.settings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .vcontent .content .button.plus').off('click').on('click', function() {
+	    $('.settings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .fvcontent .content .button.plus').off('click').on('click', function() {
 		var v = $(this).prev().val();
 		v++;
 		$(this).prev().val(v);
@@ -538,6 +568,22 @@ function parsePacket(hex, check_confirm = 0)
 		a = setCRC16(a);
 		characteristic_TX.writeValueWithoutResponse(a);
 		log("Send: setGearUpValue -> " + g.toString(16) + ' = ' + v);
+
+		ctimeout = setTimeout(timeoutCheck, 1000);
+	    });
+	    $('.txsettings .gear_values .fvcontent .content .button.set').off('click').on('click', function() {
+		startBlock("Update front gear value");
+
+		var g = $(this).parent().attr('front');
+		var v = $(this).prev().prev().val();
+
+		var v2 = (v & 0xFF);
+		var v1 = ((v >> 8) & 0xFF);
+
+		var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setFrontGearLimit, 0x03, g, v1, v2, 0x00, 0x00 ]);
+		a = setCRC16(a);
+		characteristic_TX.writeValueWithoutResponse(a);
+		log("Send: setFrontGearLimit -> " + g.toString(16) + ' = ' + v);
 
 		ctimeout = setTimeout(timeoutCheck, 1000);
 	    });
@@ -929,11 +975,11 @@ $(document).ready(function() {
     });
 
     // set all gear values
-    $('.gear_values .button.set_all').on('click', function() {
+    $('.settings .gear_values .vcontent .button.set_all').on('click', function() {
 	startBlock("Update gears values");
 
 	all_gears = [];
-	$('.gear_values .content input').each(function() {
+	$('.settings .gear_values .vcontent .content input').each(function() {
 	    var g = $(this).parent().attr('gear');
 	    var v = $(this).val();
 
@@ -953,6 +999,34 @@ $(document).ready(function() {
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
 	log("Send: setGearUpValue -> " + v.gear.toString(16) + ' = ' + v.value);
+
+	ctimeout = setTimeout(timeoutCheck, 1000);
+    });
+    // set all front limits
+    $('.txsettings .gear_values .fvcontent .button.set_all').on('click', function() {
+	startBlock("Update front gears values");
+
+	all_gears = [];
+	$('.txsettings .gear_values .fvcontent .content input').each(function() {
+	    var g = $(this).parent().attr('front');
+	    var v = $(this).val();
+
+	    all_gears.push({
+		'gear': g,
+		'value': v
+	    });
+	});
+
+	// start iteration of all_gears
+	var v = all_gears.shift();
+
+	var v2 = (v.value & 0xFF);
+	var v1 = ((v.value >> 8) & 0xFF);
+
+	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setFrontGearLimit, 0x03, v.gear, v1, v2, 0x00, 0x00 ]);
+	a = setCRC16(a);
+	characteristic_TX.writeValueWithoutResponse(a);
+	log("Send: setFrontGearLimit -> " + v.gear.toString(16) + ' = ' + v.value);
 
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
