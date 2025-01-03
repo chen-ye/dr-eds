@@ -14,6 +14,7 @@ const cmd_getLockInfo = 0x31;
 const cmd_getPowerInfo = 0x42;
 const cmd_getFrontAndRearDerailleurGearValuesInfo = 0x61;
 const cmd_backSetting = 0x67;
+const cmd_fineTuneFrontGear = 0x85;
 const cmd_getDeviceMac = 0x86;
 const cmd_frontStatusReport = 0x88;
 const cmd_frontLifting = 0x89;
@@ -172,10 +173,21 @@ function handleCharacteristicValueChanged(event)
 	    s += r.payload[t] + ' ';
 	}
 	log(s, 1);
-
 	info['Q_NUM'] = r.payload[4];
 	if ((info['Q_NUM'] == 1) || (info['Q_NUM'] == 2) || (info['Q_NUM'] == 3)) t = 1;
 	if ((info['Q_NUM'] == 4) || (info['Q_NUM'] == 5) || (info['Q_NUM'] == 6)) t = 2;
+
+	var pr = "";
+	if (device_type == "EDS TX") pr = "tx";
+	if (t == 1) {
+	    // show micro shift only on lowest gear
+	    $('.' + pr + 'settings .front_micro').show();
+	} else {
+	    $('.' + pr + 'settings .front_micro').hide();
+	}
+
+	log("FD frontLifting to gear " + t, 1);
+
 	$('.txsettings .front_buttons .button.gear').html(t);
     } else
     if (r.cmd == cmd_switchFingerOrder) {
@@ -828,6 +840,32 @@ $(document).ready(function() {
 	characteristic_TX.writeValueWithoutResponse(a);
 	log("Send: rearLifting -> " + f.toString(16));
     });
+    // front shift up
+    $('.txsettings .front_buttons .button.up').on('click', function() {
+	var c = parseInt($('.txsettings .front_buttons .button.gear').html());
+	if (c == 1) {
+	    qalert("Front Up shift");
+
+	    var f = 0x01;
+	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_frontLifting, 0x01, f, 0x00, 0x00 ]);
+	    a = setCRC16(a);
+	    characteristic_TX.writeValueWithoutResponse(a);
+	    log("Send: frontLifting -> " + f.toString(16));
+	}
+    });
+    // Front shift down
+    $('.txsettings .front_buttons .button.down').on('click', function() {
+	var c = parseInt($('.txsettings .front_buttons .button.gear').html());
+	if (c == 2) {
+	    qalert("Front Down shift");
+
+	    var f = 0x02;
+	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_frontLifting, 0x01, f, 0x00, 0x00 ]);
+	    a = setCRC16(a);
+	    characteristic_TX.writeValueWithoutResponse(a);
+	    log("Send: frontLifting -> " + f.toString(16));
+	}
+    });
 
     // number of gears
     $('.settings .action_buttons .button.gears select, .txsettings .action_buttons .button.gears select').on('change', function() {
@@ -868,6 +906,26 @@ $(document).ready(function() {
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
 	log("Send: fineTuneGear -> " + f.toString(16));
+    });
+    // front micro shift up
+    $('.txsettings .front_micro .up').on('click', function() {
+	qalert("Front Up micro shift");
+
+	var f = 0x02;
+	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_fineTuneFrontGear, 0x01, f, 0x00, 0x00 ]);
+	a = setCRC16(a);
+	characteristic_TX.writeValueWithoutResponse(a);
+	log("Send: fineTuneFrontGear -> " + f.toString(16));
+    });
+    // front micro shift down
+    $('.txsettings .front_micro .down').on('click', function() {
+	qalert("Front Down micro shift");
+
+	var f = 0x01;
+	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_fineTuneFrontGear, 0x01, f, 0x00, 0x00 ]);
+	a = setCRC16(a);
+	characteristic_TX.writeValueWithoutResponse(a);
+	log("Send: fineTuneFrontGear -> " + f.toString(16));
     });
 
     // set all gear values
