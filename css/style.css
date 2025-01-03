@@ -173,6 +173,10 @@ body.logs {
     margin: 0 auto;
     font-size: 0.7em;
 }
+.txsettings .front_buttons .button.up:before,
+.txsettings .front_buttons .button.down:before {
+    content: "front";
+}
 .settings .action_buttons .button.gear:before,
 .txsettings .front_buttons .button.gear:before,
 .txsettings .action_buttons .button.gear:before {
@@ -181,6 +185,10 @@ body.logs {
 .settings .action_buttons .button.gears:before,
 .txsettings .action_buttons .button.gears:before {
     content: "total";
+}
+.txsettings .action_buttons .button.up:before,
+.txsettings .action_buttons .button.down:before {
+    content: "rear";
 }
 .settings .action_buttons .button.up:after,
 .settings .action_buttons .button.down:after,
