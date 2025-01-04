@@ -20,6 +20,7 @@ const cmd_getLockInfo = 0x31;
 const cmd_getPowerInfo = 0x42;
 const cmd_getTransmissionVersionInfo = 0x60;
 const cmd_getFrontAndRearDerailleurGearValuesInfo = 0x61;
+const cmd_backDialSleep = 0x63;
 const cmd_backSetting = 0x67;
 const cmd_setFrontGearLimit = 0x82;
 const cmd_fineTuneFrontGear = 0x85;
@@ -402,6 +403,18 @@ function handleCharacteristicValueChanged(event)
 		$('.txsettings .buttons_function .button.mode').removeClass('selected');
 	    else
 		$('.txsettings .buttons_function .button.mode').addClass('selected');
+	} else {
+	    error('Command failed');
+	}
+    } else
+    if (r.cmd == cmd_backDialSleep)
+    {
+	log("Received: backDialSleep");
+
+	endBlock();
+	if (r.payload[0] == 0x00)
+	{
+	    clearTimeout(ctimeout);
 	} else {
 	    error('Command failed');
 	}
@@ -1352,6 +1365,9 @@ $(document).ready(function() {
 
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
+    $('.txsettings .buttons_function select').on('change', function() {
+	
+    });
 
     // set race mode
     $('.txsettings .buttons_function .button.mode').on('click', function() {
@@ -1364,6 +1380,21 @@ $(document).ready(function() {
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
 	log("Send: setProtectionThreshold");
+
+	ctimeout = setTimeout(timeoutCheck, 1000);
+    });
+
+    // set sleep mode
+    $('.txsettings .buttons_function .button.sleep').on('click', function() {
+	var f = 1;
+	if (!$(this).hasClass('selected')) f = 0;
+
+	startBlock("Set " + (f == 0 ? "sleep" : "no sleep") + " mode");
+
+	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_backDialSleep, 0x01, f, 0x00, 0x00 ]);
+	a = setCRC16(a);
+	characteristic_TX.writeValueWithoutResponse(a);
+	log("Send: backDialSleep -> " + f.toString(16));
 
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
