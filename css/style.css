@@ -366,11 +366,12 @@ body.logs {
     text-align: center;
     margin-top: 2em;
 }
-.buttons_function .vbutton {
+.buttons_function .vbutton,
+.buttons_function .button {
     position: relative;
 }
-.buttons_function .vbutton:before {
-    content: "function";
+.buttons_function .vbutton:before,
+.buttons_function .button:before {
     color: var(--main-text-light-color);
     position: absolute;
     top: 0;
@@ -379,8 +380,8 @@ body.logs {
     margin: 0 auto;
     font-size: 0.7em;
 }
-.buttons_function .vbutton:after {
-    content: "shift";
+.buttons_function .vbutton:after,
+.buttons_function .button:after {
     color: var(--main-text-light-color);
     position: absolute;
     bottom: 0;
@@ -388,6 +389,32 @@ body.logs {
     right: 0;
     margin: 0 auto;
     font-size: 0.7em;
+}
+.buttons_function .vbutton.top:before,
+.buttons_function .vbutton.bottom:before {
+    content: "function";
+}
+.buttons_function .vbutton.top:after,
+.buttons_function .vbutton.bottom:after {
+    content: "shift";
+}
+.buttons_function .button.top:before,
+.buttons_function .button.single:before {
+    content: "left";
+}
+.buttons_function .vbutton.small:before,
+.buttons_function .vbutton.big:before {
+    content: "right";
+}
+.buttons_function .vbutton.small:after {
+    content: "small";
+}
+.buttons_function .vbutton.big:after {
+    content: "big";
+}
+.buttons_function .button.mode:after,
+.buttons_function .button.sleep:after {
+    content: "mode";
 }
 
 .button {

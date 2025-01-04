@@ -3,8 +3,11 @@
     TODO:
 	1. firmware upgrade
 	2. casual/performance mode
-	3. buttons settings
-	4. presets by device_type
+	3. sleep
+	4. buttons settings
+	5. presets by device_type
+	6. RD protection
+	7. FD/RD threshold
 */
 
 var debug = 1;
@@ -26,6 +29,7 @@ const cmd_frontLifting = 0x89;
 const cmd_shutdown = 0x90;
 const cmd_setTotalGear = 0x91;
 const cmd_setGearUpValue = 0x92;
+const cmd_setProtectionThreshold = 0x93;
 const cmd_fineTuneGear = 0x95;
 const cmd_getCurrentGear = 0x97;
 const cmd_serverReportGear = 0x98;
@@ -136,7 +140,7 @@ function handleCharacteristicValueChanged(event)
 	blocks = r.payload[1];
 	current_block = 0;
 
-	startBlock("Getting information " + current_block + '/' + blocks, 0);
+	startBlock("Getting information " + (current_block + 1) + '/' + blocks, 0);
 	// let's read all the data
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_read, 0x03, 0x00, current_block, 0x51, 0x00, 0x00 ]);
 	a = setCRC16(a);
@@ -353,6 +357,11 @@ function handleCharacteristicValueChanged(event)
 	info['R_POWER'] = r.payload[2] * 256 + r.payload[3];
 	info['Q_POWER'] = r.payload[6] * 256 + r.payload[7];
 	info['L_POWER'] = r.payload[8] * 256 + r.payload[9];
+
+	if (parseInt(r.payload[12]) == 0)
+	    $('.txsettings .buttons_function .button.sleep').addClass('selected');
+	else
+	    $('.txsettings .buttons_function .button.sleep').removeClass('selected');
 
 	updateBattery();
 
@@ -572,14 +581,41 @@ function parsePacket(hex, check_confirm = 0)
 	    bindActionButtons();
 	    buildPresets();
 
-	    $('.settings .buttons_function .button').removeClass('selected');
-	    if (parseInt(info['KeySwitch']) == 0) {
-	    	$('.settings .buttons_function .vbutton.top').html('Up');
-	    	$('.settings .buttons_function .vbutton.bottom').html('Down');
-	    } else {
-	    	$('.settings .buttons_function .vbutton.top').html('Down');
-	    	$('.settings .buttons_function .vbutton.bottom').html('Up');
+	    if (device_type == "EDS OX") {
+		//$('.settings .buttons_function .button').removeClass('selected');
+		if (parseInt(info['KeySwitch']) == 0) {
+	    	    $('.settings .buttons_function .vbutton.top').html('Up');
+	    	    $('.settings .buttons_function .vbutton.bottom').html('Down');
+		} else {
+	    	    $('.settings .buttons_function .vbutton.top').html('Down');
+	    	    $('.settings .buttons_function .vbutton.bottom').html('Up');
+		}
+	    } else
+	    if (device_type == "EDS TX") {
+		if (parseInt(info['KeySwitch'].substring(0, 1)) == 1) $('.txsettings .buttons_function .vbutton.small select').val('up');
+		if (parseInt(info['KeySwitch'].substring(0, 1)) == 2) $('.txsettings .buttons_function .vbutton.small select').val('down');
+		if (parseInt(info['KeySwitch'].substring(0, 1)) == 3) $('.txsettings .buttons_function .vbutton.small select').val('front');
+
+		if (parseInt(info['KeySwitch'].substring(1, 2)) == 1) $('.txsettings .buttons_function .vbutton.big select').val('up');
+		if (parseInt(info['KeySwitch'].substring(1, 2)) == 2) $('.txsettings .buttons_function .vbutton.big select').val('down');
+		if (parseInt(info['KeySwitch'].substring(1, 2)) == 3) $('.txsettings .buttons_function .vbutton.big select').val('front');
+
+		if (parseInt(info['KeySwitch'].substring(2, 3)) == 1) $('.txsettings .buttons_function .button.single select').val('up');
+		if (parseInt(info['KeySwitch'].substring(2, 3)) == 2) $('.txsettings .buttons_function .button.single select').val('down');
+		if (parseInt(info['KeySwitch'].substring(2, 3)) == 3) $('.txsettings .buttons_function .button.single select').val('front');
 	    }
+
+	    if (info['PTOTECT'] == 1)
+		$('.txsettings .buttons_function .button.mode').addClass('selected');
+	    else
+		$('.txsettings .buttons_function .button.mode').removeClass('selected');
+
+	    // send getTransmissionVersionInfo to get sleep status
+	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_getTransmissionVersionInfo, 0x00, 0x00, 0x00 ]);
+	    a = setCRC16(a);
+	    characteristic_TX.writeValueWithoutResponse(a);
+	    log("Send: getTransmissionVersionInfo");
+	    qalert("Get sleep status");
 	}
     }
 
