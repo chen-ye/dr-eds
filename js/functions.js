@@ -81,6 +81,7 @@ function setup()
 
 function onDisconnect()
 {
+    endBlock();
     log('Disconnected');
     setup();
 }
@@ -206,24 +207,30 @@ function handleCharacteristicValueChanged(event)
 	// for some reason this always return 0 after change which may indicate OK,
 	// but we ignore it - we just assume it switched buttons
 	endBlock();
-	if (r.payload[0] == 0x00) {
+	if (device_type == "EDS OX") {
+	    if (r.payload[0] == 0x00) {
+		clearTimeout(ctimeout);
+
+		if ($('.settings .buttons_function .vbutton:first-child').html() == "Up") {
+		    var f = 0x01;
+		} else {
+		    var f = 0x00;
+		}
+		endBlock();
+		qalert((f == 0 ? "Normal buttons" : "Reversed buttons"));
+
+		if ($('.settings .buttons_function .vbutton:first-child').html() == "Up") {
+		    $('.settings .buttons_function .vbutton:first-child').html("Down");
+		    $('.settings .buttons_function .vbutton:last-child').html("Up");
+		} else {
+		    $('.settings .buttons_function .vbutton:first-child').html("Up");
+		    $('.settings .buttons_function .vbutton:last-child').html("Down");
+		}
+	    }
+	} else
+	if (device_type == "EDS TX") {
 	    clearTimeout(ctimeout);
-
-	    if ($('.settings .buttons_function .vbutton:first-child').html() == "Up") {
-		var f = 0x01;
-	    } else {
-		var f = 0x00;
-	    }
 	    endBlock();
-	    qalert((f == 0 ? "Normal buttons" : "Reversed buttons"));
-
-	    if ($('.settings .buttons_function .vbutton:first-child').html() == "Up") {
-		$('.settings .buttons_function .vbutton:first-child').html("Down");
-		$('.settings .buttons_function .vbutton:last-child').html("Up");
-	    } else {
-		$('.settings .buttons_function .vbutton:first-child').html("Up");
-		$('.settings .buttons_function .vbutton:last-child').html("Down");
-	    }
 	} else {
 	    error('Command failed');
 	}
@@ -1366,7 +1373,27 @@ $(document).ready(function() {
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
     $('.txsettings .buttons_function select').on('change', function() {
-	
+	var f1 = $('.txsettings .buttons_function select[button="big"]').val();
+	if (f1 == "up") f1 = 2;
+	if (f1 == "down") f1 = 1;
+	if (f1 == "front") f1 = 3;
+	var f2 = $('.txsettings .buttons_function select[button="small"]').val();
+	if (f2 == "up") f2 = 2;
+	if (f2 == "down") f2 = 1;
+	if (f2 == "front") f2 = 3;
+	var f3 = $('.txsettings .buttons_function select[button="single"]').val();
+	if (f3 == "up") f3 = 2;
+	if (f3 == "down") f3 = 1;
+	if (f3 == "front") f3 = 3;
+
+	startBlock("Set button commands");
+
+	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_switchFingerOrder, 0x03, f1, f2, f3, 0x00, 0x00 ]);
+	a = setCRC16(a);
+	characteristic_TX.writeValueWithoutResponse(a);
+	log("Send: switchFingerOrder -> " + f1.toString(16) + ' ' + f2.toString(16) + ' ' + f3.toString(16));
+
+	ctimeout = setTimeout(timeoutCheck, 1000);
     });
 
     // set race mode
