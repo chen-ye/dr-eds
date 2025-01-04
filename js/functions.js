@@ -1350,16 +1350,19 @@ $(document).ready(function() {
 
     // shutdown
     $('.button_shutdown').on('click', function() {
-	qalert("Device shutdown");
+	if (confirm('Shutdown ' + device_type + '?')) {
+	    qalert("Device shutdown");
 
-	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_shutdown, 0x00, 0x00, 0x00 ]);
-	a = setCRC16(a);
-	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: shutdown");
+	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_shutdown, 0x00, 0x00, 0x00 ]);
+	    a = setCRC16(a);
+	    characteristic_TX.writeValueWithoutResponse(a);
+	    log("Send: shutdown");
 
-	$('.bmenus').hide();
+	    $('.button_menu').removeClass('selected');
+	    $('.bmenus').hide();
 
-	dev.gatt.disconnect();
+	    dev.gatt.disconnect();
+	}
     });
 
     // disconnect
