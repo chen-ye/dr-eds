@@ -337,11 +337,13 @@ function handleCharacteristicValueChanged(event)
 	log(s);
 
 	if (!f) {
-	    $('.txsettings .gear_values .fvnone').show();
+	    $('.txsettings .fvnone').show();
 	    $('.txsettings .gear_values .fvcontent').hide();
+	    $('.txsettings .front_buttons').hide();
 	} else {
-	    $('.txsettings .gear_values .fvnone').hide();
+	    $('.txsettings .fvnone').hide();
 	    $('.txsettings .gear_values .fvcontent').show();
+	    $('.txsettings .front_buttons').show();
 	}
 
 	$('.txsettings .gear_values .fvcontent .content').html('');
@@ -367,7 +369,7 @@ function handleCharacteristicValueChanged(event)
 	updateBattery();
 
 	// check if FD just wake up
-	if ($('.txsettings .gear_values .fvnone').is(":visible")) {
+	if ($('.txsettings .fvnone').is(":visible")) {
 	    setTimeout(function() {
 		if ((parseInt(r.payload[6]) != 0) && (parseInt(r.payload[7]) != 0)) {
 		    log("FD waked up");

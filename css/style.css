@@ -286,12 +286,13 @@ body.logs {
 .txsettings .gear_values .fvcontent {
     margin-bottom: 1em;
 }
-.txsettings .gear_values .fvnone {
+.txsettings .fvnone {
     font-size: 0.8em;
-    margin-bottom: 2em;
+    margin: 5em 0 2em 0;
     padding: 0 1em;
+    text-align: center;
 }
-.txsettings .gear_values .fvnone a {
+.txsettings .fvnone a {
     text-decoration: none;
     border-bottom: 1px dashed var(--main-color);
     color: var(--main-color);
