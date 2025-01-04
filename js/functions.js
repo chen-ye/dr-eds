@@ -46,9 +46,9 @@ var all_gears = [];
 var qtimeout;
 var ctimeout;
 
-function log(s, force)
+function log(s)
 {
-    if (debug || force) {
+    if (debug) {
 	$('.debug').append(s.trim() + '\n');
 	$('.debug').scrollTop($('.debug').prop("scrollHeight"));
 
@@ -145,7 +145,7 @@ function handleCharacteristicValueChanged(event)
     } else
     if (r.cmd == cmd_rearLifting) {
 	// shift from gear
-	log("Received: rearLifting", 1);
+	log("Received: rearLifting");
     } else
     if (r.cmd == cmd_serverReportGear) {
 	log("Received: serverReportGear");
@@ -156,14 +156,14 @@ function handleCharacteristicValueChanged(event)
 	{
 	    s += r.payload[t] + ' ';
 	}
-	log(s, 1);
+	log(s);
 	info['NUM'] = r.payload[4];
 	var t = parseInt(r.payload[4]);
 	t = parseInt(info['TOTAL_CNT']) - t + 1;
 	if (r.payload[5] == 1)
-	    log("RD start rearLifting to gear " + t, 1);
+	    log("RD start rearLifting to gear " + t);
 	else
-	    log("RD finish rearLifting to gear " + t, 1);
+	    log("RD finish rearLifting to gear " + t);
 
 	// show micro shift only on lowest gear
 	var pr = "";
@@ -179,7 +179,7 @@ function handleCharacteristicValueChanged(event)
 	$('.live .gears').html('/' + info['TOTAL_CNT']);
     } else
     if (r.cmd == cmd_frontStatusReport) {
-	log("Received: frontStatusReport", 1);
+	log("Received: frontStatusReport");
 
 	// shifted front
 	var s = "";
@@ -187,7 +187,7 @@ function handleCharacteristicValueChanged(event)
 	{
 	    s += r.payload[t] + ' ';
 	}
-	log(s, 1);
+	log(s);
 
 	if ((r.payload[4] > 0) && (r.payload[4] < 7)) {
 	    info['Q_NUM'] = r.payload[4];
@@ -203,7 +203,7 @@ function handleCharacteristicValueChanged(event)
 		$('.' + pr + 'settings .front_micro').hide();
 	    }
 
-	    log("FD gear " + t, 1);
+	    log("FD gear " + t);
 
 	    $('.txsettings .front_buttons .button.gear').html(t);
 	} else {
