@@ -120,6 +120,8 @@ function handleCharacteristicValueChanged(event)
     if (r.ascii) return;
 
     if (r.cmd == cmd_getKey) {
+	log("Received: getKey");
+
 	key = r.key;
 
 	// start read all the data
@@ -129,6 +131,8 @@ function handleCharacteristicValueChanged(event)
 	log("Send: startRead");
     } else
     if (r.cmd == cmd_startRead) {
+	log("Received: startRead");
+
 	blocks = r.payload[1];
 	current_block = 0;
 
@@ -141,9 +145,11 @@ function handleCharacteristicValueChanged(event)
     } else
     if (r.cmd == cmd_rearLifting) {
 	// shift from gear
-	log("RD received rearLifting", 1);
+	log("Received: rearLifting", 1);
     } else
     if (r.cmd == cmd_serverReportGear) {
+	log("Received: serverReportGear");
+
 	// shifted to gear
 	var s = "";
 	for (var t = 0; t < r.payload_length; t++)
@@ -173,6 +179,8 @@ function handleCharacteristicValueChanged(event)
 	$('.live .gears').html('/' + info['TOTAL_CNT']);
     } else
     if (r.cmd == cmd_frontStatusReport) {
+	log("Received: frontStatusReport", 1);
+
 	// shifted front
 	var s = "";
 	for (var t = 0; t < r.payload_length; t++)
@@ -180,24 +188,31 @@ function handleCharacteristicValueChanged(event)
 	    s += r.payload[t] + ' ';
 	}
 	log(s, 1);
-	info['Q_NUM'] = r.payload[4];
-	if ((info['Q_NUM'] == 1) || (info['Q_NUM'] == 2) || (info['Q_NUM'] == 3)) t = 1;
-	if ((info['Q_NUM'] == 4) || (info['Q_NUM'] == 5) || (info['Q_NUM'] == 6)) t = 2;
 
-	var pr = "";
-	if (device_type == "EDS TX") pr = "tx";
-	if (t == 1) {
-	    // show micro shift only on lowest gear
-	    $('.' + pr + 'settings .front_micro').show();
+	if ((r.payload[4] > 0) && (r.payload[4] < 7)) {
+	    info['Q_NUM'] = r.payload[4];
+	    if ((info['Q_NUM'] == 1) || (info['Q_NUM'] == 2) || (info['Q_NUM'] == 3)) t = 1;
+	    if ((info['Q_NUM'] == 4) || (info['Q_NUM'] == 5) || (info['Q_NUM'] == 6)) t = 2;
+
+	    var pr = "";
+	    if (device_type == "EDS TX") pr = "tx";
+	    if (t == 1) {
+		// show micro shift only on lowest gear
+		$('.' + pr + 'settings .front_micro').show();
+	    } else {
+		$('.' + pr + 'settings .front_micro').hide();
+	    }
+
+	    log("FD gear " + t, 1);
+
+	    $('.txsettings .front_buttons .button.gear').html(t);
 	} else {
-	    $('.' + pr + 'settings .front_micro').hide();
+	    ;;;
 	}
-
-	log("FD frontLifting to gear " + t, 1);
-
-	$('.txsettings .front_buttons .button.gear').html(t);
     } else
     if (r.cmd == cmd_switchFingerOrder) {
+	log("Received: switchFingerOrder");
+
 	// for some reason this always return 0 after change which may indicate OK,
 	// but we ignore it - we just assume it switched buttons
 	endBlock();
@@ -224,6 +239,8 @@ function handleCharacteristicValueChanged(event)
 	}
     } else
     if (r.cmd == cmd_setTotalGear) {
+	log("Received: setTotalGear");
+
 	// for some reason this always return 0 after change which may indicate OK,
 	// but we don't know actual gear values, so ...
 	endBlock();
@@ -244,6 +261,8 @@ function handleCharacteristicValueChanged(event)
 	log("Send: startRead");
     } else
     if (r.cmd == cmd_setGearUpValue) {
+	log("Received: setGearUpdate");
+
 	// for some reason this always return 0 after change which may indicate OK,
 	// but we ignore it since we already have it in input field
 	if (all_gears.length == 0) {
@@ -273,6 +292,8 @@ function handleCharacteristicValueChanged(event)
 	}
     } else
     if (r.cmd == cmd_setFrontGearLimit) {
+	log("Received: setFrontGearLimit");
+
 	// for some reason this always return 0 after change which may indicate OK,
 	// but we ignore it since we already have it in input field
 	if (all_gears.length == 0) {
@@ -300,10 +321,6 @@ function handleCharacteristicValueChanged(event)
 	} else {
 	    error('Command failed');
 	}
-    } else
-    if (r.cmd == cmd_frontStatusReport)
-    {
-        log("Received: frontStatusReport");
     } else
     if (r.cmd == cmd_getFrontAndRearDerailleurGearValuesInfo)
     {
