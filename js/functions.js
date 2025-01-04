@@ -340,10 +340,13 @@ function handleCharacteristicValueChanged(event)
 	    $('.txsettings .fvnone').show();
 	    $('.txsettings .gear_values .fvcontent').hide();
 	    $('.txsettings .front_buttons').hide();
+	    $('.txsettings .front_micro').hide();
 	} else {
 	    $('.txsettings .fvnone').hide();
 	    $('.txsettings .gear_values .fvcontent').show();
 	    $('.txsettings .front_buttons').show();
+	    if (parseInt($('.txsettings .front_buttons .button.gear').html()) == 1)
+		$('.txsettings .front_micro').show();
 	}
 
 	$('.txsettings .gear_values .fvcontent .content').html('');
