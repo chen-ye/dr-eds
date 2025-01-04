@@ -1401,14 +1401,20 @@ $(document).ready(function() {
 	var f = 2;
 	if (!$(this).hasClass('selected')) f = 1;
 
-	startBlock("Set " + (f == 1 ? "race" : "normal") + " mode");
+	if (
+	    ((f == 1) && (confirm('Race mode will drain RD battery faster - continue?')))
+	    ||
+	    (f == 2)
+	) {
+	    startBlock("Set " + (f == 1 ? "race" : "normal") + " mode");
 
-	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setProtectionThreshold, 0x01, f, 0x00, 0x00 ]);
-	a = setCRC16(a);
-	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: setProtectionThreshold");
+	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setProtectionThreshold, 0x01, f, 0x00, 0x00 ]);
+	    a = setCRC16(a);
+	    characteristic_TX.writeValueWithoutResponse(a);
+	    log("Send: setProtectionThreshold");
 
-	ctimeout = setTimeout(timeoutCheck, 1000);
+	    ctimeout = setTimeout(timeoutCheck, 1000);
+	}
     });
 
     // set sleep mode
@@ -1416,14 +1422,20 @@ $(document).ready(function() {
 	var f = 1;
 	if (!$(this).hasClass('selected')) f = 0;
 
-	startBlock("Set " + (f == 0 ? "sleep" : "no sleep") + " mode");
+	if (
+	    ((f == 1) && (confirm('Disabling sleep mode will drain RD battery faster - continue?')))
+	    ||
+	    (f == 0)
+	) {
+	    startBlock("Set " + (f == 0 ? "sleep" : "no sleep") + " mode");
 
-	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_backDialSleep, 0x01, f, 0x00, 0x00 ]);
-	a = setCRC16(a);
-	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: backDialSleep -> " + f.toString(16));
+	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_backDialSleep, 0x01, f, 0x00, 0x00 ]);
+	    a = setCRC16(a);
+	    characteristic_TX.writeValueWithoutResponse(a);
+	    log("Send: backDialSleep -> " + f.toString(16));
 
-	ctimeout = setTimeout(timeoutCheck, 1000);
+	    ctimeout = setTimeout(timeoutCheck, 1000);
+	}
     });
 
     // debug
