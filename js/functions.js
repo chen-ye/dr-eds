@@ -113,7 +113,7 @@ function handleCharacteristicValueChanged(event)
 	payload[t] = value.getUint8(t);
 	s += value.getUint8(t) + ' ';
     }
-    log("Received: " + s);
+    log("Payload: " + s);
 
     var r = parsePacket(payload);
 
@@ -136,7 +136,7 @@ function handleCharacteristicValueChanged(event)
 	blocks = r.payload[1];
 	current_block = 0;
 
-	startBlock("Getting information", 0);
+	startBlock("Getting information " + current_block + '/' + blocks, 0);
 	// let's read all the data
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_read, 0x03, 0x00, current_block, 0x51, 0x00, 0x00 ]);
 	a = setCRC16(a);
@@ -150,13 +150,6 @@ function handleCharacteristicValueChanged(event)
     if (r.cmd == cmd_serverReportGear) {
 	log("Received: serverReportGear");
 
-	// shifted to gear
-	var s = "";
-	for (var t = 0; t < r.payload_length; t++)
-	{
-	    s += r.payload[t] + ' ';
-	}
-	log(s);
 	info['NUM'] = r.payload[4];
 	var t = parseInt(r.payload[4]);
 	t = parseInt(info['TOTAL_CNT']) - t + 1;
@@ -180,14 +173,6 @@ function handleCharacteristicValueChanged(event)
     } else
     if (r.cmd == cmd_frontStatusReport) {
 	log("Received: frontStatusReport");
-
-	// shifted front
-	var s = "";
-	for (var t = 0; t < r.payload_length; t++)
-	{
-	    s += r.payload[t] + ' ';
-	}
-	log(s);
 
 	if ((r.payload[4] > 0) && (r.payload[4] < 7)) {
 	    info['Q_NUM'] = r.payload[4];
@@ -388,6 +373,12 @@ function handleCharacteristicValueChanged(event)
 		}
 	    }, 3000);
 	}
+    } else
+    if (r.cmd == cmd_frontLifting)
+    {
+	log("Received: frontLifting");
+
+	endBlock();
     }
 }
 
@@ -455,6 +446,8 @@ function parsePacket(hex, check_confirm = 0)
 
 	current_block++;
 	if (current_block < blocks) {
+	    startBlock("Getting information " + current_block + '/' + blocks, 0);
+
 	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_read, 0x03, 0x00, current_block, 0x51, 0x00, 0x00 ]);
 	    a = setCRC16(a);
 	    characteristic_TX.writeValueWithoutResponse(a);
@@ -950,8 +943,6 @@ $(document).ready(function() {
 	.catch(error => { console.error(error); });
     });
 
-    
-
     // shift up
     $('.settings .action_buttons .button.up, .txsettings .action_buttons .button.up, .live .action_buttons .button.up').on('click', function() {
 	qalert("Up shift");
@@ -976,7 +967,7 @@ $(document).ready(function() {
     $('.txsettings .front_buttons .button.up').on('click', function() {
 	var c = parseInt($('.txsettings .front_buttons .button.gear').html());
 	if (c == 1) {
-	    qalert("Front Up shift");
+	    startBlock("Front Up shift");
 
 	    var f = 0x01;
 	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_frontLifting, 0x01, f, 0x00, 0x00 ]);
@@ -989,7 +980,7 @@ $(document).ready(function() {
     $('.txsettings .front_buttons .button.down').on('click', function() {
 	var c = parseInt($('.txsettings .front_buttons .button.gear').html());
 	if (c == 2) {
-	    qalert("Front Down shift");
+	    startBlock("Front Down shift");
 
 	    var f = 0x02;
 	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_frontLifting, 0x01, f, 0x00, 0x00 ]);
