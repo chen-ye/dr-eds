@@ -388,6 +388,23 @@ function handleCharacteristicValueChanged(event)
 	log("Received: frontLifting");
 
 	endBlock();
+    } else
+    if (r.cmd == cmd_setProtectionThreshold)
+    {
+	log("Received: setProtectionThreshold");
+
+	endBlock();
+	if (r.payload[0] == 0x00)
+	{
+	    clearTimeout(ctimeout);
+
+	    if ($('.txsettings .buttons_function .button.mode').hasClass('selected'))
+		$('.txsettings .buttons_function .button.mode').removeClass('selected');
+	    else
+		$('.txsettings .buttons_function .button.mode').addClass('selected');
+	} else {
+	    error('Command failed');
+	}
     }
 }
 
@@ -1332,6 +1349,21 @@ $(document).ready(function() {
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
 	log("Send: switchFingerOrder -> " + f.toString(16));
+
+	ctimeout = setTimeout(timeoutCheck, 1000);
+    });
+
+    // set race mode
+    $('.txsettings .buttons_function .button.mode').on('click', function() {
+	var f = 2;
+	if (!$(this).hasClass('selected')) f = 1;
+
+	startBlock("Set " + (f == 1 ? "race" : "normal") + " mode");
+
+	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setProtectionThreshold, 0x01, f, 0x00, 0x00 ]);
+	a = setCRC16(a);
+	characteristic_TX.writeValueWithoutResponse(a);
+	log("Send: setProtectionThreshold");
 
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
