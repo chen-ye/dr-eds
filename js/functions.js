@@ -4,6 +4,7 @@
 	1. firmware upgrade
 	2. casual/performance mode
 	3. buttons settings
+	4. presets by device_type
 */
 
 var debug = 1;
@@ -14,6 +15,7 @@ var device_type = "";
 const cmd_getKey = 0x11;
 const cmd_getLockInfo = 0x31;
 const cmd_getPowerInfo = 0x42;
+const cmd_getTransmissionVersionInfo = 0x60;
 const cmd_getFrontAndRearDerailleurGearValuesInfo = 0x61;
 const cmd_backSetting = 0x67;
 const cmd_setFrontGearLimit = 0x82;
@@ -308,11 +310,22 @@ function handleCharacteristicValueChanged(event)
         log("Received: getFrontAndRearDerailleurGearValuesInfo");
 
         var s = "FD:";
+        var f = 0;
         for (var t = 0; t < r.payload_length; t = t + 1)
         {
 	    s += ' ' + r.payload[t];
+
+	    if (parseInt(r.payload[t]) != 0) f = 1;
 	}
 	log(s);
+
+	if (!f) {
+	    $('.txsettings .gear_values .fvnone').show();
+	    $('.txsettings .gear_values .fvcontent').hide();
+	} else {
+	    $('.txsettings .gear_values .fvnone').hide();
+	    $('.txsettings .gear_values .fvcontent').show();
+	}
 
 	$('.txsettings .gear_values .fvcontent .content').html('');
 	for (var t = 0; t < r.payload_length; t = t + 2) {
@@ -324,6 +337,28 @@ function handleCharacteristicValueChanged(event)
 
 	buildFrontValues();
 	bindActionButtons();
+    } else
+    if (r.cmd == cmd_getTransmissionVersionInfo)
+    {
+	log("Received: getTransmissionVersionInfo");
+
+	// check if FD just wake up
+	if ($('.txsettings .gear_values .fvnone').is(":visible")) {
+	    setTimeout(function() {
+		if ((parseInt(r.payload[6]) != 0) && (parseInt(r.payload[7]) != 0)) {
+		    log("FD waked up");
+		    var f1 = 0x01;
+		    var f2 = 0x01;
+		    var f3 = 0x06;
+		    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_getFrontAndRearDerailleurGearValuesInfo, 0x03, f1, f2, f3, 0x00, 0x00 ]);
+		    a = setCRC16(a);
+		    characteristic_TX.writeValueWithoutResponse(a);
+		    log("Send: getFrontAndRearDerailleurGearValuesInfo, -> " + f1.toString(16) + ' ' + f2.toString(16) + ' ' + f3.toString(16));
+
+		    qalert("Get FD information");
+		}
+	    }, 3000);
+	}
     }
 }
 
@@ -475,6 +510,8 @@ function parsePacket(hex, check_confirm = 0)
 		    a = setCRC16(a);
 		    characteristic_TX.writeValueWithoutResponse(a);
 		    log("Send: getFrontAndRearDerailleurGearValuesInfo, -> " + f1.toString(16) + ' ' + f2.toString(16) + ' ' + f3.toString(16));
+
+		    qalert("Get FD information");
 		}
 
 		t = 1;
