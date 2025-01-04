@@ -2,12 +2,9 @@
 /*
     TODO:
 	1. firmware upgrade
-	2. casual/performance mode
-	3. sleep
-	4. buttons settings
-	5. presets by device_type
-	6. RD protection
-	7. FD/RD threshold
+	2. presets by device_type
+	3. RD protection
+	4. FD/RD threshold
 */
 
 var debug = 1;
