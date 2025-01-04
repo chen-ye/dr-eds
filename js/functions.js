@@ -342,6 +342,13 @@ function handleCharacteristicValueChanged(event)
     {
 	log("Received: getTransmissionVersionInfo");
 
+	info['H_POWER'] = r.payload[0] * 256 + r.payload[1];
+	info['R_POWER'] = r.payload[2] * 256 + r.payload[3];
+	info['Q_POWER'] = r.payload[6] * 256 + r.payload[7];
+	info['L_POWER'] = r.payload[8] * 256 + r.payload[9];
+
+	updateBattery();
+
 	// check if FD just wake up
 	if ($('.txsettings .gear_values .fvnone').is(":visible")) {
 	    setTimeout(function() {
@@ -520,42 +527,7 @@ function parsePacket(hex, check_confirm = 0)
 		$('.txsettings .front_buttons .button.gear').html(t);
 	    }
 
-	    var b = localStorage.getItem('battery');
-	    if (device_type == "EDS OX") {
-		$('.info .content .left .left_ver').html(info['GEARS_V']);
-		if (b == 'percent') {
-		    $('.info .content').attr('type', 'percent');
-		    $('.info .content .left .left_val').html(percentage(info['POWER_2']) + '%');
-		} else {
-		    $('.info .content').attr('type', 'battery');
-		    $('.info .content .left .left_val').html((parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
-		}
-
-		$('.info .content .right .right_ver').html(info['REMOTE_V']);
-		$('.info .content .right .right_val').html((parseInt(info['POWER_1']) / 100).toFixed(2) + 'V');
-	    } else
-	    if (device_type == "EDS TX") {
-		$('.info .txcontent .left .left_rver').html(info['H_Ver']);
-		$('.info .txcontent .left .left_fver').html(info['Q_Ver']);
-		if (b == 'percent') {
-		    $('.info .txcontent').attr('type', 'percent');
-
-		    $('.info .txcontent .left .left_fval').html(percentage(info['Q_POWER']) + '%');
-		    $('.info .txcontent .left .left_rval').html(percentage(info['H_POWER']) + '%');
-		} else {
-		    $('.info .txcontent').attr('type', 'volts');
-
-		    $('.info .txcontent .left .left_fval').html((parseInt(info['Q_POWER']) / 100).toFixed(2) + 'V');
-		    $('.info .txcontent .left .left_rval').html((parseInt(info['H_POWER']) / 100).toFixed(2) + 'V');
-
-		    if (b == null) localStorage.setItem('battery', 'volts');
-		}
-
-		$('.info .txcontent .right .right_lver').html(info['L_Ver']);
-		$('.info .txcontent .right .right_rver').html(info['R_Ver']);
-		$('.info .txcontent .right .right_lval').html((parseInt(info['L_POWER']) / 100).toFixed(2) + 'V');
-		$('.info .txcontent .right .right_rval').html((parseInt(info['R_POWER']) / 100).toFixed(2) + 'V');
-	    }
+	    updateBattery();
 
 	    if (device_type == "EDS OX") {
 		$('.settings .gear_values .vcontent .content').html('');
@@ -711,6 +683,71 @@ function bindActionButtons()
 	log("Send: setFrontGearLimit -> " + g.toString(16) + ' = ' + v);
 
 	ctimeout = setTimeout(timeoutCheck, 1000);
+    });
+}
+
+function updateBattery()
+{
+    var b = localStorage.getItem('battery');
+    if (device_type == "EDS OX") {
+	$('.info .content .left .left_ver').html(info['GEARS_V']);
+	if (b == 'percent') {
+	    $('.info .content').attr('type', 'percent');
+	    $('.info .content .left .left_val').html(percentage(info['POWER_2']) + '%');
+	} else {
+	    $('.info .content').attr('type', 'battery');
+	    $('.info .content .left .left_val').html((parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
+	}
+
+	$('.info .content .right .right_ver').html(info['REMOTE_V']);
+	$('.info .content .right .right_val').html((parseInt(info['POWER_1']) / 100).toFixed(2) + 'V');
+    } else
+	if (device_type == "EDS TX") {
+	    $('.info .txcontent .left .left_rver').html(info['H_Ver']);
+	    $('.info .txcontent .left .left_fver').html(info['Q_Ver']);
+	    if (b == 'percent') {
+	        $('.info .txcontent').attr('type', 'percent');
+
+		$('.info .txcontent .left .left_fval').html(percentage(info['Q_POWER']) + '%');
+		$('.info .txcontent .left .left_rval').html(percentage(info['H_POWER']) + '%');
+	    } else {
+		$('.info .txcontent').attr('type', 'volts');
+
+		$('.info .txcontent .left .left_fval').html((parseInt(info['Q_POWER']) / 100).toFixed(2) + 'V');
+		$('.info .txcontent .left .left_rval').html((parseInt(info['H_POWER']) / 100).toFixed(2) + 'V');
+
+		if (b == null) localStorage.setItem('battery', 'volts');
+	    }
+
+	    $('.info .txcontent .right .right_lver').html(info['L_Ver']);
+	    $('.info .txcontent .right .right_rver').html(info['R_Ver']);
+	    $('.info .txcontent .right .right_lval').html((parseInt(info['L_POWER']) / 100).toFixed(2) + 'V');
+	    $('.info .txcontent .right .right_rval').html((parseInt(info['R_POWER']) / 100).toFixed(2) + 'V');
+    }
+
+    // V/%
+    $('.info .content').off('click').on('click', function() {
+	//$('.info .content .left .left_ver').html(info['GEARS_V']);
+	if ($(this).attr('type') == 'volts') {
+	    $('.info .content .left .left_val').html(percentage(parseInt(info['POWER_2'])) + '%');
+	    $(this).attr('type', 'percent');
+	} else {
+	    $('.info .content .left .left_val').html((parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
+	    $(this).attr('type', 'volts');
+	}
+	localStorage.setItem('battery', $(this).attr('type'));
+    });
+    $('.info .txcontent').off('click').on('click', function() {
+	if ($(this).attr('type') == 'volts') {
+	    $('.info .txcontent .left .left_fval').html(percentage(parseInt(info['Q_POWER'])) + '%');
+	    $('.info .txcontent .left .left_rval').html(percentage(parseInt(info['H_POWER'])) + '%');
+	    $(this).attr('type', 'percent');
+	} else {
+	    $('.info .txcontent .left .left_fval').html((parseInt(info['Q_POWER']) / 100).toFixed(2) + 'V');
+	    $('.info .txcontent .left .left_rval').html((parseInt(info['H_POWER']) / 100).toFixed(2) + 'V');
+	    $(this).attr('type', 'volts');
+	}
+	localStorage.setItem('battery', $(this).attr('type'));
     });
 }
 
@@ -891,30 +928,7 @@ $(document).ready(function() {
 	.catch(error => { console.error(error); });
     });
 
-    // V/%
-    $('.info .content').on('click', function() {
-	//$('.info .content .left .left_ver').html(info['GEARS_V']);
-	if ($(this).attr('type') == 'volts') {
-	    $('.info .content .left .left_val').html(percentage(parseInt(info['POWER_2'])) + '%');
-	    $(this).attr('type', 'percent');
-	} else {
-	    $('.info .content .left .left_val').html((parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
-	    $(this).attr('type', 'volts');
-	}
-	localStorage.setItem('battery', $(this).attr('type'));
-    });
-    $('.info .txcontent').on('click', function() {
-	if ($(this).attr('type') == 'volts') {
-	    $('.info .txcontent .left .left_fval').html(percentage(parseInt(info['Q_POWER'])) + '%');
-	    $('.info .txcontent .left .left_rval').html(percentage(parseInt(info['H_POWER'])) + '%');
-	    $(this).attr('type', 'percent');
-	} else {
-	    $('.info .txcontent .left .left_fval').html((parseInt(info['Q_POWER']) / 100).toFixed(2) + 'V');
-	    $('.info .txcontent .left .left_rval').html((parseInt(info['H_POWER']) / 100).toFixed(2) + 'V');
-	    $(this).attr('type', 'volts');
-	}
-	localStorage.setItem('battery', $(this).attr('type'));
-    });
+    
 
     // shift up
     $('.settings .action_buttons .button.up, .txsettings .action_buttons .button.up, .live .action_buttons .button.up').on('click', function() {
