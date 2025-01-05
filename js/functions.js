@@ -1296,7 +1296,7 @@ $(document).ready(function() {
 		});
 	    });
 	    $('.' + pr + 'settings .gear_values .fvcontent input').each(function() {
-		var g = $(this).parent().attr('gear');
+		var g = $(this).parent().attr('front');
 		var v = $(this).val();
 
 		exp.current.front.push({
