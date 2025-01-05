@@ -1370,19 +1370,34 @@ $(document).ready(function() {
 			    localStorage.setItem('show_page', "live");
 			}
 		    if (g.hasOwnProperty('battery')) {
-			$('.info .content .left .left_ver').html(info['GEARS_V']);
+			localStorage.setItem('battery', g.battery);
+			updateBattery();
+			/*$('.info .content .left .left_ver').html(info['GEARS_V']);
 			if (g.battery == 'percent') {
 			    $('.info .content .left .left_val').html(percentage(parseInt(info['POWER_2'])) + '%');
 			    $('.info .content, .info .txcontent').attr('type', 'percent');
 			} else {
 			    $('.info .content .left .left_val').html((parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
 			    $('.info .content, .info .txcontent').attr('type', 'volts');
-			}
+			}*/
 		    }
 
 		    if (g.hasOwnProperty('current')) {
-			for (var t in g.current) {
-			    $('.settings .gear_values .content .gear[gear="' + g.current[t].gear + '"] input').val(g.current[t].value);
+			if (g.current.hasOwnProperty('device')) {
+			    if (device_type == g.current.device) {
+				var pr = "";
+				if (device_type == "EDS TX") {
+				    pr = "tx";
+				    for (var t in g.current.front) {
+					$('.' + pr + 'settings .gear_values .fvcontent .front[front="' + g.current.front[t].gear + '"] input').val(g.current.front[t].value);
+				    }
+				}
+				for (var t in g.current.rear) {
+				    $('.' + pr + 'settings .gear_values .vcontent .gear[gear="' + g.current.rear[t].gear + '"] input').val(g.current.rear[t].value);
+				}
+			    } else {
+				alert('Current values not imported - different device');
+			    }
 			}
 		    }
 		    if (g.hasOwnProperty('gears')) {
@@ -1393,6 +1408,7 @@ $(document).ready(function() {
 
 		    qalert('Settings, values and presets are restored');
 		}
+		document.forms['uploadform'].reset();
 	    }
 	    reader.readAsText(evt.target.files[0]);
 	}
