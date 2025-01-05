@@ -615,6 +615,13 @@ function parsePacket(hex, check_confirm = 0)
 	    bindActionButtons();
 	    buildPresets();
 
+	    // race mode
+	    if (info['PTOTECT'] == 1)
+		$('.txsettings .buttons_function .button.mode').addClass('selected');
+	    else
+		$('.txsettings .buttons_function .button.mode').removeClass('selected');
+
+	    // buttons
 	    if (device_type == "EDS OX") {
 		//$('.settings .buttons_function .button').removeClass('selected');
 		if (parseInt(info['KeySwitch']) == 0) {
@@ -639,17 +646,14 @@ function parsePacket(hex, check_confirm = 0)
 		if (parseInt(info['KeySwitch'].substring(2, 3)) == 3) $('.txsettings .buttons_function .button.single select').val('front');
 	    }
 
-	    if (info['PTOTECT'] == 1)
-		$('.txsettings .buttons_function .button.mode').addClass('selected');
-	    else
-		$('.txsettings .buttons_function .button.mode').removeClass('selected');
-
-	    // send getTransmissionVersionInfo to get sleep status
-	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_getTransmissionVersionInfo, 0x00, 0x00, 0x00 ]);
-	    a = setCRC16(a);
-	    characteristic_TX.writeValueWithoutResponse(a);
-	    log("Send: getTransmissionVersionInfo");
-	    qalert("Get sleep status");
+	    if (device_type == "EDS TX") {
+		// send getTransmissionVersionInfo to get sleep status
+		var a = new Uint8Array([ 0xfe, 0x32, key, cmd_getTransmissionVersionInfo, 0x00, 0x00, 0x00 ]);
+		a = setCRC16(a);
+		characteristic_TX.writeValueWithoutResponse(a);
+		log("Send: getTransmissionVersionInfo");
+		qalert("Get sleep status");
+	    }
 	}
     }
 
