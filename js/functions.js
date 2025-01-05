@@ -681,31 +681,42 @@ function buildPresets()
     else
 	gears = {};
 
+    if (gears[device_type] == null) return;
+
     var s = '';
-    for (var t in gears) {
+    for (var t in gears[device_type]) {
 	s += '<div class="preset_wrap"><div class="button preset" preset="' + t + '">' + t + '</div><div class="button del" preset="' + t + '">x</div></div>';
     }
-    $('.settings .gear_values .presets').html(s);
+    var pr = "";
+    if (device_type == "EDS TX") pr = "tx";
+    $('.' + pr + 'settings .gear_values .presets').html(s);
 
-    $('.settings .gear_values .presets .preset').off('click').on('click', function() {
+    $('.' + pr + 'settings .gear_values .presets .preset').off('click').on('click', function() {
 	var a = localStorage.getItem('gears');
 	a = JSON.parse(a);
 	if (a != null) {
-	    for (var t in a[$(this).attr('preset')])
-	    {
-		$('.settings .gear_values .vcontent .content .gear[gear="' + a[$(this).attr('preset')][t].gear + '"] input').val(a[$(this).attr('preset')][t].value);
+	    if (a[device_type] != null) {
+		for (var t in a[device_type][$(this).attr('preset')]['rear'])
+		{
+			$('.' + pr + 'settings .gear_values .vcontent .content .gear[gear="' + a[device_type][$(this).attr('preset')]['rear'][t].gear + '"] input').val(a[device_type][$(this).attr('preset')]['rear'][t].value);
+		}
+		if (device_type == "EDS TX") {
+		    for (var t in a[device_type][$(this).attr('preset')]['front'])
+			$('.txsettings .gear_values .fvcontent .content .front[front="' + a[device_type][$(this).attr('preset')]['front'][t].gear + '"] input').val(a[device_type][$(this).attr('preset')]['front'][t].value);
+		}
 	    }
 	}
 
 	qalert('Gear values loaded from preset "' + $(this).attr('preset') + '"<br />Click "Set all" to upload then to RD');
     });
-    $('.settings .gear_values .presets .del').off('click').on('click', function() {
+    $('.' + pr + 'settings .gear_values .presets .del').off('click').on('click', function() {
 	var pname =  $(this).attr('preset');
 	if (confirm('Delete preset "' + pname + '"?')) {
 	    var a = localStorage.getItem('gears');
 	    a = JSON.parse(a);
 	    if (a != null) {
-		delete a[$(this).attr('preset')];
+		if (a[device_type] != null)
+		    delete a[device_type][$(this).attr('preset')];
 	    }
 	    localStorage.setItem('gears', JSON.stringify(a));
 
@@ -1211,9 +1222,28 @@ $(document).ready(function() {
 	if ((n != null) && (n != "")) {
 	    var s = localStorage.getItem('gears');
 	    if (s == null) s = {}; else s = JSON.parse(s);
+	    if (s[device_type] == null) s[device_type] = {};
+
+	    s[device_type][n] = {};
 
 	    var r = [];
-	    $('.gear_values .content input').each(function() {
+	    var pr = "";
+	    if (device_type == "EDS TX") {
+		pr = "tx";
+		$('.txsettings .gear_values .fvcontent input').each(function() {
+		    var g = $(this).parent().attr('front');
+		    var v = $(this).val();
+
+		    r.push({
+			'gear': g,
+			'value': v
+		    });
+		});
+		s[device_type][n]['front'] = r;
+	    }
+
+	    r = [];
+	    $('.' + pr + 'settings .gear_values .vcontent input').each(function() {
 		var g = $(this).parent().attr('gear');
 		var v = $(this).val();
 
@@ -1222,7 +1252,7 @@ $(document).ready(function() {
 		    'value': v
 		});
 	    });
-	    s[n] = r;
+	    s[device_type][n]['rear'] = r;
 
 	    localStorage.setItem('gears', JSON.stringify(s));
 
