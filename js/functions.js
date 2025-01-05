@@ -2,8 +2,9 @@
 /*
     TODO:
 	1. firmware upgrade
-	2. RD protection
-	3. FD/RD threshold
+	2. live view
+	3. RD protection
+	4. FD/RD threshold
 */
 
 var debug = 1;
@@ -113,7 +114,7 @@ function handleCharacteristicValueChanged(event)
     var s = "";
     for (var t = 0; t < value.byteLength; t++) {
 	payload[t] = value.getUint8(t);
-	s += value.getUint8(t) + ' ';
+	s += value.getUint8(t).toString(16).padStart(2, '0') + ' ';
     }
     log("Payload: " + s);
 
@@ -274,7 +275,7 @@ function handleCharacteristicValueChanged(event)
 		var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setGearUpValue, 0x03, v.gear, v1, v2, 0x00, 0x00 ]);
 		a = setCRC16(a);
 		characteristic_TX.writeValueWithoutResponse(a);
-		log("Send: setGearUpValue -> " + v.gear.toString(16) + ' = ' + v.value);
+		log("Send: setGearUpValue -> " + v.gear.toString(16).padStart(2, '0') + ' = ' + v.value);
 
 		ctimeout = setTimeout(timeoutCheck, 1000);
 	    } else {
@@ -305,7 +306,7 @@ function handleCharacteristicValueChanged(event)
 		var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setFrontGearLimit, 0x03, v.gear, v1, v2, 0x00, 0x00 ]);
 		a = setCRC16(a);
 		characteristic_TX.writeValueWithoutResponse(a);
-		log("Send: setFrontGearLimit -> " + v.gear.toString(16) + ' = ' + v.value);
+		log("Send: setFrontGearLimit -> " + v.gear.toString(16).padStart(2, '0') + ' = ' + v.value);
 
 		ctimeout = setTimeout(timeoutCheck, 1000);
 	    } else {
@@ -323,7 +324,7 @@ function handleCharacteristicValueChanged(event)
         var f = 0;
         for (var t = 0; t < r.payload_length; t = t + 1)
         {
-	    s += ' ' + r.payload[t];
+	    s += ' ' + r.payload[t].toString(16).padStart(2, '0');
 
 	    if (parseInt(r.payload[t]) != 0) f = 1;
 	}
@@ -380,7 +381,7 @@ function handleCharacteristicValueChanged(event)
 		    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_getFrontAndRearDerailleurGearValuesInfo, 0x03, f1, f2, f3, 0x00, 0x00 ]);
 		    a = setCRC16(a);
 		    characteristic_TX.writeValueWithoutResponse(a);
-		    log("Send: getFrontAndRearDerailleurGearValuesInfo, -> " + f1.toString(16) + ' ' + f2.toString(16) + ' ' + f3.toString(16));
+		    log("Send: getFrontAndRearDerailleurGearValuesInfo, -> " + f1.toString(16).padStart(2, '0') + ' ' + f2.toString(16).padStart(2, '0') + ' ' + f3.toString(16).padStart(2, '0'));
 
 		    qalert("Get FD information");
 		}
@@ -441,10 +442,10 @@ function parsePacket(hex, check_confirm = 0)
     r.length = hex[4] ^ u8;
 
     if (crc == crcc) {
-	log("CRC: " + crc + " = " + crcc + " -> OK");
+	log("CRC: " + crc.toString(16).padStart(2, '0') + " = " + crcc.toString(16).padStart(2, '0') + " -> OK");
     } else {
 	if (blocks == 0) {
-	    log("CRC: " + crc + " != " + crcc + " -> FAILED");
+	    log("CRC: " + crc.toString(16).padStart(2, '0') + " != " + crcc.toString(16).padStart(2, '0') + " -> FAILED");
 	    r.error = 1;
 	    return r;
 	} else {
@@ -456,10 +457,10 @@ function parsePacket(hex, check_confirm = 0)
 	}
     }
     if (!r.ascii) {
-	log("prefix: " + hex[0]);
-	log("u8: " + u8);
-	log("key: " + r.key);
-	log("cmd: " + r.cmd);
+	log("prefix: " + hex[0].toString(16).padStart(2, '0'));
+	log("u8: " + u8.toString(16).padStart(2, '0'));
+	log("key: " + r.key.toString(16).padStart(2, '0'));
+	log("cmd: " + r.cmd.toString(16).padStart(2, '0'));
 	log("length: " + r.length);
 
 	for (var t = 5; t < 5 + r.length; t++) {
@@ -468,7 +469,7 @@ function parsePacket(hex, check_confirm = 0)
 	}
 	var s = "";
 	for (var t = 0; t < r.payload_length; t++) {
-	    s += r.payload[t] + ' ';
+	    s += r.payload[t].toString(16).padStart(2, '0') + ' ';
 	}
 	log("payload: " + s);
     } else {
@@ -573,7 +574,7 @@ function parsePacket(hex, check_confirm = 0)
 		    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_getFrontAndRearDerailleurGearValuesInfo, 0x03, f1, f2, f3, 0x00, 0x00 ]);
 		    a = setCRC16(a);
 		    characteristic_TX.writeValueWithoutResponse(a);
-		    log("Send: getFrontAndRearDerailleurGearValuesInfo, -> " + f1.toString(16) + ' ' + f2.toString(16) + ' ' + f3.toString(16));
+		    log("Send: getFrontAndRearDerailleurGearValuesInfo, -> " + f1.toString(16).padStart(2, '0') + ' ' + f2.toString(16).padStart(2, '0') + ' ' + f3.toString(16).padStart(2, '0'));
 
 		    qalert("Get FD information");
 		}
@@ -759,7 +760,7 @@ function bindActionButtons()
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setGearUpValue, 0x03, g, v1, v2, 0x00, 0x00 ]);
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: setGearUpValue -> " + g.toString(16) + ' = ' + v);
+	log("Send: setGearUpValue -> " + g.toString(16).padStart(2, '0') + ' = ' + v);
 
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
@@ -775,7 +776,7 @@ function bindActionButtons()
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setFrontGearLimit, 0x03, g, v1, v2, 0x00, 0x00 ]);
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: setFrontGearLimit -> " + g.toString(16) + ' = ' + v);
+	log("Send: setFrontGearLimit -> " + g.toString(16).padStart(2, '0') + ' = ' + v);
 
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
@@ -1031,7 +1032,7 @@ $(document).ready(function() {
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_rearLifting, 0x01, f, 0x00, 0x00 ]);
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: rearLifting -> " + f.toString(16));
+	log("Send: rearLifting -> " + f.toString(16).padStart(2, '0'));
     });
     // shift down
     $('.settings .action_buttons .button.down, .txsettings .action_buttons .button.down, .live .action_buttons .button.down').on('click', function() {
@@ -1041,7 +1042,7 @@ $(document).ready(function() {
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_rearLifting, 0x01, f, 0x00, 0x00 ]);
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: rearLifting -> " + f.toString(16));
+	log("Send: rearLifting -> " + f.toString(16).padStart(2, '0'));
     });
     // front shift up
     $('.txsettings .front_buttons .button.up').on('click', function() {
@@ -1053,7 +1054,7 @@ $(document).ready(function() {
 	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_frontLifting, 0x01, f, 0x00, 0x00 ]);
 	    a = setCRC16(a);
 	    characteristic_TX.writeValueWithoutResponse(a);
-	    log("Send: frontLifting -> " + f.toString(16));
+	    log("Send: frontLifting -> " + f.toString(16).padStart(2, '0'));
 	}
     });
     // Front shift down
@@ -1066,7 +1067,7 @@ $(document).ready(function() {
 	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_frontLifting, 0x01, f, 0x00, 0x00 ]);
 	    a = setCRC16(a);
 	    characteristic_TX.writeValueWithoutResponse(a);
-	    log("Send: frontLifting -> " + f.toString(16));
+	    log("Send: frontLifting -> " + f.toString(16).padStart(2, '0'));
 	}
     });
 
@@ -1084,7 +1085,7 @@ $(document).ready(function() {
 	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setTotalGear, 0x01, f, 0x00, 0x00 ]);
 	    a = setCRC16(a);
 	    characteristic_TX.writeValueWithoutResponse(a);
-	    log("Send: setTotalGear -> " + f.toString(16));
+	    log("Send: setTotalGear -> " + f.toString(16).padStart(2, '0'));
 
 	    ctimeout = setTimeout(timeoutCheck, 1000);
 	}
@@ -1098,7 +1099,7 @@ $(document).ready(function() {
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_fineTuneGear, 0x01, f, 0x00, 0x00 ]);
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: fineTuneGear -> " + f.toString(16));
+	log("Send: fineTuneGear -> " + f.toString(16).padStart(2, '0'));
     });
     // micro shift down
     $('.settings .micro .down, .txsettings .micro .down').on('click', function() {
@@ -1108,7 +1109,7 @@ $(document).ready(function() {
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_fineTuneGear, 0x01, f, 0x00, 0x00 ]);
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: fineTuneGear -> " + f.toString(16));
+	log("Send: fineTuneGear -> " + f.toString(16).padStart(2, '0'));
     });
     // front micro shift up
     $('.txsettings .front_micro .up').on('click', function() {
@@ -1118,7 +1119,7 @@ $(document).ready(function() {
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_fineTuneFrontGear, 0x01, f, 0x00, 0x00 ]);
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: fineTuneFrontGear -> " + f.toString(16));
+	log("Send: fineTuneFrontGear -> " + f.toString(16).padStart(2, '0'));
     });
     // front micro shift down
     $('.txsettings .front_micro .down').on('click', function() {
@@ -1128,7 +1129,7 @@ $(document).ready(function() {
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_fineTuneFrontGear, 0x01, f, 0x00, 0x00 ]);
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: fineTuneFrontGear -> " + f.toString(16));
+	log("Send: fineTuneFrontGear -> " + f.toString(16).padStart(2, '0'));
     });
 
     // set all gear values
@@ -1155,7 +1156,7 @@ $(document).ready(function() {
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setGearUpValue, 0x03, v.gear, v1, v2, 0x00, 0x00 ]);
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: setGearUpValue -> " + v.gear.toString(16) + ' = ' + v.value);
+	log("Send: setGearUpValue -> " + v.gear.toString(16).padStart(2, '0') + ' = ' + v.value);
 
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
@@ -1182,7 +1183,7 @@ $(document).ready(function() {
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setGearUpValue, 0x03, v.gear, v1, v2, 0x00, 0x00 ]);
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: setGearUpValue -> " + v.gear.toString(16) + ' = ' + v.value);
+	log("Send: setGearUpValue -> " + v.gear.toString(16).padStart(2, '0') + ' = ' + v.value);
 
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
@@ -1210,7 +1211,7 @@ $(document).ready(function() {
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setFrontGearLimit, 0x03, v.gear, v1, v2, 0x00, 0x00 ]);
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: setFrontGearLimit -> " + v.gear.toString(16) + ' = ' + v.value);
+	log("Send: setFrontGearLimit -> " + v.gear.toString(16).padStart(2, '0') + ' = ' + v.value);
 
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
@@ -1427,7 +1428,7 @@ $(document).ready(function() {
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_switchFingerOrder, 0x01, f, 0x00, 0x00 ]);
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: switchFingerOrder -> " + f.toString(16));
+	log("Send: switchFingerOrder -> " + f.toString(16).padStart(2, '0'));
 
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
@@ -1450,7 +1451,7 @@ $(document).ready(function() {
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_switchFingerOrder, 0x03, f1, f2, f3, 0x00, 0x00 ]);
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: switchFingerOrder -> " + f1.toString(16) + ' ' + f2.toString(16) + ' ' + f3.toString(16));
+	log("Send: switchFingerOrder -> " + f1.toString(16).padStart(2, '0') + ' ' + f2.toString(16).padStart(2, '0') + ' ' + f3.toString(16).padStart(2, '0'));
 
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
@@ -1491,7 +1492,7 @@ $(document).ready(function() {
 	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_backDialSleep, 0x01, f, 0x00, 0x00 ]);
 	    a = setCRC16(a);
 	    characteristic_TX.writeValueWithoutResponse(a);
-	    log("Send: backDialSleep -> " + f.toString(16));
+	    log("Send: backDialSleep -> " + f.toString(16).padStart(2, '0'));
 
 	    ctimeout = setTimeout(timeoutCheck, 1000);
 	}
