@@ -1263,7 +1263,7 @@ $(document).ready(function() {
     // export
     $('.button_export').on('click', function() {
 	var d = new Date();
-	var fname = 'drWtOX-gears-' +
+	var fname = 'drWt-gears-' +
 	    d.getFullYear() +
 	    (d.getMonth() + 1).toString().padStart(2, 0) +
 	    d.getDate().toString().padStart(2, 0) +
@@ -1275,15 +1275,31 @@ $(document).ready(function() {
 	if (confirm('Export settings, values and presets to file ' + fname + '?')) {
 	    var exp = {
 		'debug': $('.button_debug').hasClass('selected'),
-		'page': $('.button_page').hasClass('icon-wrench') ? "settings" : "live",
+		'page': $('.button_page').hasClass('icon-wrench') ? "live" : "settings",
 		'battery': localStorage.getItem('battery'),
-		'current': []
+		'current': {
+		    'rear': []
+		}
 	    };
-	    $('.gear_values .content input').each(function() {
+	    var pr = "";
+	    if (device_type == "EDS TX") {
+		pr = "tx";
+		exp.current.front = [];
+	    }
+	    $('.' + pr + 'settings .gear_values .vcontent input').each(function() {
 		var g = $(this).parent().attr('gear');
 		var v = $(this).val();
 
-		exp.current.push({
+		exp.current.rear.push({
+		    'gear': g,
+		    'value': v
+		});
+	    });
+	    $('.' + pr + 'settings .gear_values .fvcontent input').each(function() {
+		var g = $(this).parent().attr('gear');
+		var v = $(this).val();
+
+		exp.current.front.push({
 		    'gear': g,
 		    'value': v
 		});
