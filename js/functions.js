@@ -1278,6 +1278,7 @@ $(document).ready(function() {
 		'page': $('.button_page').hasClass('icon-wrench') ? "live" : "settings",
 		'battery': localStorage.getItem('battery'),
 		'current': {
+		    'device': device_type,
 		    'rear': []
 		}
 	    };
