@@ -2,9 +2,8 @@
 /*
     TODO:
 	1. firmware upgrade
-	2. presets by device_type
-	3. RD protection
-	4. FD/RD threshold
+	2. RD protection
+	3. FD/RD threshold
 */
 
 var debug = 1;
