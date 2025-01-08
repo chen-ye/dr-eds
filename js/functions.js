@@ -403,6 +403,10 @@ function handleCharacteristicValueChanged(event)
 	{
 	    clearTimeout(ctimeout);
 
+	    if ($('.settings .buttons_function .button.mode').hasClass('selected'))
+		$('.settings .buttons_function .button.mode').removeClass('selected');
+	    else
+		$('.settings .buttons_function .button.mode').addClass('selected');
 	    if ($('.txsettings .buttons_function .button.mode').hasClass('selected'))
 		$('.txsettings .buttons_function .button.mode').removeClass('selected');
 	    else
@@ -617,9 +621,9 @@ function parsePacket(hex, check_confirm = 0)
 
 	    // race mode
 	    if (info['PTOTECT'] == 1)
-		$('.txsettings .buttons_function .button.mode').addClass('selected');
+		$('.settings .buttons_function .button.mode, .txsettings .buttons_function .button.mode').addClass('selected');
 	    else
-		$('.txsettings .buttons_function .button.mode').removeClass('selected');
+		$('.settings .buttons_function .button.mode, .txsettings .buttons_function .button.mode').removeClass('selected');
 
 	    // buttons
 	    if (device_type == "EDS OX") {
@@ -1461,7 +1465,7 @@ $(document).ready(function() {
     });
 
     // set race mode
-    $('.txsettings .buttons_function .button.mode').on('click', function() {
+    $('.settings .buttons_function .button.mode, .txsettings .buttons_function .button.mode').on('click', function() {
 	var f = 2;
 	if (!$(this).hasClass('selected')) f = 1;
 
