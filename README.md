@@ -50,12 +50,12 @@ Make sure `logs` button in the menu is pressed and debug messages are visible, t
 
 
 ### Sreenshots OX:
-![Main screen without debug info](https://drwtox.jeckyll.net/images/shot1.png){width=33%}
-![Main screen dark theme without debug info](https://drwtox.jeckyll.net/images/shot5.png){width=33%}
-![Main screen with debug info](https://drwtox.jeckyll.net/images/shot2.png){width=33%}
-![Main screen (bottom part) withou debug info](https://drwtox.jeckyll.net/images/shot4.png){width=233}
-![Main screen (bottom part) with debug info](https://drwtox.jeckyll.net/images/shot3.png){width=33%}
-![Live view](https://drwtox.jeckyll.net/images/shot6.png){width=33%}
+![Main screen without debug info](images/shot1.png){width=33%}
+![Main screen dark theme without debug info](images/shot5.png){width=33%}
+![Main screen with debug info](images/shot2.png){width=33%}
+![Main screen (bottom part) withou debug info](images/shot4.png){width=233}
+![Main screen (bottom part) with debug info](images/shot3.png){width=33%}
+![Live view](images/shot6.png){width=33%}
 
 ## More information
 - [General EDS OX information](EDS-OX.md)
