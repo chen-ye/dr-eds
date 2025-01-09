@@ -97,7 +97,8 @@ body.logs {
     right: 0;
     z-index: 100;
 }
-.info .content {
+.info .content,
+.info .txcontent {
     background: var(--selected-background-color);
     color: var(--selected-text-color);
     font-family: var(--debug-font);
@@ -134,15 +135,24 @@ body.logs {
     position: relative;
 }
 
-.settings .action_buttons {
+.settings .action_buttons,
+.txsettings .front_buttons {
     text-align: center;
     margin-top: 4em;
 }
+.txsettings .action_buttons {
+    text-align: center;
+    margin-top: 2em;
+}
 .settings .action_buttons .button,
+.txsettings .action_buttons .button,
+.txsettings .front_buttons .button,
 .live .action_buttons .button {
     position: relative;
 }
 .settings .action_buttons .button:after,
+.txsettings .action_buttons .button:after,
+.txsettings .front_buttons .button:after,
 .live .action_buttons .button:after {
     color: var(--main-text-light-color);
     position: absolute;
@@ -152,7 +162,9 @@ body.logs {
     margin: 0 auto;
     font-size: 0.7em;
 }
-.settings .action_buttons .button:before {
+.settings .action_buttons .button:before,
+.txsettings .front_buttons .button:before,
+.txsettings .action_buttons .button:before {
     color: var(--main-text-light-color);
     position: absolute;
     top: 0;
@@ -161,33 +173,56 @@ body.logs {
     margin: 0 auto;
     font-size: 0.7em;
 }
-.settings .action_buttons .button.gear:before {
+.txsettings .front_buttons .button.up:before,
+.txsettings .front_buttons .button.down:before {
+    content: "front";
+}
+.settings .action_buttons .button.gear:before,
+.txsettings .front_buttons .button.gear:before,
+.txsettings .action_buttons .button.gear:before {
     content: "current";
 }
-.settings .action_buttons .button.gears:before {
+.settings .action_buttons .button.gears:before,
+.txsettings .action_buttons .button.gears:before {
     content: "total";
+}
+.txsettings .action_buttons .button.up:before,
+.txsettings .action_buttons .button.down:before {
+    content: "rear";
 }
 .settings .action_buttons .button.up:after,
 .settings .action_buttons .button.down:after,
+.txsettings .front_buttons .button.up:after,
+.txsettings .front_buttons .button.down:after,
+.txsettings .action_buttons .button.up:after,
+.txsettings .action_buttons .button.down:after,
 .live .action_buttons .button.up:after,
 .live .action_buttons .button.down:after {
     content: "shift";
 }
-.settings .action_buttons .button.gear:after {
+.settings .action_buttons .button.gear:after,
+.txsettings .front_buttons .button.gear:after,
+.txsettings .action_buttons .button.gear:after {
     content: "gear";
 }
-.settings .action_buttons .button.gears:after {
+.settings .action_buttons .button.gears:after,
+.txsettings .action_buttons .button.gears:after {
     content: "gears";
 }
-
-.settings .micro {
+.settings .micro,
+.txsettings .front_micro,
+.txsettings .micro {
     text-align: center;
     margin-top: 0.2em;
 }
-.settings .micro .button {
+.settings .micro .button,
+.txsettings .front_micro .button,
+.txsettings .micro .button {
     position: relative;
 }
-.settings .micro .button:after {
+.settings .micro .button:after,
+.txsettings .front_micro .button:after,
+.txsettings .micro .button:after {
     color: var(--main-text-light-color);
     position: absolute;
     bottom: 0;
@@ -196,7 +231,9 @@ body.logs {
     margin: 0 auto;
     font-size: 0.7em;
 }
-.settings .micro .button:before {
+.settings .micro .button:before,
+.txsettings .front_micro .button:before,
+.txsettings .micro .button:before {
     color: var(--main-text-light-color);
     position: absolute;
     top: 0;
@@ -206,23 +243,35 @@ body.logs {
     font-size: 0.7em;
 }
 .settings .micro .button.up:before,
-.settings .micro .button.down:before {
+.settings .micro .button.down:before,
+.txsettings .front_micro .button.up:before,
+.txsettings .front_micro .button.down:before,
+.txsettings .micro .button.up:before,
+.txsettings .micro .button.down:before {
     content: "micro";
 }
 .settings .micro .button.up:after,
-.settings .micro .button.down:after {
+.settings .micro .button.down:after,
+.txsettings .front_micro .button.up:after,
+.txsettings .front_micro .button.down:after,
+.txsettings .micro .button.up:after,
+.txsettings .micro .button.down:after {
     content: "shift";
 }
-
-.settings .gear_values {
+.settings .gear_values,
+.txsettings .gear_values {
     text-align: center;
     margin-top: 2em;
 }
-.settings .gear_values .gear {
+.settings .gear_values .gear,
+.txsettings .gear_values .front,
+.txsettings .gear_values .gear {
     margin-bottom: 0.2em;
     white-space: nowrap;
 }
-.settings .gear_values .vcontent {
+.settings .gear_values .vcontent,
+.txsettings .gear_values .fvcontent,
+.txsettings .gear_values .vcontent {
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
@@ -234,9 +283,22 @@ body.logs {
     flex-direction: row;
     justify-content: center;
 }
-.settings .gear_values .content {
+.txsettings .gear_values .fvcontent {
+    margin-bottom: 1em;
 }
-.settings .gear_values .buttons {
+.txsettings .fvnone {
+    font-size: 0.8em;
+    margin: 5em 0 2em 0;
+    padding: 0 1em;
+    text-align: center;
+}
+.txsettings .fvnone a {
+    text-decoration: none;
+    border-bottom: 1px dashed var(--main-color);
+    color: var(--main-color);
+}
+.settings .gear_values .buttons,
+.txsettings .gear_values .buttons {
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
@@ -250,19 +312,16 @@ body.logs {
     justify-content: space-between;
     margin-left: 1em;
 }
-.settings .gear_values .buttons .button {
+.settings .gear_values .buttons .button,
+.txsettings .gear_values .buttons .button {
     margin-bottom: 0.2em;
 }
-.settings .gear_values .buttons .fake {
-}
-.settings .gear_values .buttons .set_all {
-}
-.settings .gear_values .buttons .save {
-}
-.settings .gear_values .content .button.plus {
+.settings .gear_values .content .button.plus,
+.txsettings .gear_values .content .button.plus {
     position: relative;
 }
-.settings .gear_values .content .button.plus:after {
+.settings .gear_values .content .button.plus:after,
+.txsettings .gear_values .content .button.plus:after {
     color: var(--main-text-light-color);
     position: absolute;
     bottom: 0;
@@ -275,22 +334,26 @@ body.logs {
     z-index: 1;
     pointer-events: none;
 }
-.settings .gear_values .presets {
+.settings .gear_values .presets,
+.txsettings .gear_values .presets {
     margin-top: 1em;
     margin-bottom: 1em;
 }
-.settings .gear_values .preset_wrap {
+.settings .gear_values .preset_wrap,
+.txsettings .gear_values .preset_wrap {
     white-space: nowrap;
     display: inline-block;
     margin: 0 0.1em;
 }
-.settings .gear_values .preset_wrap .preset {
+.settings .gear_values .preset_wrap .preset,
+.txsettings .gear_values .preset_wrap .preset {
     border-right: none;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     padding-right: 0.2em;
 }
-.settings .gear_values .preset_wrap .del {
+.settings .gear_values .preset_wrap .del,
+.txsettings .gear_values .preset_wrap .del {
     border-left: none;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
@@ -303,11 +366,12 @@ body.logs {
     text-align: center;
     margin-top: 2em;
 }
-.buttons_function .vbutton {
+.buttons_function .vbutton,
+.buttons_function .button {
     position: relative;
 }
-.buttons_function .vbutton:before {
-    content: "function";
+.buttons_function .vbutton:before,
+.buttons_function .button:before {
     color: var(--main-text-light-color);
     position: absolute;
     top: 0;
@@ -316,8 +380,8 @@ body.logs {
     margin: 0 auto;
     font-size: 0.7em;
 }
-.buttons_function .vbutton:after {
-    content: "shift";
+.buttons_function .vbutton:after,
+.buttons_function .button:after {
     color: var(--main-text-light-color);
     position: absolute;
     bottom: 0;
@@ -325,6 +389,32 @@ body.logs {
     right: 0;
     margin: 0 auto;
     font-size: 0.7em;
+}
+.buttons_function .vbutton.top:before,
+.buttons_function .vbutton.bottom:before {
+    content: "function";
+}
+.buttons_function .vbutton.top:after,
+.buttons_function .vbutton.bottom:after {
+    content: "shift";
+}
+.buttons_function .button.top:before,
+.buttons_function .button.single:before {
+    content: "left";
+}
+.buttons_function .vbutton.small:before,
+.buttons_function .vbutton.big:before {
+    content: "right";
+}
+.buttons_function .vbutton.small:after {
+    content: "small";
+}
+.buttons_function .vbutton.big:after {
+    content: "big";
+}
+.buttons_function .button.mode:after,
+.buttons_function .button.sleep:after {
+    content: "mode";
 }
 
 .button {
@@ -345,7 +435,8 @@ body.logs {
 .button_debug,
 .button_page,
 .button_menu,
-.button_power,
+.button_shutdown,
+.button_disconnect,
 .button_export,
 .button_import {
     /*position: absolute;*/
@@ -361,7 +452,8 @@ body.logs {
     background: var(--background-color);
 }
 .button_page,
-.button_power,
+.button_shutdown,
+.button_disconnect,
 .button_export,
 .button_import {
     background: var(--selected-background-color);
@@ -407,24 +499,28 @@ select {
     font-family: var(--main-font);
     text-align: center;
 }
-.settings .gear_values .button.minus {
+.settings .gear_values .button.minus,
+.txsettings .gear_values .button.minus {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-right: 0;
     padding: 0.6em 1em;
     width: 0em;
 }
-.settings .gear_values .button.plus {
+.settings .gear_values .button.plus,
+.txsettings .gear_values .button.plus {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     border-left: 0;
     padding: 0.6em 1em;
     width: 0em;
 }
-.settings .gear_values .button.set {
+.settings .gear_values .button.set,
+.txsettings .gear_values .button.set {
     margin-left: 0.2em;
 }
-.settings .gear_values input[type="text"] {
+.settings .gear_values input[type="text"],
+.txsettings .gear_values input[type="text"] {
     width: 3em;
     border: 2px solid var(--main-color);
     color: var(--main-text-color);
@@ -438,6 +534,7 @@ select {
     box-sizing: border-box;
 }
 
+/* https://icon-sets.iconify.design/ */
 .icon-bike {
     display: inline-block;
     background-repeat: no-repeat;
@@ -455,7 +552,14 @@ select {
 .icon-gear.selected {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='M12 15.5A3.5 3.5 0 0 1 8.5 12A3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5a3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64z'/%3E%3C/svg%3E");
 }
-.icon-power {
+.icon-disconnect {
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: 70% 70%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2048 2048'%3E%3Cpath fill='%23fff' d='m1300 1201l-271 271l90 90l-226 227q-63 63-145 97t-172 34q-73 0-141-22t-127-67l-199 198l-90-90l198-199q-44-58-66-126t-23-142q0-89 34-171t97-146l227-226l90 90l271-271l91 90l-272 272l272 272l272-272zm-724 591q64 0 122-24t104-70l136-136l-452-452l-136 136q-45 45-69 103t-25 123q0 66 25 124t68 102t102 69t125 25M1831 308q44 58 66 126t23 142q0 89-34 171t-97 146l-227 226l-633-633l226-227q63-63 145-97t172-34q73 0 141 22t127 67l199-198l90 90zm-133 494q45-45 69-103t25-123q0-66-25-124t-69-101t-102-69t-124-26q-64 0-122 24t-104 70l-136 136l452 452z'/%3E%3C/svg%3E");
+    background-position: center;
+}
+.icon-shutdown {
     display: inline-block;
     background-repeat: no-repeat;
     background-size: 80% 80%;
@@ -532,8 +636,15 @@ select {
     flex-direction: row;
 }
 .menus .bmenus>div {
-    margin-right: 0.8em;
+    margin-right: 0.6em;
 }
+
+.front1:after { content: "front 1"; }
+.front2:after { content: "front 2"; }
+.front3:after { content: "front 3"; }
+.front4:after { content: "front 4"; }
+.front5:after { content: "front 5"; }
+.front6:after { content: "front 6"; }
 
 .gear1:after { content: "gear 1"; }
 .gear2:after { content: "gear 2"; }
