@@ -98,7 +98,8 @@ body.logs {
     z-index: 100;
 }
 .info .content,
-.info .txcontent {
+.info .txcontent,
+.info .gxcontent {
     background: var(--selected-background-color);
     color: var(--selected-text-color);
     font-family: var(--debug-font);
@@ -136,7 +137,8 @@ body.logs {
 }
 
 .settings .action_buttons,
-.txsettings .front_buttons {
+.txsettings .front_buttons,
+.gxsettings .action_buttons {
     text-align: center;
     margin-top: 4em;
 }
@@ -146,12 +148,14 @@ body.logs {
 }
 .settings .action_buttons .button,
 .txsettings .action_buttons .button,
+.gxsettings .action_buttons .button,
 .txsettings .front_buttons .button,
 .live .action_buttons .button {
     position: relative;
 }
 .settings .action_buttons .button:after,
 .txsettings .action_buttons .button:after,
+.gxsettings .action_buttons .button:after,
 .txsettings .front_buttons .button:after,
 .live .action_buttons .button:after {
     color: var(--main-text-light-color);
@@ -164,6 +168,7 @@ body.logs {
 }
 .settings .action_buttons .button:before,
 .txsettings .front_buttons .button:before,
+.gxsettings .action_buttons .button:before,
 .txsettings .action_buttons .button:before {
     color: var(--main-text-light-color);
     position: absolute;
@@ -179,15 +184,19 @@ body.logs {
 }
 .settings .action_buttons .button.gear:before,
 .txsettings .front_buttons .button.gear:before,
+.gxsettings .action_buttons .button.gear:before,
 .txsettings .action_buttons .button.gear:before {
     content: "current";
 }
 .settings .action_buttons .button.gears:before,
-.txsettings .action_buttons .button.gears:before {
+.txsettings .action_buttons .button.gears:before,
+.gxsettings .action_buttons .button.gears:before {
     content: "total";
 }
 .txsettings .action_buttons .button.up:before,
-.txsettings .action_buttons .button.down:before {
+.txsettings .action_buttons .button.down:before,
+.gxsettings .action_buttons .button.up:before,
+.gxsettings .action_buttons .button.down:before {
     content: "rear";
 }
 .settings .action_buttons .button.up:after,
@@ -196,33 +205,40 @@ body.logs {
 .txsettings .front_buttons .button.down:after,
 .txsettings .action_buttons .button.up:after,
 .txsettings .action_buttons .button.down:after,
+.gxsettings .action_buttons .button.up:after,
+.gxsettings .action_buttons .button.down:after,
 .live .action_buttons .button.up:after,
 .live .action_buttons .button.down:after {
     content: "shift";
 }
 .settings .action_buttons .button.gear:after,
 .txsettings .front_buttons .button.gear:after,
-.txsettings .action_buttons .button.gear:after {
+.txsettings .action_buttons .button.gear:after,
+.gxsettings .action_buttons .button.gear:after {
     content: "gear";
 }
 .settings .action_buttons .button.gears:after,
-.txsettings .action_buttons .button.gears:after {
+.txsettings .action_buttons .button.gears:after,
+.gxsettings .action_buttons .button.gears:after {
     content: "gears";
 }
 .settings .micro,
 .txsettings .front_micro,
-.txsettings .micro {
+.txsettings .micro,
+.gxsettings .micro {
     text-align: center;
     margin-top: 0.2em;
 }
 .settings .micro .button,
 .txsettings .front_micro .button,
-.txsettings .micro .button {
+.txsettings .micro .button,
+.gxsettings .micro .button {
     position: relative;
 }
 .settings .micro .button:after,
 .txsettings .front_micro .button:after,
-.txsettings .micro .button:after {
+.txsettings .micro .button:after,
+.gxsettings .micro .button:after {
     color: var(--main-text-light-color);
     position: absolute;
     bottom: 0;
@@ -233,7 +249,8 @@ body.logs {
 }
 .settings .micro .button:before,
 .txsettings .front_micro .button:before,
-.txsettings .micro .button:before {
+.txsettings .micro .button:before,
+.gxsettings .micro .button:before {
     color: var(--main-text-light-color);
     position: absolute;
     top: 0;
@@ -247,7 +264,9 @@ body.logs {
 .txsettings .front_micro .button.up:before,
 .txsettings .front_micro .button.down:before,
 .txsettings .micro .button.up:before,
-.txsettings .micro .button.down:before {
+.txsettings .micro .button.down:before,
+.gxsettings .micro .button.up:before,
+.gxsettings .micro .button.down:before {
     content: "micro";
 }
 .settings .micro .button.up:after,
@@ -255,23 +274,28 @@ body.logs {
 .txsettings .front_micro .button.up:after,
 .txsettings .front_micro .button.down:after,
 .txsettings .micro .button.up:after,
-.txsettings .micro .button.down:after {
+.txsettings .micro .button.down:after,
+.gxsettings .micro .button.up:after,
+.gxsettings .micro .button.down:after {
     content: "shift";
 }
 .settings .gear_values,
-.txsettings .gear_values {
+.txsettings .gear_values,
+.gxsettings .gear_values {
     text-align: center;
     margin-top: 2em;
 }
 .settings .gear_values .gear,
 .txsettings .gear_values .front,
-.txsettings .gear_values .gear {
+.txsettings .gear_values .gear,
+.gxsettings .gear_values .gear {
     margin-bottom: 0.2em;
     white-space: nowrap;
 }
 .settings .gear_values .vcontent,
 .txsettings .gear_values .fvcontent,
-.txsettings .gear_values .vcontent {
+.txsettings .gear_values .vcontent,
+.gxsettings .gear_values .vcontent {
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
@@ -298,7 +322,8 @@ body.logs {
     color: var(--main-color);
 }
 .settings .gear_values .buttons,
-.txsettings .gear_values .buttons {
+.txsettings .gear_values .buttons,
+.gxsettings .gear_values .buttons {
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
@@ -313,15 +338,18 @@ body.logs {
     margin-left: 1em;
 }
 .settings .gear_values .buttons .button,
-.txsettings .gear_values .buttons .button {
+.txsettings .gear_values .buttons .button,
+.gxsettings .gear_values .buttons .button {
     margin-bottom: 0.2em;
 }
 .settings .gear_values .content .button.plus,
-.txsettings .gear_values .content .button.plus {
+.txsettings .gear_values .content .button.plus,
+.gxsettings .gear_values .content .button.plus {
     position: relative;
 }
 .settings .gear_values .content .button.plus:after,
-.txsettings .gear_values .content .button.plus:after {
+.txsettings .gear_values .content .button.plus:after,
+.gxsettings .gear_values .content .button.plus:after {
     color: var(--main-text-light-color);
     position: absolute;
     bottom: 0;
@@ -335,25 +363,29 @@ body.logs {
     pointer-events: none;
 }
 .settings .gear_values .presets,
-.txsettings .gear_values .presets {
+.txsettings .gear_values .presets,
+.gxsettings .gear_values .presets {
     margin-top: 1em;
     margin-bottom: 1em;
 }
 .settings .gear_values .preset_wrap,
-.txsettings .gear_values .preset_wrap {
+.txsettings .gear_values .preset_wrap,
+.gxsettings .gear_values .preset_wrap {
     white-space: nowrap;
     display: inline-block;
     margin: 0 0.1em;
 }
 .settings .gear_values .preset_wrap .preset,
-.txsettings .gear_values .preset_wrap .preset {
+.txsettings .gear_values .preset_wrap .preset,
+.gxsettings .gear_values .preset_wrap .preset {
     border-right: none;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     padding-right: 0.2em;
 }
 .settings .gear_values .preset_wrap .del,
-.txsettings .gear_values .preset_wrap .del {
+.txsettings .gear_values .preset_wrap .del,
+.gxsettings .gear_values .preset_wrap .del {
     border-left: none;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
@@ -500,7 +532,8 @@ select {
     text-align: center;
 }
 .settings .gear_values .button.minus,
-.txsettings .gear_values .button.minus {
+.txsettings .gear_values .button.minus,
+.gxsettings .gear_values .button.minus {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-right: 0;
@@ -508,7 +541,8 @@ select {
     width: 0em;
 }
 .settings .gear_values .button.plus,
-.txsettings .gear_values .button.plus {
+.txsettings .gear_values .button.plus,
+.gxsettings .gear_values .button.plus {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     border-left: 0;
@@ -516,11 +550,13 @@ select {
     width: 0em;
 }
 .settings .gear_values .button.set,
-.txsettings .gear_values .button.set {
+.txsettings .gear_values .button.set,
+.gxsettings .gear_values .button.set {
     margin-left: 0.2em;
 }
 .settings .gear_values input[type="text"],
-.txsettings .gear_values input[type="text"] {
+.txsettings .gear_values input[type="text"],
+.gxsettings .gear_values input[type="text"] {
     width: 3em;
     border: 2px solid var(--main-color);
     color: var(--main-text-color);
