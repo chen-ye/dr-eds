@@ -952,6 +952,7 @@ $(document).ready(function() {
     if (navigator.bluetooth == null) {
 	log('Sorry, no web bluetooth support');
 	log('Try to install Chrome browser on your device first and try this app again');
+	log('Running on: ' + navigator.userAgent + ' | ' + navigator.appCodeName + ' | ' + navigator.appName + ' | ' + navigator.appVersion + ' | ' + navigator.platform);
 	return;
     }
     navigator.bluetooth.getAvailability().then((available) => {
@@ -960,6 +961,7 @@ $(document).ready(function() {
 	    log('Google Chrome: open chrome://flags and enable web bluetooth support');
 	    log('Brave: open brave://flags and enable web bluetooth support');
 	    log('Vivaldi: open vivaldi://flags and enable web bluetooth support');
+	    log('Running on: ' + navigator.userAgent + ' | ' + navigator.appCodeName + ' | ' + navigator.appName + ' | ' + navigator.appVersion + ' | ' + navigator.platform);
 	    return;
 	}
     });
@@ -988,6 +990,7 @@ $(document).ready(function() {
 	    startBlock("Connected to " + device_type);
 	    $('.scan').hide();
 
+	    log('Running on: ' + navigator.userAgent + ' | ' + navigator.appCodeName + ' | ' + navigator.appName + ' | ' + navigator.appVersion + ' | ' + navigator.platform);
 	    log('Connected to ' + device_type);
 
 	    dev = device;
