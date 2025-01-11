@@ -1350,6 +1350,7 @@ $(document).ready(function() {
 		});
 		s[device_type][n]['front'] = r;
 	    }
+	    if (device_type == "EDS GeX") pr = "gx";
 
 	    r = [];
 	    $('.' + pr + 'settings .gear_values .vcontent input').each(function() {
