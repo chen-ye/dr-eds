@@ -634,7 +634,7 @@ function parsePacket(hex, check_confirm = 0)
 		$('.gxsettings .gear_values .vcontent .content').html('');
 		for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
 		    var r = parseInt(info['TOTAL_CNT']) - t;
-		    $('.gxsettings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['GEARS[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
+		    $('.gxsettings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
 		}
 	    }
 
