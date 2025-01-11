@@ -681,14 +681,14 @@ function parsePacket(hex, check_confirm = 0)
 		if (parseInt(info['KeySwitch'].substring(2, 3)) == 3) $('.txsettings .buttons_function .button.single select').val('front');
 	    } else
 	    if (device_type == "EDS GeX") {
-		if (parseInt(info['KeySwitch'].substring(0, 1)) == 1) $('.txsettings .buttons_function .vbutton.small select').val('up');
-		if (parseInt(info['KeySwitch'].substring(0, 1)) == 2) $('.txsettings .buttons_function .vbutton.small select').val('down');
+		if (parseInt(info['KeySwitch'].substring(0, 1)) == 1) $('.gxsettings .buttons_function .vbutton.small select').val('up');
+		if (parseInt(info['KeySwitch'].substring(0, 1)) == 2) $('.gxsettings .buttons_function .vbutton.small select').val('down');
 
-		if (parseInt(info['KeySwitch'].substring(1, 2)) == 1) $('.txsettings .buttons_function .vbutton.big select').val('up');
-		if (parseInt(info['KeySwitch'].substring(1, 2)) == 2) $('.txsettings .buttons_function .vbutton.big select').val('down');
+		if (parseInt(info['KeySwitch'].substring(1, 2)) == 1) $('.gxsettings .buttons_function .vbutton.big select').val('up');
+		if (parseInt(info['KeySwitch'].substring(1, 2)) == 2) $('.gxsettings .buttons_function .vbutton.big select').val('down');
 
-		if (parseInt(info['KeySwitch'].substring(2, 3)) == 1) $('.txsettings .buttons_function .button.single select').val('up');
-		if (parseInt(info['KeySwitch'].substring(2, 3)) == 2) $('.txsettings .buttons_function .button.single select').val('down');
+		if (parseInt(info['KeySwitch'].substring(2, 3)) == 1) $('.gxsettings .buttons_function .button.single select').val('up');
+		if (parseInt(info['KeySwitch'].substring(2, 3)) == 2) $('.gxsettings .buttons_function .button.single select').val('down');
 	    }
 
 	    if ((device_type == "EDS TX") || (device_type == "EDS GeX")) {
