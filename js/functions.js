@@ -553,7 +553,7 @@ function parsePacket(hex, check_confirm = 0)
 	    if (device_type == "EDS TX")
 		$('.info .txcontent').show();
 	    else
-	    if (device_type == "EDS TX")
+	    if (device_type == "EDS GeX")
 		$('.info .gxcontent').show();
 	    $('.button_page').show();
 	    $('.button_disconnect').show();
