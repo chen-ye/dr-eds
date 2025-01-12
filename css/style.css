@@ -659,8 +659,9 @@ select {
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
-    -webkit-flex-direction: row;
-    flex-direction: row;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    direction: rtl;
 }
 .menus .bmenus {
     display: -webkit-box;
@@ -668,11 +669,11 @@ select {
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
-    -webkit-flex-direction: row;
-    flex-direction: row;
+    -webkit-flex-direction: column;
+    flex-direction: column;
 }
 .menus .bmenus>div {
-    margin-right: 0.6em;
+    margin-bottom: 0.6em;
 }
 
 .front1:after { content: "front 1"; }
