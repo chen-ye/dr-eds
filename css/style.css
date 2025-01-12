@@ -19,6 +19,14 @@
 
     --debug-font: "Courier New", monospace;
 
+    --font-size: 1em;
+    --font-size-live: 1em;
+    --font-size-info: 0.8em;
+    --font-size-settings: 1em;
+    --font-size-debug: 0.7em;
+    --font-size-alert: 0.9em;
+    --font-size-error: 0.9em;
+
     @media (prefers-color-scheme: dark) {
 	color-scheme: dark;
 
@@ -47,7 +55,7 @@
     -webkit-tap-highlight-color: transparent;
 }
 body {
-    font-size: 1em;
+    font-size: var(--font-size);
     font-family: var(--main-font);
     background: var(--background-color);
     color: var(--text-color);
@@ -58,6 +66,9 @@ body.logs {
     padding-bottom: 12em;
 }
 
+.live {
+    font-size: var(--font-size-live);
+}
 .live .cgear {
     margin: 12em 0 10em 0;
     /*display: -webkit-box;
@@ -71,22 +82,22 @@ body.logs {
     justify-content: center;*/
 }
 .live .gear {
-    font-size: 15em;
-    line-height: 0.8em;
+    font-size: calc(var(--font-size-live) * 15);
+    line-height: calc(var(--font-size-live) * 0.8);
     text-align: center;
     color: var(--main-color);
 }
 .live .gears {
     margin-top: 0.5em;
     text-align: center;
-    font-size: 1.5em;
+    font-size: calc(var(--font-size-live) * 1.5);
     color: var(--main-text-light-color);
 }
 .live .action_buttons {
     text-align: center;
 }
 .live .button {
-    font-size: 1.7em;
+    font-size: calc(var(--font-size-live) * 1.7);
     margin: 0 0.2em;
 }
 
@@ -96,6 +107,7 @@ body.logs {
     left: 0;
     right: 0;
     z-index: 100;
+    font-size: var(--font-size-info);
 }
 .info .content,
 .info .txcontent,
@@ -103,7 +115,6 @@ body.logs {
     background: var(--selected-background-color);
     color: var(--selected-text-color);
     font-family: var(--debug-font);
-    font-size: 0.8em;
     padding: 0.5em 0.5em 0.3em 0.5em;
     display: -webkit-box;
     display: -moz-box;
@@ -119,7 +130,7 @@ body.logs {
     margin-left: auto;
 }
 .info.big {
-    font-size: 2em;
+    font-size: calc(var(--font-size-info) * 2.5);
 }
 .info.big .left_rd {
     display: none;
@@ -164,7 +175,7 @@ body.logs {
     left: 0;
     right: 0;
     margin: 0 auto;
-    font-size: 0.7em;
+    font-size: calc(var(--font-size-settings) * 0.7);
 }
 .settings .action_buttons .button:before,
 .txsettings .front_buttons .button:before,
@@ -176,7 +187,7 @@ body.logs {
     left: 0;
     right: 0;
     margin: 0 auto;
-    font-size: 0.7em;
+    font-size: calc(var(--font-size-settings) * 0.7);
 }
 .txsettings .front_buttons .button.up:before,
 .txsettings .front_buttons .button.down:before {
@@ -245,7 +256,7 @@ body.logs {
     left: 0;
     right: 0;
     margin: 0 auto;
-    font-size: 0.7em;
+    font-size: calc(var(--font-size-settings) * 0.7);
 }
 .settings .micro .button:before,
 .txsettings .front_micro .button:before,
@@ -257,7 +268,7 @@ body.logs {
     left: 0;
     right: 0;
     margin: 0 auto;
-    font-size: 0.7em;
+    font-size: calc(var(--font-size-settings) * 0.7);
 }
 .settings .micro .button.up:before,
 .settings .micro .button.down:before,
@@ -311,7 +322,7 @@ body.logs {
     margin-bottom: 1em;
 }
 .txsettings .fvnone {
-    font-size: 0.8em;
+    font-size: calc(var(--font-size-settings) * 0.8);
     margin: 5em 0 2em 0;
     padding: 0 1em;
     text-align: center;
@@ -356,7 +367,7 @@ body.logs {
     left: 0;
     right: 0;
     margin: 0 auto;
-    font-size: 0.7em;
+    font-size: calc(var(--font-size-settings) * 0.7);
     text-align: center;
     margin-left: calc(-7em);
     z-index: 1;
@@ -410,7 +421,7 @@ body.logs {
     left: 0;
     right: 0;
     margin: 0 auto;
-    font-size: 0.7em;
+    font-size: calc(var(--font-size-settings) * 0.7);
 }
 .buttons_function .vbutton:after,
 .buttons_function .button:after {
@@ -420,7 +431,7 @@ body.logs {
     left: 0;
     right: 0;
     margin: 0 auto;
-    font-size: 0.7em;
+    font-size: calc(var(--font-size-settings) * 0.7);
 }
 .buttons_function .vbutton.top:before,
 .buttons_function .vbutton.bottom:before {
@@ -457,7 +468,7 @@ body.logs {
     border-radius: 2em;
     border: 2px solid var(--main-color);
     color: var(--main-text-color);
-    font-size: 0.9em;
+    font-size: calc(var(--font-size-settings) * 0.9);
     font-family: var(--main-font);
 }
 .button.selected {
@@ -470,7 +481,9 @@ body.logs {
 .button_shutdown,
 .button_disconnect,
 .button_export,
-.button_import {
+.button_import,
+.button_zoom_in,
+.button_zoom_out {
     /*position: absolute;*/
     padding: 0.9em;
     width: 0.9em;
@@ -487,7 +500,9 @@ body.logs {
 .button_shutdown,
 .button_disconnect,
 .button_export,
-.button_import {
+.button_import,
+.button_zoom_in,
+.button_zoom_out {
     background: var(--selected-background-color);
 }
 
@@ -504,7 +519,7 @@ body.logs {
     border: 2px solid var(--main-color);
     border-bottom: 1px solid var(--main-color);
     color: var(--main-text-color);
-    font-size: 0.9em;
+    font-size: calc(var(--font-size-settings) * 0.9);
     font-family: var(--main-font);
 }
 .vbutton:last-child {
@@ -517,7 +532,7 @@ body.logs {
     border: 2px solid var(--main-color);
     border-top: 1px solid var(--main-color);
     color: var(--main-text-color);
-    font-size: 0.9em;
+    font-size: calc(var(--font-size-settings) * 0.9);
     font-family: var(--main-font);
 }
 select {
@@ -527,7 +542,7 @@ select {
     cursor: pointer;
     background: var(--main-background-color);
     color: var(--main-text-color);
-    font-size: 0.9em;
+    font-size: calc(var(--font-size-settings) * 0.9);
     font-family: var(--main-font);
     text-align: center;
 }
@@ -563,7 +578,7 @@ select {
     border-left: 0;
     border-right: 0;
     padding: 0.6em 0;
-    font-size: 0.9em;
+    font-size: calc(var(--font-size-settings) * 0.9);
     font-family: var(--main-font);
     text-align: center;
     background: var(--main-background-color);
@@ -633,12 +648,26 @@ select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='%23fff' stroke-linecap='round' stroke-width='1.5'%3E%3Cpath d='M4 12a8 8 0 1 0 16 0'/%3E%3Cpath stroke-linejoin='round' d='M12 14V4m0 0l3 3m-3-3L9 7'/%3E%3C/g%3E%3C/svg%3E");
     background-position: center;
 }
+.icon-zoom-in {
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: 80% 80%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='m3.9 21.5l-1.4-1.4L5.6 17H3v-2h6v6H7v-2.6zm16.2 0L17 18.4V21h-2v-6h6v2h-2.6l3.1 3.1zM3 9V7h2.6L2.5 3.9l1.4-1.4L7 5.6V3h2v6zm12 0V3h2v2.6l3.1-3.1l1.4 1.4L18.4 7H21v2z'/%3E%3C/svg%3E");
+    background-position: center;
+}
+.icon-zoom-out {
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: 80% 80%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='M3 21v-6h2v2.6l3.1-3.1l1.4 1.4L6.4 19H9v2zm12 0v-2h2.6l-3.1-3.1l1.4-1.4l3.1 3.1V15h2v6zM8.1 9.5L5 6.4V9H3V3h6v2H6.4l3.1 3.1zm7.8 0l-1.4-1.4L17.6 5H15V3h6v6h-2V6.4z'/%3E%3C/svg%3E");
+    background-position: center;
+}
 
 .debug {
     border: none;
     resize: none;
     font-family: var(--debug-font);
-    font-size: 0.7em;
+    font-size: var(--font-size-debug);
     height: 15em;
     overflow: auto;
     bottom: 0;
@@ -700,14 +729,14 @@ select {
 
 .error {
     color: var(--error-text-color);
-    background: var(--error-background-color);;
+    background: var(--error-background-color);
     cursor: pointer;
     display: inline-block;
     left: 50%;
     padding: 0.6em 1.5em;
     border-radius: 2em;
     border: 2px solid red;
-    font-size: 0.9em;
+    font-size: var(--font-size-error);
     font-family: var(--main-font);
     position: fixed;
     transform: translateX(-50%);
@@ -724,7 +753,7 @@ select {
     padding: 0.6em 1.5em;
     border-radius: 2em;
     border: 2px solid var(--main-color);
-    font-size: 0.9em;
+    font-size: var(--font-size-alert)
     font-family: var(--main-font);
     position: fixed;
     transform: translateX(-50%);

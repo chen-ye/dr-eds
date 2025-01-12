@@ -724,11 +724,11 @@ function timeoutCheck()
 
 function buildPresets()
 {
-    var gears = localStorage.getItem('gears');
-    if (gears != null)
-	gears = JSON.parse(gears);
-    else
+    try {
+	var gears = JSON.parse(localStorage.getItem('gears'));
+    } catch(error) {
 	gears = {};
+    }
 
     if (gears[device_type] == null) return;
 
@@ -742,9 +742,8 @@ function buildPresets()
     $('.' + pr + 'settings .gear_values .presets').html(s);
 
     $('.' + pr + 'settings .gear_values .presets .preset').off('click').on('click', function() {
-	var a = localStorage.getItem('gears');
-	a = JSON.parse(a);
-	if (a != null) {
+	try {
+	    var a = JSON.parse(localStorage.getItem('gears'));
 	    if (a[device_type] != null) {
 		for (var t in a[device_type][$(this).attr('preset')]['rear'])
 		{
@@ -755,24 +754,28 @@ function buildPresets()
 			$('.txsettings .gear_values .fvcontent .content .front[front="' + a[device_type][$(this).attr('preset')]['front'][t].gear + '"] input').val(a[device_type][$(this).attr('preset')]['front'][t].value);
 		}
 	    }
-	}
 
-	qalert('Gear values loaded from preset "' + $(this).attr('preset') + '"<br />Click "Set all" to upload then to RD');
+	    qalert('Gear values loaded from preset "' + $(this).attr('preset') + '"<br />Click "Set all" to upload then to RD');
+	} catch(error) {
+	    ;;;
+	}
     });
     $('.' + pr + 'settings .gear_values .presets .del').off('click').on('click', function() {
 	var pname =  $(this).attr('preset');
 	if (confirm('Delete preset "' + pname + '"?')) {
-	    var a = localStorage.getItem('gears');
-	    a = JSON.parse(a);
-	    if (a != null) {
+	    try {
+		var a = JSON.parse(localStorage.getItem('gears'));
 		if (a[device_type] != null)
 		    delete a[device_type][$(this).attr('preset')];
+
+		localStorage.setItem('gears', JSON.stringify(a));
+
+		buildPresets();
+
+		qalert('Preset "' + pname + '" deleted');
+	    } catch(error) {
+		;;;
 	    }
-	    localStorage.setItem('gears', JSON.stringify(a));
-
-	    buildPresets();
-
-	    qalert('Preset "' + pname + '" deleted');
 	}
     });
 }
@@ -1019,6 +1022,15 @@ function endBlock()
 
 $(document).ready(function() {
     var bt_supported = 0;
+
+    try {
+	var z = JSON.parse(localStorage.getItem('zoom'));
+	document.documentElement.style.setProperty('--font-size-info', z.info);
+	document.documentElement.style.setProperty('--font-size-live', z.live);
+	document.documentElement.style.setProperty('--font-size-settings', z.settings);
+    } catch(error) {
+	;;;
+    }
 
     if (navigator.bluetooth == null) {
 	log('Sorry, no web bluetooth support');
@@ -1475,6 +1487,7 @@ $(document).ready(function() {
 			    $('.info').removeClass('big');
 			    $('.button_page').removeClass('icon-wrench').addClass('icon-bike');
 			    localStorage.setItem('show_page', "settings");
+			    show_page = "settings";
 			} else {
 			    $('.settings').hide();
 			    $('.txsettings').hide();
@@ -1483,6 +1496,7 @@ $(document).ready(function() {
 			    $('.info').addClass('big');
 			    $('.button_page').removeClass('icon-bike').addClass('icon-wrench');
 			    localStorage.setItem('show_page', "live");
+			    show_page = "live";
 			}
 		    if (g.hasOwnProperty('battery')) {
 			localStorage.setItem('battery', g.battery);
@@ -1667,6 +1681,7 @@ $(document).ready(function() {
 	    $('.info').removeClass('big');
 	    $(this).removeClass('icon-wrench').addClass('icon-bike');
 	    localStorage.setItem('show_page', 'settings');
+	    show_page = "settings";
 	} else {
 	    $('.settings').hide();
 	    $('.txsettings').hide();
@@ -1675,6 +1690,7 @@ $(document).ready(function() {
 	    $('.info').addClass('big');
 	    $(this).removeClass('icon-bike').addClass('icon-wrench');
 	    localStorage.setItem('show_page', 'live');
+	    show_page = "live";
 	}
     });
 
@@ -1727,5 +1743,63 @@ $(document).ready(function() {
     // hide qalert in click
     $('.qalert').on('click', function() {
 	$(this).fadeOut();
+    });
+
+    // zoom
+    $('.button_zoom_in').on('click', function() {
+	try {
+	    var z = JSON.parse(localStorage.getItem('zoom'));
+	} catch(error) {
+	    z = {
+		'info': '0.8em',
+		'live': '1em',
+		'settings': '1em'
+	    };
+	}
+	//var a = parseFloat(getComputedStyle(document.documentElement,null).getPropertyValue("--font-size-info").replace('em', ''));
+	//a = a - 0.05;
+	//document.documentElement.style.setProperty('--font-size-info', a + 'em');
+	//z.info = a + 'em';
+	if (show_page == "live") {
+	    var a = parseFloat(getComputedStyle(document.documentElement,null).getPropertyValue("--font-size-live").replace('em', ''));
+	    a = a - 0.05;
+	    document.documentElement.style.setProperty('--font-size-live', a + 'em');
+	    z.live = a + 'em';
+	} else
+	if (show_page == "settings") {
+	    var a = parseFloat(getComputedStyle(document.documentElement,null).getPropertyValue("--font-size-settings").replace('em', ''));
+	    a = a - 0.05;
+	    document.documentElement.style.setProperty('--font-size-settings', a + 'em');
+	    z.settings = a + 'em';
+	}
+	localStorage.setItem('zoom', JSON.stringify(z));
+    });
+    $('.button_zoom_out').on('click', function() {
+	try {
+	    z = JSON.parse(localStorage.getItem('zoom'));
+	} catch(error) {
+	    z = {
+		'info': '0.8em',
+		'live': '1em',
+		'settings': '1em'
+	    };
+	}
+	//var a = parseFloat(getComputedStyle(document.documentElement,null).getPropertyValue("--font-size-info").replace('em', ''));
+	//a = a + 0.05;
+	//document.documentElement.style.setProperty('--font-size-info', a + 'em');
+	//z.info = a + 'em';
+	if (show_page == "live") {
+	    var a = parseFloat(getComputedStyle(document.documentElement,null).getPropertyValue("--font-size-live").replace('em', ''));
+	    a = a + 0.05;
+	    document.documentElement.style.setProperty('--font-size-live', a + 'em');
+	    z.live = a + 'em';
+	} else
+	if (show_page == "settings") {
+	    var a = parseFloat(getComputedStyle(document.documentElement,null).getPropertyValue("--font-size-settings").replace('em', ''));
+	    a = a + 0.05;
+	    document.documentElement.style.setProperty('--font-size-settings', a + 'em');
+	    z.settings = a + 'em';
+	}
+	localStorage.setItem('zoom', JSON.stringify(z));
     });
 });
