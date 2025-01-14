@@ -3,10 +3,10 @@
     <meta name="MobileOptimized" content="width" />
     <meta name="HandheldFriendly" content="true" />
     <link rel="manifest" href="manifest.json" />
-    <link href="css/style.css?5" rel='stylesheet' type='text/css' />
+    <link href="css/style.css?13" rel='stylesheet' type='text/css' />
     <link href="css/opensans.css" rel='stylesheet' type='text/css' />
     <script src="js/jquery-3.1.1.min.js"></script>
-    <script src="js/functions.js?5"></script>
+    <script src="js/functions.js?13"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
 </head>
 <body>
@@ -26,6 +26,15 @@
 	    <span class="right_shifter">R[<span class="right_rver"></span>]:</span> <span class="right_rval"></span>
 	</div>
     </div>
+    <div class="gxcontent" style="display: none;">
+	<div class="left" type="volts">
+	    <span class="left_rd">RD[<span class="left_rver"></span>]:</span> <span class="left_rval"></span>
+	</div>
+	<div class="right">
+	    <span class="right_shifter">L[<span class="right_lver"></span>]:</span> <span class="right_lval"></span>
+	    <span class="right_shifter">R[<span class="right_rver"></span>]:</span> <span class="right_rval"></span>
+	</div>
+    </div>
 </div>
 
 <div class="scan">
@@ -33,14 +42,18 @@
 </div>
 
 <div class="live" style="display: none;">
+    <div class="fgear">&nbsp;</div>
+
     <div class="cgear">
 	<div class="gear"></div>
 	<div class="gears"></div>
     </div>
 
     <div class="action_buttons">
-	<div class="button down">Down</div>
+	<div class="button front" style="display: none;">Front</div>
+	<div style="width: 100%; height: 1em;"></div>
 	<div class="button up">Up</div>
+	<div class="button down">Down</div>
     </div>
 </div>
 
@@ -202,6 +215,82 @@
     </div>
 </div>
 
+<div class="gxsettings" style="display: none;">
+    <div class="action_buttons">
+	<div class="button down">Down</div>
+	<div class="button gear"></div>
+	<div class="button gears">
+	    <select>
+		<option value="3">3</option>
+		<option value="4">4</option>
+		<option value="5">5</option>
+		<option value="6">6</option>
+		<option value="7">7</option>
+		<option value="8">8</option>
+		<option value="9">9</option>
+		<option value="10">10</option>
+		<option value="11">11</option>
+		<option value="12">12</option>
+		<option value="13">13</option>
+		<option value="14">14</option>
+	    </select>
+	</div>
+	<div class="button up">Up</div>
+    </div>
+
+    <div class="micro" style="display: none;">
+	<div class="button up">Up</div>
+	<div class="button down">Down</div>
+    </div>
+
+    <div class="gear_values">
+	<div class="vcontent">
+	    <div class="content"></div>
+	    <div class="buttons">
+		<div class="fake"></div>
+		<div class="button set_all">Set all</div>
+		<div class="button save">Save as</div>
+	    </div>
+	</div>
+	<div class="presets"></div>
+    </div>
+
+    <div class="buttons_function">
+	<div class="content">
+	    <div class="vbox">
+		<div class="button single">
+		    <select button="single">
+			<option value="up">Up shift</option>
+			<option value="down">Down shift</option>
+		    </select>
+		</div>
+	    </div>
+	    <div class="vbox">
+		<div class="vbutton small">
+		    <select button="small">
+			<option value="up">Up shift</option>
+			<option value="down">Down shift</option>
+		    </select>
+		</div>
+		<div class="vbutton big">
+		    <select button="big">
+			<option value="up">Up shift</option>
+			<option value="down">Down shift</option>
+		    </select>
+		</div>
+	    </div>
+	</div>
+    </div>
+    <div class="buttons_function">
+	<div class="content">
+	    <div class="vbox">
+		<div class="button mode">Race</div>
+		<div class="button sleep">Sleep</div>
+	    </div>
+	</div>
+    </div>
+</div>
+
 <textarea class="debug" readonly></textarea>
 <div class="menus">
     <div class="bmenus" style="display: none;">
@@ -209,8 +298,10 @@
 	<div class="button button_shutdown icon-shutdown" style="display: none;"></div>
 	<div class="button button_export icon-export" style="display: none;"></div>
 	<div class="button button_import icon-import" style="display: none;"></div>
-	<div class="button button_debug icon-logs selected"></div>
 	<div class="button button_page icon-wrench" style="display: none;"></div>
+	<div class="button button_zoom_out icon-zoom-out"></div>
+	<div class="button button_zoom_in icon-zoom-in"></div>
+	<div class="button button_debug icon-logs selected"></div>
     </div>
     <div class="button button_menu icon-gear"></div>
 </div>
