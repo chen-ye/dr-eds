@@ -190,8 +190,10 @@ function handleCharacteristicValueChanged(event)
 	    if (t == 1) {
 		// show micro shift only on lowest gear
 		$('.' + pr + 'settings .front_micro').show();
+		$('.live .fgear').html('big');
 	    } else {
 		$('.' + pr + 'settings .front_micro').hide();
+		$('.live .fgear').html('small');
 	    }
 
 	    log("FD gear " + t);
@@ -540,9 +542,10 @@ function parsePacket(hex, check_confirm = 0)
 	    if (device_type == "EDS OX")
 		$('.settings').show();
 	    else
-	    if (device_type == "EDS TX")
+	    if (device_type == "EDS TX") {
 		$('.txsettings').show();
-	    else
+		$('.live .action_buttons .button.front').show();
+	    } else
 	    if (device_type == "EDS GeX")
 		$('.gxsettings').show();
 	    $('.scan').hide();
@@ -610,6 +613,10 @@ function parsePacket(hex, check_confirm = 0)
 		if ((info['Q_NUM'] == 1) || (info['Q_NUM'] == 2) || (info['Q_NUM'] == 3)) t = 1;
 		if ((info['Q_NUM'] == 4) || (info['Q_NUM'] == 5) || (info['Q_NUM'] == 6)) t = 2;
 		$('.txsettings .front_buttons .button.gear').html(t);
+		if (t == 1)
+		    $('.live .fgear').html('big');
+		else
+		    $('.live .fgear').html('small');
 	    }
 
 	    updateBattery();
@@ -1163,6 +1170,18 @@ $(document).ready(function() {
 	    characteristic_TX.writeValueWithoutResponse(a);
 	    log("Send: frontLifting -> " + f.toString(16).padStart(2, '0'));
 	}
+    });
+    // front shift alter
+    $('.live .action_buttons .button.front').on('click', function() {
+	var c = parseInt($('.txsettings .front_buttons .button.gear').html()) || 0;
+
+        startBlock("Front shift");
+
+	var f = c;
+	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_frontLifting, 0x01, f, 0x00, 0x00 ]);
+	a = setCRC16(a);
+	characteristic_TX.writeValueWithoutResponse(a);
+	log("Send: frontLifting -> " + f.toString(16).padStart(2, '0'));
     });
 
     // number of gears

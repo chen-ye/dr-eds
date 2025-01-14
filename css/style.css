@@ -69,8 +69,14 @@ body.logs {
 .live {
     font-size: var(--font-size-live);
 }
+.live .fgear {
+    margin: 1.7em 0 0.7em 0;
+    font-size: calc(var(--font-size-live) * 4);
+    text-align: center;
+    color: var(--main-color);
+}
 .live .cgear {
-    margin: 12em 0 10em 0;
+    margin: 2em 0 7em 0;
     /*display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
@@ -95,10 +101,16 @@ body.logs {
 }
 .live .action_buttons {
     text-align: center;
+    width: 100%;
 }
 .live .button {
     font-size: calc(var(--font-size-live) * 1.7);
     margin: 0 0.2em;
+}
+.live .action_buttons .front,
+.live .action_buttons .up,
+.live .action_buttons .down {
+    width: 40%;
 }
 
 .info {
@@ -218,6 +230,7 @@ body.logs {
 .txsettings .action_buttons .button.down:after,
 .gxsettings .action_buttons .button.up:after,
 .gxsettings .action_buttons .button.down:after,
+.live .action_buttons .button.front:after,
 .live .action_buttons .button.up:after,
 .live .action_buttons .button.down:after {
     content: "shift";
@@ -470,6 +483,8 @@ body.logs {
     color: var(--main-text-color);
     font-size: calc(var(--font-size-settings) * 0.9);
     font-family: var(--main-font);
+    text-align: center;
+    box-sizing: border-box;
 }
 .button.selected {
     background-color: var(--selected-background-color);
@@ -691,6 +706,9 @@ select {
     -webkit-flex-direction: column;
     flex-direction: column;
     direction: rtl;
+}
+.menus .button {
+    padding: 1.4em;
 }
 .menus .bmenus {
     display: -webkit-box;
