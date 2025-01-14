@@ -851,7 +851,7 @@ function updateBattery()
 	    $('.info .content').attr('type', 'percent');
 	    $('.info .content .left .left_val').html(percentage(info['POWER_2']) + '%');
 	} else {
-	    $('.info .content').attr('type', 'battery');
+	    $('.info .content').attr('type', 'volts');
 	    $('.info .content .left .left_val').html((parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
 	}
 
