@@ -11,6 +11,7 @@ var debug = 1;
 var show_debug = 1;
 var show_page = 'settings';
 var device_type = "";
+var first_call = 1;
 
 const cmd_getKey = 0x11;
 const cmd_getLockInfo = 0x31;
@@ -18,7 +19,8 @@ const cmd_getPowerInfo = 0x42;
 const cmd_getTransmissionVersionInfo = 0x60;
 const cmd_getFrontAndRearDerailleurGearValuesInfo = 0x61;
 const cmd_backDialSleep = 0x63;
-const cmd_backSetting = 0x67;
+const cmd_backSetting2p = 0x66;
+const cmd_backSetting1p = 0x67;
 const cmd_setFrontGearLimit = 0x82;
 const cmd_fineTuneFrontGear = 0x85;
 const cmd_getDeviceMac = 0x86;
@@ -380,6 +382,19 @@ function handleCharacteristicValueChanged(event)
 
 	updateBattery();
 
+	// check RD protection
+	if (first_call) {
+	    first_call = 0;
+
+	    var f = 0x01;
+	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_backSetting1p, 0x01, f, 0x00, 0x00 ]);
+	    a = setCRC16(a);
+	    characteristic_TX.writeValueWithoutResponse(a);
+	    log("Send: backSetting1p -> " + f.toString(16).padStart(2, '0'));
+
+	    qalert("Get RD protection");
+	}
+
 	// check if FD just wake up
 	if ($('.txsettings .fvnone').is(":visible")) {
 	    setTimeout(function() {
@@ -391,7 +406,7 @@ function handleCharacteristicValueChanged(event)
 		    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_getFrontAndRearDerailleurGearValuesInfo, 0x03, f1, f2, f3, 0x00, 0x00 ]);
 		    a = setCRC16(a);
 		    characteristic_TX.writeValueWithoutResponse(a);
-		    log("Send: getFrontAndRearDerailleurGearValuesInfo, -> " + f1.toString(16).padStart(2, '0') + ' ' + f2.toString(16).padStart(2, '0') + ' ' + f3.toString(16).padStart(2, '0'));
+		    log("Send: getFrontAndRearDerailleurGearValuesInfo -> " + f1.toString(16).padStart(2, '0') + ' ' + f2.toString(16).padStart(2, '0') + ' ' + f3.toString(16).padStart(2, '0'));
 
 		    qalert("Get FD information");
 		}
@@ -434,6 +449,29 @@ function handleCharacteristicValueChanged(event)
     if (r.cmd == cmd_backDialSleep)
     {
 	log("Received: backDialSleep");
+
+	endBlock();
+	if (r.payload[0] == 0x00)
+	{
+	    clearTimeout(ctimeout);
+	} else {
+	    error('Command failed');
+	}
+    } else
+    if (r.cmd == cmd_backSetting1p)
+    {
+	log("Received: backSetting1p");
+
+	if (r.payload[0] == 0x01)
+	{
+	    $('.txsettings .buttons_function .button.rdprotect').addClass('selected');
+	} else {
+	    $('.txsettings .buttons_function .button.rdprotect').removeClass('selected');
+	}
+    } else
+    if (r.cmd == cmd_backSetting2p)
+    {
+	log("Received: backSetting2p");
 
 	endBlock();
 	if (r.payload[0] == 0x00)
@@ -604,7 +642,7 @@ function parsePacket(hex, check_confirm = 0)
 		    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_getFrontAndRearDerailleurGearValuesInfo, 0x03, f1, f2, f3, 0x00, 0x00 ]);
 		    a = setCRC16(a);
 		    characteristic_TX.writeValueWithoutResponse(a);
-		    log("Send: getFrontAndRearDerailleurGearValuesInfo, -> " + f1.toString(16).padStart(2, '0') + ' ' + f2.toString(16).padStart(2, '0') + ' ' + f3.toString(16).padStart(2, '0'));
+		    log("Send: getFrontAndRearDerailleurGearValuesInfo -> " + f1.toString(16).padStart(2, '0') + ' ' + f2.toString(16).padStart(2, '0') + ' ' + f3.toString(16).padStart(2, '0'));
 
 		    qalert("Get FD information");
 		}
@@ -1654,6 +1692,27 @@ $(document).ready(function() {
 	    a = setCRC16(a);
 	    characteristic_TX.writeValueWithoutResponse(a);
 	    log("Send: backDialSleep -> " + f.toString(16).padStart(2, '0'));
+
+	    ctimeout = setTimeout(timeoutCheck, 1000);
+	}
+    });
+
+    // set RD protection
+    $('.txsettings .buttons_function .button.rdprotect').on('click', function() {
+	var f = 1;
+	if (!$(this).hasClass('selected')) f = 0;
+
+	if (
+	    ((f == 1) && (confirm('Disabling RD protection can damage drivetrain - continue?')))
+	    ||
+	    (f == 0)
+	) {
+	    startBlock("Set " + (f == 0 ? "RD protection OFF" : "RD protection ON"));
+
+	    var a = new Uint8Array([ 0xfe, 0x32, key, backSetting2p, 0x08, f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ]);
+	    a = setCRC16(a);
+	    characteristic_TX.writeValueWithoutResponse(a);
+	    log("Send: backSetting2p -> " + f.toString(16).padStart(2, '0'));
 
 	    ctimeout = setTimeout(timeoutCheck, 1000);
 	}

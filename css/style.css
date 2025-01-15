@@ -469,7 +469,8 @@ body.logs {
     content: "big";
 }
 .buttons_function .button.mode:after,
-.buttons_function .button.sleep:after {
+.buttons_function .button.sleep:after,
+.buttons_function .button.rdprotect:after {
     content: "mode";
 }
 
