@@ -1,6 +1,6 @@
 ## Communication with the app
 
-When wake up RD broadcast it's name `EDS OX` and manufacturer specifica data - 11 bytes. First 6 bytes are mac address. Last five looks like some sort of serial number (?!).
+When wake up RD broadcast it's name `EDS OX`, `EDS TX`, `EDS GeX` and manufacturer specifica data - 11 bytes. First 6 bytes are mac address. Last five looks like some sort of serial number (?!).
 
 When app connect to RD, it become slave, phone become master device.
 
@@ -125,6 +125,24 @@ Some values are still unknown, but here is what I guess is valid:
 - `ANT_Ver` - ANT+ firmware version - 6.2
 - `Q_CODE` - FD error code? - unknown - 0x0
 - `Q_GEA[1-Q_TOTAL]` - FD limits
+
+GeX values are similar to TX:
+```
+L_Ver:3.25,L_POWER:299,R_Ver:4.30,R_POWER:297,
+Q_Ver:0.0,Q_POWER:0,H_Ver:2.67,B,H_POWER:825,
+TOTAL_CNT:11,NUM:9,PTOTECT:2,KeySwitch:2120
+RacingMode:0,HRunCnt:41993,RunTime:2377,
+ErrList:0x20,0x0,0x0
+ERRCODE:0x0
+H_GEA[1]:0,H_GEA[2]:170,H_GEA[3]:280,H_GEA[4]:410,H_GEA[5]:540,H_GEA[6]:650,H_GEA[7]:795,H_GEA[8]:930,H_GEA[9]:1050,H_GEA[10]:1190,H_GEA[11]:1335,Q_TOTAL:0,Q_NUM:0,Q_PTOTECT:0,
+ANT_Ver:6.2,Q_CODE:0x0,
+```
+
+New values:
+- `RacingMode` - may indicate racing mode on/off
+- `HRunCnt` - may be number of shifts
+- `RunTime` - may be time of usage
+
 
 Some of the commands:
 - `getKey` = 0x11
