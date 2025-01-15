@@ -25,6 +25,7 @@ You can clone repo and host it yourself or use it from supplied URL.
 - battery voltage/percentage display - click on title bar to switch
 - Race mode (experimental) - official app use `competitive mode` - can be turned on or off independent from `sleep mode`
 - Sleep mode (TX, GeX only - experimental) - official app use `casual mode` - can be turned on or off independent from `race mode`
+- RD protection (TX only - experimental) - when on smallest chain ring don't allow RD to go to two smallest cogs
 - Live view - useful if riding with a phone - display gear, battery and allow shifting
 
 ### What's missing:
@@ -34,7 +35,6 @@ You can clone repo and host it yourself or use it from supplied URL.
 - Please, feel free to add more ...
 
 ### What may be added:
-- RD protection (TX only) - when on smallest chainring don't allow RD to go to two smallest cogs
 - FD, RD thresholds - need more research actual functions - for now it is known only that RD treshold=1 is race mode, treshold=2 is normal mode. FD also have treshold, but it is uknown for what is used.
 
 ### Requirements:
