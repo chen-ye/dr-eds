@@ -38,6 +38,8 @@ const cmd_rearLifting = 0x99;
 const cmd_startRead = 0xfa;
 const cmd_read = 0xfb;
 
+const locale = new Intl.Locale(navigator.language);
+
 var dev;
 var characteristic_TX;
 
@@ -1068,6 +1070,10 @@ function endBlock()
 $(document).ready(function() {
     var bt_supported = 0;
 
+    // switch language if not en
+    if (locale.language != "en")
+	$('head').append('<link rel="stylesheet" type="text/css" href="/lang/' + locale.language + '.css">');
+
     try {
 	var z = JSON.parse(localStorage.getItem('zoom'));
 	document.documentElement.style.setProperty('--font-size-info', z.info);
@@ -1119,6 +1125,7 @@ $(document).ready(function() {
 	    $('.scan').hide();
 
 	    log('Running on: ' + navigator.userAgent + ' | ' + navigator.appCodeName + ' | ' + navigator.appName + ' | ' + navigator.appVersion + ' | ' + navigator.platform);
+	    log('Detected language: ' + locale.language);
 	    log('Connected to ' + device_type);
 
 	    dev = device;

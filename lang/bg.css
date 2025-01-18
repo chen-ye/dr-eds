@@ -1,0 +1,45 @@
+
+:root {
+    --lang-current: "текуща";
+    --lang-total: "общо";
+
+    --lang-shift: "превключи";
+
+    --lang-micro: "микро";
+
+    --lang-gear: "скорост";
+    --lang-gears: "скорости";
+
+    --lang-front: "преден";
+    --lang-rear: "заден";
+    --lang-left: "ляв";
+    --lang-right: "десен";
+
+    --lang-small: "малък";
+    --lang-big: "голям";
+
+    --lang-function: "функция";
+    --lang-mode: "режим;
+
+    --lang-limit1: "лимит 1";
+    --lang-limit2: "лимит 2";
+    --lang-limit3: "лимит 3";
+    --lang-limit4: "лимит 4";
+    --lang-limit5: "лимит 5";
+    --lang-limit6: "лимит 6";
+
+    --lang-gear1: "1 скорост";
+    --lang-gear2: "2 скорост";
+    --lang-gear3: "3 скорост";
+    --lang-gear4: "4 скорост";
+    --lang-gear5: "5 скорост";
+    --lang-gear6: "6 скорост";
+    --lang-gear7: "7 скорост";
+    --lang-gear8: "8 скорост";
+    --lang-gear9: "9 скорост";
+    --lang-gear10: "10 скорост";
+    --lang-gear11: "11 скорост";
+    --lang-gear12: "12 скорост";
+    --lang-gear13: "13 скорост";
+    --lang-gear14: "14 скорост";
+}

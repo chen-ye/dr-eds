@@ -1,4 +1,6 @@
 
+@import url("/lang/en.css");
+
 :root {
     color-scheme: light;
 
@@ -203,24 +205,24 @@ body.logs {
 }
 .txsettings .front_buttons .button.up:before,
 .txsettings .front_buttons .button.down:before {
-    content: "front";
+    content: var(--lang-front);
 }
 .settings .action_buttons .button.gear:before,
 .txsettings .front_buttons .button.gear:before,
 .gxsettings .action_buttons .button.gear:before,
 .txsettings .action_buttons .button.gear:before {
-    content: "current";
+    content: var(--lang-current);
 }
 .settings .action_buttons .button.gears:before,
 .txsettings .action_buttons .button.gears:before,
 .gxsettings .action_buttons .button.gears:before {
-    content: "total";
+    content: var(--lang-total);
 }
 .txsettings .action_buttons .button.up:before,
 .txsettings .action_buttons .button.down:before,
 .gxsettings .action_buttons .button.up:before,
 .gxsettings .action_buttons .button.down:before {
-    content: "rear";
+    content: var(--lang-rear);
 }
 .settings .action_buttons .button.up:after,
 .settings .action_buttons .button.down:after,
@@ -233,18 +235,18 @@ body.logs {
 .live .action_buttons .button.front:after,
 .live .action_buttons .button.up:after,
 .live .action_buttons .button.down:after {
-    content: "shift";
+    content: var(--lang-shift);
 }
 .settings .action_buttons .button.gear:after,
 .txsettings .front_buttons .button.gear:after,
 .txsettings .action_buttons .button.gear:after,
 .gxsettings .action_buttons .button.gear:after {
-    content: "gear";
+    content: var(--lang-gear);
 }
 .settings .action_buttons .button.gears:after,
 .txsettings .action_buttons .button.gears:after,
 .gxsettings .action_buttons .button.gears:after {
-    content: "gears";
+    content: var(--lang-gears);
 }
 .settings .micro,
 .txsettings .front_micro,
@@ -291,7 +293,7 @@ body.logs {
 .txsettings .micro .button.down:before,
 .gxsettings .micro .button.up:before,
 .gxsettings .micro .button.down:before {
-    content: "micro";
+    content: var(--lang-micro);
 }
 .settings .micro .button.up:after,
 .settings .micro .button.down:after,
@@ -301,7 +303,7 @@ body.logs {
 .txsettings .micro .button.down:after,
 .gxsettings .micro .button.up:after,
 .gxsettings .micro .button.down:after {
-    content: "shift";
+    content: var(--lang-shift);
 }
 .settings .gear_values,
 .txsettings .gear_values,
@@ -448,30 +450,30 @@ body.logs {
 }
 .buttons_function .vbutton.top:before,
 .buttons_function .vbutton.bottom:before {
-    content: "function";
+    content: var(--lang-function);
 }
 .buttons_function .vbutton.top:after,
 .buttons_function .vbutton.bottom:after {
-    content: "shift";
+    content: var(--lang-shift);
 }
 .buttons_function .button.top:before,
 .buttons_function .button.single:before {
-    content: "left";
+    content: var(--lang-left);
 }
 .buttons_function .vbutton.small:before,
 .buttons_function .vbutton.big:before {
-    content: "right";
+    content: var(--lang-right);
 }
 .buttons_function .vbutton.small:after {
-    content: "small";
+    content: var(--lang-small);
 }
 .buttons_function .vbutton.big:after {
-    content: "big";
+    content: var(--lang-big);
 }
 .buttons_function .button.mode:after,
 .buttons_function .button.sleep:after,
 .buttons_function .button.rdprotect:after {
-    content: "mode";
+    content: var(--lang-mode);
 }
 
 .button {
@@ -724,27 +726,27 @@ select {
     margin-bottom: 0.6em;
 }
 
-.front1:after { content: "front 1"; }
-.front2:after { content: "front 2"; }
-.front3:after { content: "front 3"; }
-.front4:after { content: "front 4"; }
-.front5:after { content: "front 5"; }
-.front6:after { content: "front 6"; }
+.front1:after { content: var(--lang-limit1); }
+.front2:after { content: var(--lang-limit2); }
+.front3:after { content: var(--lang-limit3); }
+.front4:after { content: var(--lang-limit4); }
+.front5:after { content: var(--lang-limit5); }
+.front6:after { content: var(--lang-limit6); }
 
-.gear1:after { content: "gear 1"; }
-.gear2:after { content: "gear 2"; }
-.gear3:after { content: "gear 3"; }
-.gear4:after { content: "gear 4"; }
-.gear5:after { content: "gear 5"; }
-.gear6:after { content: "gear 6"; }
-.gear7:after { content: "gear 7"; }
-.gear8:after { content: "gear 8"; }
-.gear9:after { content: "gear 9"; }
-.gear10:after { content: "gear 10"; }
-.gear11:after { content: "gear 11"; }
-.gear12:after { content: "gear 12"; }
-.gear13:after { content: "gear 13"; }
-.gear14:after { content: "gear 14"; }
+.gear1:after { content: var(--lang-gear1); }
+.gear2:after { content: var(--lang-gear2); }
+.gear3:after { content: var(--lang-gear3); }
+.gear4:after { content: var(--lang-gear4); }
+.gear5:after { content: var(--lang-gear5); }
+.gear6:after { content: var(--lang-gear6); }
+.gear7:after { content: var(--lang-gear7); }
+.gear8:after { content: var(--lang-gear8); }
+.gear9:after { content: var(--lang-gear9); }
+.gear10:after { content: var(--lang-gear10); }
+.gear11:after { content: var(--lang-gear11); }
+.gear12:after { content: var(--lang-gear12); }
+.gear13:after { content: var(--lang-gear13); }
+.gear14:after { content: var(--lang-gear14); }
 
 .error {
     color: var(--error-text-color);

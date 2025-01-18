@@ -1,0 +1,45 @@
+
+:root {
+    --lang-current: "current";
+    --lang-total: "total";
+
+    --lang-shift: "shift";
+
+    --lang-micro: "micro";
+
+    --lang-gear: "gear";
+    --lang-gears: "gears";
+
+    --lang-front: "front";
+    --lang-rear: "rear";
+    --lang-left: "left";
+    --lang-right: "right";
+
+    --lang-small: "small";
+    --lang-big: "big";
+
+    --lang-function: "function";
+    --lang-mode: "mode";
+
+    --lang-limit1: "limit 1";
+    --lang-limit2: "limit 2";
+    --lang-limit3: "limit 3";
+    --lang-limit4: "limit 4";
+    --lang-limit5: "limit 5";
+    --lang-limit6: "limit 6";
+
+    --lang-gear1: "gear 1";
+    --lang-gear2: "gear 2";
+    --lang-gear3: "gear 3";
+    --lang-gear4: "gear 4";
+    --lang-gear5: "gear 5";
+    --lang-gear6: "gear 6";
+    --lang-gear7: "gear 7";
+    --lang-gear8: "gear 8";
+    --lang-gear9: "gear 9";
+    --lang-gear10: "gear 10";
+    --lang-gear11: "gear 11";
+    --lang-gear12: "gear 12";
+    --lang-gear13: "gear 13";
+    --lang-gear14: "gear 14";
+}
