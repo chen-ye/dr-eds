@@ -6,9 +6,16 @@ Communication with the shifter is different from communication with the app. It 
 
 After wake up both RD and Shifter broadcast data. RD broadcast it's name (see above - [Communication with the app](#communication-with-the-app)).
 
-On the other hand shifter is more cryptic. It broardcast some magic numbers for a bit: `070f0014556a8437023a0124000000000000000000`. For now only know part is `0124` which seems to be shifter battery voltage. In any case `070f0014556a8437023a` seems pretty consistent and doesn't change (at least on mine OX - need more testers). May be it is just a fixed value which RD seek when trying to connect, or it have some encrypted meaning ...
+On the other hand shifter is more cryptic. It broardcast some magic numbers for a bit: `070f0014556a8437023a0124000000000000000000`. 
+What is known so far:
+- `07 0f 00 14 55 6a 84` - prefix - seems to be the same for OX and TX
+- `37` - device type - `37` = OX, `39` = TX Front, `36` = TX Left, `38` = TX Right
+- `02 3a` - device firmware - 2.58
+- `01 24` - device battery voltage * 100 - 292
+- next 3 bytes vary for example `00 00 00`, `c8 b2 00`, `c2 f9 01`
+- next 6 bytes are `00` at first
 
-After couple of broadcast last part of the message (last 6 bytes) become RD mac address in reverse. It seems that shifter is listening for RD broadcasts and when it find OX device it put it's mac address in his own broadcast. 
+After couple of broadcast last part of the message (last 6 bytes) become RD mac address in reverse. It seems that shifter is listening for RD broadcasts and when it find OX device it put it's mac address in his own broadcast.
 
 Then RD make a connection to the shifter which become slave and RD become master device. 
 
