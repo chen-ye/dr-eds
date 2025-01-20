@@ -2,9 +2,7 @@
 /*
     TODO:
 	1. firmware upgrade
-	2. live view
-	3. RD protection
-	4. FD/RD threshold
+	2. FD/RD threshold
 */
 
 var debug = 1;
@@ -145,7 +143,7 @@ function handleCharacteristicValueChanged(event)
 	blocks = r.payload[1];
 	current_block = 0;
 
-	startBlock("Getting information " + (current_block + 1) + '/' + blocks, 0);
+	startBlock(lang['L_GET_INFO'] + " " + (current_block + 1) + '/' + blocks, 0);
 	// let's read all the data
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_read, 0x03, 0x00, current_block, 0x51, 0x00, 0x00 ]);
 	a = setCRC16(a);
@@ -217,20 +215,24 @@ function handleCharacteristicValueChanged(event)
 	    if (r.payload[0] == 0x00) {
 		clearTimeout(ctimeout);
 
-		if ($('.settings .buttons_function .vbutton:first-child').html() == "Up") {
+		if ($('.settings .buttons_function .vbutton:first-child').hasClass('up')) {
 		    var f = 0x01;
 		} else {
 		    var f = 0x00;
 		}
 		endBlock();
-		qalert((f == 0 ? "Normal buttons" : "Reversed buttons"));
+		qalert((f == 0 ? lang['L_NORMAL_BUTTONS'] : lang['L_REVERSED_BUTTONS']));
 
-		if ($('.settings .buttons_function .vbutton:first-child').html() == "Up") {
-		    $('.settings .buttons_function .vbutton:first-child').html("Down");
-		    $('.settings .buttons_function .vbutton:last-child').html("Up");
-		} else {
+		if ($('.settings .buttons_function .vbutton:first-child').hasClass('up')) {
+		    $('.settings .buttons_function .vbutton:first-child').removeClass('up');
+		    $('.settings .buttons_function .vbutton:last-child').addClass('up');
 		    $('.settings .buttons_function .vbutton:first-child').html("Up");
 		    $('.settings .buttons_function .vbutton:last-child').html("Down");
+		} else {
+		    $('.settings .buttons_function .vbutton:first-child').addClass('up');
+		    $('.settings .buttons_function .vbutton:last-child').removeClass('up');
+		    $('.settings .buttons_function .vbutton:first-child').html("Down");
+		    $('.settings .buttons_function .vbutton:last-child').html("Up");
 		}
 	    }
 	} else
@@ -243,7 +245,7 @@ function handleCharacteristicValueChanged(event)
 	    endBlock();
 	} else
 	{
-	    error('Command failed');
+	    error(lang['L_COMMAND_FAILED']);
 	}
     } else
     if (r.cmd == cmd_setTotalGear) {
@@ -254,11 +256,11 @@ function handleCharacteristicValueChanged(event)
 	endBlock();
 	if (r.payload[0] == 0x00) {
 	    clearTimeout(ctimeout);
-	    qalert("Changed number of gears");
+	    qalert(lang['L_NUMBER_OF_GEARS_CHANGED']);
 	} else {
 	    $('.settings .action_buttons .button.gears select').val(info['TOTAL_CNT']);
 
-	    error('Command failed');
+	    error(lang['L_COMMAND_FAILED']);
 	}
 	// re-read config
 	info = {};
@@ -293,10 +295,10 @@ function handleCharacteristicValueChanged(event)
 
 		ctimeout = setTimeout(timeoutCheck, 1000);
 	    } else {
-		qalert("Updated gear value");
+		qalert(lang['L_GEAR_VALUE_UPDATED']);
 	    }
 	} else {
-	    error('Command failed');
+	    error(lang['L_COMMAND_FAILED']);
 	}
     } else
     if (r.cmd == cmd_setFrontGearLimit) {
@@ -324,10 +326,10 @@ function handleCharacteristicValueChanged(event)
 
 		ctimeout = setTimeout(timeoutCheck, 1000);
 	    } else {
-		qalert("Updated front gear value");
+		qalert(lang['L_FRONT_GEAR_VALUE_UPDATED']);
 	    }
 	} else {
-	    error('Command failed');
+	    error(lang['L_COMMAND_FAILED']);
 	}
     } else
     if (r.cmd == cmd_getFrontAndRearDerailleurGearValuesInfo)
@@ -394,7 +396,7 @@ function handleCharacteristicValueChanged(event)
 	    characteristic_TX.writeValueWithoutResponse(a);
 	    log("Send: backSetting1p -> " + f.toString(16).padStart(2, '0'));
 
-	    qalert("Get RD protection");
+	    qalert(lang['L_GET_RD_PROTECTION']);
 	}
 
 	// check if FD just wake up
@@ -410,7 +412,7 @@ function handleCharacteristicValueChanged(event)
 		    characteristic_TX.writeValueWithoutResponse(a);
 		    log("Send: getFrontAndRearDerailleurGearValuesInfo -> " + f1.toString(16).padStart(2, '0') + ' ' + f2.toString(16).padStart(2, '0') + ' ' + f3.toString(16).padStart(2, '0'));
 
-		    qalert("Get FD information");
+		    qalert(lang['L_GET_FD_INFORMATION']);
 		}
 	    }, 3000);
 	}
@@ -445,7 +447,7 @@ function handleCharacteristicValueChanged(event)
 	    else
 		$('.gxsettings .buttons_function .button.mode').addClass('selected');
 	} else {
-	    error('Command failed');
+	    error(lang['L_COMMAND_FAILED']);
 	}
     } else
     if (r.cmd == cmd_backDialSleep)
@@ -457,7 +459,7 @@ function handleCharacteristicValueChanged(event)
 	{
 	    clearTimeout(ctimeout);
 	} else {
-	    error('Command failed');
+	    error(lang['L_COMMAND_FAILED']);
 	}
     } else
     if (r.cmd == cmd_backSetting1p)
@@ -480,7 +482,7 @@ function handleCharacteristicValueChanged(event)
 	{
 	    clearTimeout(ctimeout);
 	} else {
-	    error('Command failed');
+	    error(lang['L_COMMAND_FAILED']);
 	}
     }
 }
@@ -549,7 +551,7 @@ function parsePacket(hex, check_confirm = 0)
 
 	current_block++;
 	if (current_block < blocks) {
-	    startBlock("Getting information " + current_block + '/' + blocks, 0);
+	    startBlock(lang['L_GET_INFO'] + " " + current_block + '/' + blocks, 0);
 
 	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_read, 0x03, 0x00, current_block, 0x51, 0x00, 0x00 ]);
 	    a = setCRC16(a);
@@ -646,7 +648,7 @@ function parsePacket(hex, check_confirm = 0)
 		    characteristic_TX.writeValueWithoutResponse(a);
 		    log("Send: getFrontAndRearDerailleurGearValuesInfo -> " + f1.toString(16).padStart(2, '0') + ' ' + f2.toString(16).padStart(2, '0') + ' ' + f3.toString(16).padStart(2, '0'));
 
-		    qalert("Get FD information");
+		    qalert(lang['L_GET_FD_INFORMATION']);
 		}
 
 		t = 1;
@@ -654,9 +656,9 @@ function parsePacket(hex, check_confirm = 0)
 		if ((info['Q_NUM'] == 4) || (info['Q_NUM'] == 5) || (info['Q_NUM'] == 6)) t = 2;
 		$('.txsettings .front_buttons .button.gear').html(t);
 		if (t == 1)
-		    $('.live .fgear').html('big');
+		    $('.live .fgear').html(lang['L_FD_BIG']);
 		else
-		    $('.live .fgear').html('small');
+		    $('.live .fgear').html(lang['L_FD_SMALL']);
 	    }
 
 	    updateBattery();
@@ -665,7 +667,7 @@ function parsePacket(hex, check_confirm = 0)
 		$('.settings .gear_values .vcontent .content').html('');
 		for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
 		    var r = parseInt(info['TOTAL_CNT']) - t;
-		    $('.settings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['GEARS[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
+		    $('.settings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['GEARS[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
 		}
 	    } else
 	    if (device_type == "EDS TX") {
@@ -674,14 +676,14 @@ function parsePacket(hex, check_confirm = 0)
 		$('.txsettings .gear_values .vcontent .content').html('');
 		for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
 		    var r = parseInt(info['TOTAL_CNT']) - t;
-		    $('.txsettings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
+		    $('.txsettings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
 		}
 	    } else
 	    if (device_type == "EDS GeX") {
 		$('.gxsettings .gear_values .vcontent .content').html('');
 		for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
 		    var r = parseInt(info['TOTAL_CNT']) - t;
-		    $('.gxsettings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
+		    $('.gxsettings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
 		}
 	    }
 
@@ -707,35 +709,35 @@ function parsePacket(hex, check_confirm = 0)
 	    if (device_type == "EDS OX") {
 		//$('.settings .buttons_function .button').removeClass('selected');
 		if (parseInt(info['KeySwitch']) == 0) {
-	    	    $('.settings .buttons_function .vbutton.top').html('Up');
-	    	    $('.settings .buttons_function .vbutton.bottom').html('Down');
+	    	    $('.settings .buttons_function .vbutton.top').html(lang['L_UP']);
+	    	    $('.settings .buttons_function .vbutton.bottom').html(lang['L_DOWN']);
 		} else {
-	    	    $('.settings .buttons_function .vbutton.top').html('Down');
-	    	    $('.settings .buttons_function .vbutton.bottom').html('Up');
+	    	    $('.settings .buttons_function .vbutton.top').html(lang['L_DOWN']);
+	    	    $('.settings .buttons_function .vbutton.bottom').html(lang['L_UP']);
 		}
 	    } else
 	    if (device_type == "EDS TX") {
-		if (parseInt(info['KeySwitch'].substring(0, 1)) == 1) $('.txsettings .buttons_function .vbutton.small select').val('up');
-		if (parseInt(info['KeySwitch'].substring(0, 1)) == 2) $('.txsettings .buttons_function .vbutton.small select').val('down');
-		if (parseInt(info['KeySwitch'].substring(0, 1)) == 3) $('.txsettings .buttons_function .vbutton.small select').val('front');
+		if (parseInt(info['KeySwitch'].substring(0, 1)) == 1) $('.txsettings .buttons_function .vbutton.small select').val(lang['L_UP'].toLowerCase());
+		if (parseInt(info['KeySwitch'].substring(0, 1)) == 2) $('.txsettings .buttons_function .vbutton.small select').val(lang['L_DOWN'].toLowerCase());
+		if (parseInt(info['KeySwitch'].substring(0, 1)) == 3) $('.txsettings .buttons_function .vbutton.small select').val(lang['L_FRONT'].toLowerCase());
 
-		if (parseInt(info['KeySwitch'].substring(1, 2)) == 1) $('.txsettings .buttons_function .vbutton.big select').val('up');
-		if (parseInt(info['KeySwitch'].substring(1, 2)) == 2) $('.txsettings .buttons_function .vbutton.big select').val('down');
-		if (parseInt(info['KeySwitch'].substring(1, 2)) == 3) $('.txsettings .buttons_function .vbutton.big select').val('front');
+		if (parseInt(info['KeySwitch'].substring(1, 2)) == 1) $('.txsettings .buttons_function .vbutton.big select').val(lang['L_UP'].toLowerCase());
+		if (parseInt(info['KeySwitch'].substring(1, 2)) == 2) $('.txsettings .buttons_function .vbutton.big select').val(lang['L_DOWN'].toLowerCase());
+		if (parseInt(info['KeySwitch'].substring(1, 2)) == 3) $('.txsettings .buttons_function .vbutton.big select').val(lang['L_FRONT'].toLowerCase());
 
-		if (parseInt(info['KeySwitch'].substring(2, 3)) == 1) $('.txsettings .buttons_function .button.single select').val('up');
-		if (parseInt(info['KeySwitch'].substring(2, 3)) == 2) $('.txsettings .buttons_function .button.single select').val('down');
-		if (parseInt(info['KeySwitch'].substring(2, 3)) == 3) $('.txsettings .buttons_function .button.single select').val('front');
+		if (parseInt(info['KeySwitch'].substring(2, 3)) == 1) $('.txsettings .buttons_function .button.single select').val(lang['L_UP'].toLowerCase());
+		if (parseInt(info['KeySwitch'].substring(2, 3)) == 2) $('.txsettings .buttons_function .button.single select').val(lang['L_DOWN'].toLowerCase());
+		if (parseInt(info['KeySwitch'].substring(2, 3)) == 3) $('.txsettings .buttons_function .button.single select').val(lang['L_FRONT'].toLowerCase());
 	    } else
 	    if (device_type == "EDS GeX") {
-		if (parseInt(info['KeySwitch'].substring(0, 1)) == 1) $('.gxsettings .buttons_function .vbutton.small select').val('up');
-		if (parseInt(info['KeySwitch'].substring(0, 1)) == 2) $('.gxsettings .buttons_function .vbutton.small select').val('down');
+		if (parseInt(info['KeySwitch'].substring(0, 1)) == 1) $('.gxsettings .buttons_function .vbutton.small select').val(lang['L_UP'].toLowerCase());
+		if (parseInt(info['KeySwitch'].substring(0, 1)) == 2) $('.gxsettings .buttons_function .vbutton.small select').val(lang['L_DOWN'].toLowerCase());
 
-		if (parseInt(info['KeySwitch'].substring(1, 2)) == 1) $('.gxsettings .buttons_function .vbutton.big select').val('up');
-		if (parseInt(info['KeySwitch'].substring(1, 2)) == 2) $('.gxsettings .buttons_function .vbutton.big select').val('down');
+		if (parseInt(info['KeySwitch'].substring(1, 2)) == 1) $('.gxsettings .buttons_function .vbutton.big select').val(lang['L_UP'].toLowerCase());
+		if (parseInt(info['KeySwitch'].substring(1, 2)) == 2) $('.gxsettings .buttons_function .vbutton.big select').val(lang['L_DOWN'].toLowerCase());
 
-		if (parseInt(info['KeySwitch'].substring(2, 3)) == 1) $('.gxsettings .buttons_function .button.single select').val('up');
-		if (parseInt(info['KeySwitch'].substring(2, 3)) == 2) $('.gxsettings .buttons_function .button.single select').val('down');
+		if (parseInt(info['KeySwitch'].substring(2, 3)) == 1) $('.gxsettings .buttons_function .button.single select').val(lang['L_UP'].toLowerCase());
+		if (parseInt(info['KeySwitch'].substring(2, 3)) == 2) $('.gxsettings .buttons_function .button.single select').val(lang['L_DOWN'].toLowerCase());
 	    }
 
 	    if ((device_type == "EDS TX") || (device_type == "EDS GeX")) {
@@ -744,7 +746,7 @@ function parsePacket(hex, check_confirm = 0)
 		a = setCRC16(a);
 		characteristic_TX.writeValueWithoutResponse(a);
 		log("Send: getTransmissionVersionInfo");
-		qalert("Get sleep status");
+		qalert(lang['L_GET_SLEEP_STATUS']);
 	    }
 	}
     }
@@ -766,7 +768,7 @@ function getSupportedProperties(characteristic)
 function timeoutCheck()
 {
     endBlock();
-    error("Command failed");
+    error(lang['L_COMMAND_FAILED']);
 }
 
 function buildPresets()
@@ -802,14 +804,14 @@ function buildPresets()
 		}
 	    }
 
-	    qalert('Gear values loaded from preset "' + $(this).attr('preset') + '"<br />Click "Set all" to upload then to RD');
+	    qalert(lang['L_PRESET_LOADED'].replace('%s', $(this).attr('preset')));
 	} catch(error) {
 	    ;;;
 	}
     });
     $('.' + pr + 'settings .gear_values .presets .del').off('click').on('click', function() {
 	var pname =  $(this).attr('preset');
-	if (confirm('Delete preset "' + pname + '"?')) {
+	if (confirm(lang['L_PRESET_CONFIRM_DELETE'].replace('%s', pname))) {
 	    try {
 		var a = JSON.parse(localStorage.getItem('gears'));
 		if (a[device_type] != null)
@@ -819,7 +821,7 @@ function buildPresets()
 
 		buildPresets();
 
-		qalert('Preset "' + pname + '" deleted');
+		qalert(lang['L_PRESET_DELETED'].replace('%s', pname));
 	    } catch(error) {
 		;;;
 	    }
@@ -831,7 +833,7 @@ function buildFrontValues()
 {
     $('.txsettings .gear_values .fvcontent .content').html('');
     for (var t = 1; t <= parseInt(info['Q_TOTAL']); t++) {
-        $('.txsettings .gear_values .fvcontent .content').append('<div class="front" front="' + t + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['Q_GEA[' + t + ']']) + '"><div class="button plus front' + t + '">+</div><div class="button set">Set</div></div>');
+        $('.txsettings .gear_values .fvcontent .content').append('<div class="front" front="' + t + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['Q_GEA[' + t + ']']) + '"><div class="button plus front' + t + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
     }
 }
 
@@ -849,7 +851,7 @@ function bindActionButtons()
 	$(this).prev().val(v);
     });
     $('.settings .gear_values .vcontent .content .button.set, .txsettings .gear_values .vcontent .content .button.set, .gxsettings .gear_values .vcontent .content .button.set').off('click').on('click', function() {
-	startBlock("Update gear value");
+	startBlock(lang['L_UPDATE_VALUE']);
 
 	var g = $(this).parent().attr('gear');
 	var v = $(this).prev().prev().val();
@@ -865,7 +867,7 @@ function bindActionButtons()
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
     $('.txsettings .gear_values .fvcontent .content .button.set').off('click').on('click', function() {
-	startBlock("Update front gear value");
+	startBlock(lang['L_UPDATE_LIMIT']);
 
 	var g = $(this).parent().attr('front');
 	var v = $(this).prev().prev().val();
@@ -1071,8 +1073,10 @@ $(document).ready(function() {
     var bt_supported = 0;
 
     // switch language if not en
-    if (locale.language != "en")
+    if (locale.language != "en") {
 	$('head').append('<link rel="stylesheet" type="text/css" href="/lang/' + locale.language + '.css">');
+	$('head').append('<script src="lang/' + locale.language + '.js"></script>');
+    }
 
     try {
 	var z = JSON.parse(localStorage.getItem('zoom'));
@@ -1155,7 +1159,7 @@ $(document).ready(function() {
 		    // give it some time
 		    var timeout = 500;
 		    setTimeout(function() {
-			startBlock("Get key");
+			startBlock(lang['L_GET_KEY']);
 
 			// getKey
 			var a = new Uint8Array([ 0xfe, 0x32, 0x29, cmd_getKey, 0x08, 0x79, 0x4f, 0x54, 0x6d, 0x4b, 0x35 ,0x30, 0x7a, 0x00, 0x00 ]);
@@ -1172,7 +1176,7 @@ $(document).ready(function() {
 
     // shift up
     $('.settings .action_buttons .button.up, .txsettings .action_buttons .button.up, .gxsettings .action_buttons .button.up, .live .action_buttons .button.up').on('click', function() {
-	qalert("Up shift");
+	qalert(lang['L_UP_SHIFT']);
 
 	var f = 0x02;
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_rearLifting, 0x01, f, 0x00, 0x00 ]);
@@ -1182,7 +1186,7 @@ $(document).ready(function() {
     });
     // shift down
     $('.settings .action_buttons .button.down, .txsettings .action_buttons .button.down, .gxsettings .action_buttons .button.down, .live .action_buttons .button.down').on('click', function() {
-	qalert("Down shift");
+	qalert(lang['L_DOWN_SHIFT']);
 
 	var f = 0x01;
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_rearLifting, 0x01, f, 0x00, 0x00 ]);
@@ -1194,7 +1198,7 @@ $(document).ready(function() {
     $('.txsettings .front_buttons .button.up').on('click', function() {
 	var c = parseInt($('.txsettings .front_buttons .button.gear').html());
 	if (c == 1) {
-	    startBlock("Front Up shift");
+	    startBlock(lang['L_FRONT_UP_SHIFT']);
 
 	    var f = 0x01;
 	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_frontLifting, 0x01, f, 0x00, 0x00 ]);
@@ -1207,7 +1211,7 @@ $(document).ready(function() {
     $('.txsettings .front_buttons .button.down').on('click', function() {
 	var c = parseInt($('.txsettings .front_buttons .button.gear').html());
 	if (c == 2) {
-	    startBlock("Front Down shift");
+	    startBlock(lang['L_FRONT_DOWN_SHIFT']);
 
 	    var f = 0x02;
 	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_frontLifting, 0x01, f, 0x00, 0x00 ]);
@@ -1220,7 +1224,7 @@ $(document).ready(function() {
     $('.live .action_buttons .button.front').on('click', function() {
 	var c = parseInt($('.txsettings .front_buttons .button.gear').html()) || 0;
 
-        startBlock("Front shift");
+        startBlock(lang['L_FRONT_SHIFT']);
 
 	var f = c;
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_frontLifting, 0x01, f, 0x00, 0x00 ]);
@@ -1234,7 +1238,7 @@ $(document).ready(function() {
 	var t = $(this).val();
 	if (t < parseInt(info['NUM']) + 1) {
 	    endBlock();
-	    qalert('Selected total number of gears is<br />less than current gear!<br /><br />Please, shift on gear less or<br />equal of total number of gears.', 0);
+	    qalert(lang['L_ERROR_INVALID_NUMBER_OF_GEARS'], 0);
 
 	    $('.settings .action_buttons .button.gears select').val(info['TOTAL_CNT']);
 	} else {
@@ -1251,7 +1255,7 @@ $(document).ready(function() {
 
     // micro shift up
     $('.settings .micro .up, .txsettings .micro .up, .gxsettings .micro .up').on('click', function() {
-	qalert("Up micro shift");
+	qalert(lang['L_UP_MICRO_SHIFT']);
 
 	var f = 0x02;
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_fineTuneGear, 0x01, f, 0x00, 0x00 ]);
@@ -1261,7 +1265,7 @@ $(document).ready(function() {
     });
     // micro shift down
     $('.settings .micro .down, .txsettings .micro .down, .gxsettings .micro .down').on('click', function() {
-	qalert("Down micro shift");
+	qalert(lang['L_DOWN_MICRO_SHIFT']);
 
 	var f = 0x01;
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_fineTuneGear, 0x01, f, 0x00, 0x00 ]);
@@ -1271,7 +1275,7 @@ $(document).ready(function() {
     });
     // front micro shift up
     $('.txsettings .front_micro .up').on('click', function() {
-	qalert("Front Up micro shift");
+	qalert(lang['L_FRONT_UP_MICRO_SHIFT']);
 
 	var f = 0x02;
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_fineTuneFrontGear, 0x01, f, 0x00, 0x00 ]);
@@ -1281,7 +1285,7 @@ $(document).ready(function() {
     });
     // front micro shift down
     $('.txsettings .front_micro .down').on('click', function() {
-	qalert("Front Down micro shift");
+	qalert(lang['L_FRONT_DOWN_MICRO_SHIFT']);
 
 	var f = 0x01;
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_fineTuneFrontGear, 0x01, f, 0x00, 0x00 ]);
@@ -1292,7 +1296,7 @@ $(document).ready(function() {
 
     // set all gear values
     $('.settings .gear_values .vcontent .button.set_all').on('click', function() {
-	startBlock("Update gears values");
+	startBlock(lang['L_UPDATE_ALL_VALUES']);
 
 	all_gears = [];
 	$('.settings .gear_values .vcontent .content input').each(function() {
@@ -1319,7 +1323,7 @@ $(document).ready(function() {
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
     $('.txsettings .gear_values .vcontent .button.set_all').on('click', function() {
-	startBlock("Update gears values");
+	startBlock(lang['L_UPDATE_ALL_VALUES']);
 
 	all_gears = [];
 	$('.txsettings .gear_values .vcontent .content input').each(function() {
@@ -1346,7 +1350,7 @@ $(document).ready(function() {
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
     $('.gxsettings .gear_values .vcontent .button.set_all').on('click', function() {
-	startBlock("Update gears values");
+	startBlock(lang['L_UPDATE_ALL_VALUES']);
 
 	all_gears = [];
 	$('.gxsettings .gear_values .vcontent .content input').each(function() {
@@ -1374,7 +1378,7 @@ $(document).ready(function() {
     });
     // set all front limits
     $('.txsettings .gear_values .fvcontent .button.set_all').on('click', function() {
-	startBlock("Update front gears values");
+	startBlock(lang['L_UPDATE_ALL_LIMITS']);
 
 	all_gears = [];
 	$('.txsettings .gear_values .fvcontent .content input').each(function() {
@@ -1403,7 +1407,7 @@ $(document).ready(function() {
 
     // save as gear values
     $('.gear_values .button.save').on('click', function() {
-	var n = prompt('Enter gear values preset name (only letters and numbers):');
+	var n = prompt(lang['L_PROMPT_NAME_PRESET']);
 	if ((n != null) && (n != "")) {
 	    var s = localStorage.getItem('gears');
 	    if (s == null) s = {}; else s = JSON.parse(s);
@@ -1458,7 +1462,7 @@ $(document).ready(function() {
 	    d.getSeconds().toString().padStart(2, 0) +
 	    '.json';
 
-	if (confirm('Export settings, values and presets to file ' + fname + '?')) {
+	if (confirm(lang['L_PROMPT_SAVE_PRESET'].replace('%s', fname))) {
 	    var exp = {
 		'debug': $('.button_debug').hasClass('selected'),
 		'page': $('.button_page').hasClass('icon-wrench') ? "live" : "settings",
@@ -1505,7 +1509,7 @@ $(document).ready(function() {
 	    a.download = fname;
 	    a.click();
 
-	    qalert('Values saved');
+	    qalert(lang['L_EXPORT_SUCCESS']);
 	}
     });
     // import
@@ -1517,7 +1521,7 @@ $(document).ready(function() {
 	    reader.onload = function(evt) {
 		if (evt.target.readyState != 2) return;
 		if (evt.target.error) {
-		    alert('Error while reading file');
+		    qalert(lang['L_ERROR_READING_FILE']);
 		    return;
 		}
 
@@ -1582,7 +1586,7 @@ $(document).ready(function() {
 				    $('.' + pr + 'settings .gear_values .vcontent .gear[gear="' + g.current.rear[t].gear + '"] input').val(g.current.rear[t].value);
 				}
 			    } else {
-				alert('Current values not imported - different device');
+				qalert(lang['L_ERROR_CURRENT_VALUES_NOT_INPORTED']);
 			    }
 			}
 		    }
@@ -1592,7 +1596,7 @@ $(document).ready(function() {
 
 		    buildPresets();
 
-		    qalert('Settings, values and presets are restored');
+		    qalert(lang['L_IMPORT_SUCCESS']);
 		}
 		document.forms['uploadform'].reset();
 	    }
@@ -1603,13 +1607,13 @@ $(document).ready(function() {
 
     // set buttons function
     $('.settings .buttons_function .vbutton').on('click', function() {
-	if ($('.settings .buttons_function .vbutton:first-child').html() == "Up") {
+	if ($('.settings .buttons_function .vbutton:first-child').hasClass('up')) {
 	    var f = 0x01;
 	} else {
 	    var f = 0x00;
 	}
 
-	startBlock((f == 0 ? "Normal buttons" : "Reversed buttons"));
+	startBlock((f == 0 ? lang['L_NORMAL_BUTTONS'] : lang['L_REVERSED_BUTTONS']));
 
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_switchFingerOrder, 0x01, f, 0x00, 0x00 ]);
 	a = setCRC16(a);
@@ -1632,7 +1636,7 @@ $(document).ready(function() {
 	if (f3 == "down") f3 = 1;
 	if (f3 == "front") f3 = 3;
 
-	startBlock("Set button commands");
+	startBlock(lang['L_SET_BUTTON_COMMANDS']);
 
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_switchFingerOrder, 0x03, f1, f2, f3, 0x00, 0x00 ]);
 	a = setCRC16(a);
@@ -1652,7 +1656,7 @@ $(document).ready(function() {
 	if (f3 == "up") f3 = 2;
 	if (f3 == "down") f3 = 1;
 
-	startBlock("Set button commands");
+	startBlock(lang['L_SET_BUTTON_COMMANDS']);
 
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_switchFingerOrder, 0x03, f1, f2, f3, 0x00, 0x00 ]);
 	a = setCRC16(a);
@@ -1668,11 +1672,11 @@ $(document).ready(function() {
 	if (!$(this).hasClass('selected')) f = 1;
 
 	if (
-	    ((f == 1) && (confirm('Race mode will drain RD battery faster - continue?')))
+	    ((f == 1) && (confirm(lang['L_WARNING_RACE_MODE'])))
 	    ||
 	    (f == 2)
 	) {
-	    startBlock("Set " + (f == 1 ? "race" : "normal") + " mode");
+	    startBlock(lang['L_RACE_MODE'].replace("%s", (f == 1 ? lang["L_RACE_MODE_ON"] : lang['L_RACE_MODE_OFF'])));
 
 	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setProtectionThreshold, 0x01, f, 0x00, 0x00 ]);
 	    a = setCRC16(a);
@@ -1689,11 +1693,11 @@ $(document).ready(function() {
 	if (!$(this).hasClass('selected')) f = 0;
 
 	if (
-	    ((f == 1) && (confirm('Disabling sleep mode will drain RD battery faster - continue?')))
+	    ((f == 1) && (confirm(lang['L_WARNING_SLEEP_MODE'])))
 	    ||
 	    (f == 0)
 	) {
-	    startBlock("Set " + (f == 0 ? "sleep" : "no sleep") + " mode");
+	    startBlock(lang['L_SLEP_MODE'].replace("%s", (f == 0 ? lang["L_SLEEP_MODE_ON"] : lang['L_SLEEP_MODE_OFF'])));
 
 	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_backDialSleep, 0x01, f, 0x00, 0x00 ]);
 	    a = setCRC16(a);
@@ -1710,11 +1714,11 @@ $(document).ready(function() {
 	if (!$(this).hasClass('selected')) f = 0;
 
 	if (
-	    ((f == 1) && (confirm('Disabling RD protection can damage drivetrain - continue?')))
+	    ((f == 1) && (confirm(lang['L_WARNING_RD_PROTECT'])))
 	    ||
 	    (f == 0)
 	) {
-	    startBlock("Set " + (f == 0 ? "RD protection OFF" : "RD protection ON"));
+	    startBlock(lang['L_RD_PROTECT'].replace("%s", (f == 0 ? lang['L_RD_PROTECT_OFF'] : lang['L_RD_PROTECT_ON'])));
 
 	    var a = new Uint8Array([ 0xfe, 0x32, key, backSetting2p, 0x08, f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ]);
 	    a = setCRC16(a);
@@ -1781,8 +1785,8 @@ $(document).ready(function() {
 
     // shutdown
     $('.button_shutdown').on('click', function() {
-	if (confirm('Shutdown ' + device_type + '?')) {
-	    qalert("Device shutdown");
+	if (confirm(lang['L_CONFIRM_SHUTDOWN'] + ' ' + device_type + '?')) {
+	    qalert(lang['L_SHUTDOWN']);
 
 	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_shutdown, 0x00, 0x00, 0x00 ]);
 	    a = setCRC16(a);
@@ -1798,7 +1802,7 @@ $(document).ready(function() {
 
     // disconnect
     $('.button_disconnect').on('click', function() {
-	qalert("Disconnected");
+	qalert(lang['L_DICSONNECTED']);
 
 	$('.button_menu').removeClass('selected');
 	$('.bmenus').hide();
@@ -1821,7 +1825,7 @@ $(document).ready(function() {
 
 	    copyText.setSelectionRange(0, 0);
 
-	    qalert('Copied to clipboard');
+	    qalert(lang['L_COPIED_TO_CLIPBOARD']);
 	}
     });
 
