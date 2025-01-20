@@ -1,3 +1,10 @@
+## 1.3.1 (2025-01-20)
+
+### feature (2 changes)
+
+- [- fix missing translation - "connected to"](https://git.jeckyll.net/published/personal/eds-ox/-/commit/a530d26b8bb29b5035a5ae155332ede7ef088c66)
+- [full BG translation](https://git.jeckyll.net/published/personal/eds-ox/-/commit/e6db9cd055e16b79ebd94184c25f1c762aad729a)
+
 ## 1.3.0 (2025-01-20)
 
 ### feature (1 change)
