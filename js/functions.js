@@ -1453,6 +1453,7 @@ $(document).ready(function() {
 
     // export
     $('.button_export').on('click', function() {
+	$('.button_menu').trigger('click');
 	var d = new Date();
 	var fname = 'drEDS-' +
 	    d.getFullYear() +
@@ -1515,6 +1516,7 @@ $(document).ready(function() {
     });
     // import
     $('.button_import').on('click', function() {
+	$('.button_menu').trigger('click');
 	document.forms['uploadform'].elements['gearsfile'].onchange = function(evt) {
 	    if (!window.FileReader) return;
 
@@ -1737,11 +1739,13 @@ $(document).ready(function() {
 	    $('body').removeClass('logs');
 	    $(this).removeClass('selected');
 	    localStorage.setItem('show_debug', 0);
+	    $('.button_menu').trigger('click');
 	} else {
 	    $('.debug').show();
 	    $('body').addClass('logs');
 	    $(this).addClass('selected');
 	    localStorage.setItem('show_debug', 1);
+	    $('.button_menu').trigger('click');
 	}
     });
 
@@ -1772,6 +1776,7 @@ $(document).ready(function() {
 	    $(this).removeClass('icon-wrench').addClass('icon-bike');
 	    localStorage.setItem('show_page', 'settings');
 	    show_page = "settings";
+	    $('.button_menu').trigger('click');
 	} else {
 	    $('.settings').hide();
 	    $('.txsettings').hide();
@@ -1781,6 +1786,7 @@ $(document).ready(function() {
 	    $(this).removeClass('icon-bike').addClass('icon-wrench');
 	    localStorage.setItem('show_page', 'live');
 	    show_page = "live";
+	    $('.button_menu').trigger('click');
 	}
     });
 
