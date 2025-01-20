@@ -77,6 +77,7 @@ lang['L_RD_PROTECT_OFF'] = "Disable";
 lang['L_CONFIRM_SHUTDOWN'] = "Shutdown";
 lang['L_SHUTDOWN'] = "Device shutdown";
 
+lang['L_CONNECTED'] = "Connected to";
 lang['L_DICSONNECTED'] = "Disconnected";
 
 lang['L_COPIED_TO_CLIPBOARD'] = "Copied to clipboard";

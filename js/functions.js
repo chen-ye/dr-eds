@@ -1071,8 +1071,8 @@ $(document).ready(function() {
 
     // switch language if not en
     if (locale.language != "en") {
-	$('head').append('<link rel="stylesheet" type="text/css" href="/lang/' + locale.language + '.css">');
-	$('head').append('<script src="lang/' + locale.language + '.js"></script>');
+	$('head').append('<link rel="stylesheet" type="text/css" href="/lang/' + locale.language + '.css?' + Math.random() + '">');
+	$('head').append('<script src="lang/' + locale.language + '.js?' + Math.random() + '"></script>');
     }
     // translate
     $('span[lang]').each(function() {
@@ -1126,7 +1126,7 @@ $(document).ready(function() {
 	.then(device => {
 	    device_type = device.name;
 	    setup();
-	    startBlock("Connected to " + device_type);
+	    startBlock(lang['L_CONNECTED'] + ' ' + device_type);
 	    $('.scan').hide();
 
 	    log('Running on: ' + navigator.userAgent + ' | ' + navigator.appCodeName + ' | ' + navigator.appName + ' | ' + navigator.appVersion + ' | ' + navigator.platform);

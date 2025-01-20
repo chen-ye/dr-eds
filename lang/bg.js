@@ -74,6 +74,7 @@ lang['L_RD_PROTECT_OFF'] = "изключена";
 lang['L_CONFIRM_SHUTDOWN'] = "Изключи";
 lang['L_SHUTDOWN'] = "Устройството беше изключено";
 
+lang['L_CONNECTED'] = "Свързан към";
 lang['L_DICSONNECTED'] = "Връзката е прекъсната";
 
 lang['L_COPIED_TO_CLIPBOARD'] = "Копирано в клипборда";
