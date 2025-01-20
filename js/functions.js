@@ -215,24 +215,19 @@ function handleCharacteristicValueChanged(event)
 	    if (r.payload[0] == 0x00) {
 		clearTimeout(ctimeout);
 
-		if ($('.settings .buttons_function .vbutton:first-child').hasClass('up')) {
-		    var f = 0x01;
-		} else {
-		    var f = 0x00;
-		}
 		endBlock();
-		qalert((f == 0 ? lang['L_NORMAL_BUTTONS'] : lang['L_REVERSED_BUTTONS']));
-
 		if ($('.settings .buttons_function .vbutton:first-child').hasClass('up')) {
+		    qalert(lang['L_REVERSED_BUTTONS']);
 		    $('.settings .buttons_function .vbutton:first-child').removeClass('up');
 		    $('.settings .buttons_function .vbutton:last-child').addClass('up');
-		    $('.settings .buttons_function .vbutton:first-child').html(lang['L_UP']);
-		    $('.settings .buttons_function .vbutton:last-child').html(lang['L_DOWN']);
-		} else {
-		    $('.settings .buttons_function .vbutton:first-child').addClass('up');
-		    $('.settings .buttons_function .vbutton:last-child').removeClass('up');
 		    $('.settings .buttons_function .vbutton:first-child').html(lang['L_DOWN']);
 		    $('.settings .buttons_function .vbutton:last-child').html(lang['L_UP']);
+		} else {
+		    qalert(lang['L_NORMAL_BUTTONS']);
+		    $('.settings .buttons_function .vbutton:first-child').addClass('up');
+		    $('.settings .buttons_function .vbutton:last-child').removeClass('up');
+		    $('.settings .buttons_function .vbutton:first-child').html(lang['L_UP']);
+		    $('.settings .buttons_function .vbutton:last-child').html(lang['L_DOWN']);
 		}
 	    }
 	} else
@@ -709,9 +704,11 @@ function parsePacket(hex, check_confirm = 0)
 	    if (device_type == "EDS OX") {
 		//$('.settings .buttons_function .button').removeClass('selected');
 		if (parseInt(info['KeySwitch']) == 0) {
+		    $('.settings .buttons_function .vbutton:first-child').addClass('up');
 	    	    $('.settings .buttons_function .vbutton.top').html(lang['L_UP']);
 	    	    $('.settings .buttons_function .vbutton.bottom').html(lang['L_DOWN']);
 		} else {
+		    $('.settings .buttons_function .vbutton:last-child').addClass('up');
 	    	    $('.settings .buttons_function .vbutton.top').html(lang['L_DOWN']);
 	    	    $('.settings .buttons_function .vbutton.bottom').html(lang['L_UP']);
 		}
@@ -1077,6 +1074,10 @@ $(document).ready(function() {
 	$('head').append('<link rel="stylesheet" type="text/css" href="/lang/' + locale.language + '.css">');
 	$('head').append('<script src="lang/' + locale.language + '.js"></script>');
     }
+    // translate
+    $('span[lang]').each(function() {
+	$(this).html(lang[$(this).attr('lang')]);
+    });
 
     try {
 	var z = JSON.parse(localStorage.getItem('zoom'));
@@ -1718,7 +1719,7 @@ $(document).ready(function() {
 	    ||
 	    (f == 0)
 	) {
-	    startBlock(lang['L_RD_PROTECT'].replace("%s", (f == 0 ? lang['L_RD_PROTECT_OFF'] : lang['L_RD_PROTECT_ON'])));
+	    startBlock(lang['L_RD_PROTECT_MODE'].replace("%s", (f == 0 ? lang['L_RD_PROTECT_OFF'] : lang['L_RD_PROTECT_ON'])));
 
 	    var a = new Uint8Array([ 0xfe, 0x32, key, backSetting2p, 0x08, f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ]);
 	    a = setCRC16(a);

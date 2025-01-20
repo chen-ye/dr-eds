@@ -4,43 +4,43 @@
     <meta name="MobileOptimized" content="width" />
     <meta name="HandheldFriendly" content="true" />
     <link rel="manifest" href="manifest.json" />
-    <link href="css/style.css?16" rel='stylesheet' type='text/css' />
+    <link href="css/style.css?17" rel='stylesheet' type='text/css' />
     <link href="css/opensans.css" rel='stylesheet' type='text/css' />
     <script src="js/jquery-3.1.1.min.js"></script>
-    <script src="js/functions.js?16"></script>
-    <script src="lang/en.js?16"></script>
+    <script src="js/functions.js?17"></script>
+    <script src="lang/en.js?17"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
 </head>
 <body>
 
 <div class="info">
     <div class="content" style="display: none;">
-	<div class="left" type="volts"><span class="left_rd">RD[<span class="left_ver"></span>]:</span> <span class="left_val"></span></div>
-	<div class="right"><span class="right_shifter">Shifter[<span class="right_ver"></span>]:</span> <span class="right_val"></span></div>
+	<div class="left" type="volts"><span class="left_rd"><span lang="L_RD" />[<span class="left_ver"></span>]:</span> <span class="left_val"></span></div>
+	<div class="right"><span class="right_shifter"><span lang="L_SHIFTER" />[<span class="right_ver"></span>]:</span> <span class="right_val"></span></div>
     </div>
     <div class="txcontent" style="display: none;">
 	<div class="left" type="volts">
-	    <span class="left_rd">RD[<span class="left_rver"></span>]:</span> <span class="left_rval"></span>&nbsp;
-	    <span class="left_rd">FD[<span class="left_fver"></span>]:</span> <span class="left_fval"></span>
+	    <span class="left_rd"><span lang="L_RD" />[<span class="left_rver"></span>]:</span> <span class="left_rval"></span>&nbsp;
+	    <span class="left_rd"><span lang="L_FD" />[<span class="left_fver"></span>]:</span> <span class="left_fval"></span>
 	</div>
 	<div class="right">
-	    <span class="right_shifter">L[<span class="right_lver"></span>]:</span> <span class="right_lval"></span>
-	    <span class="right_shifter">R[<span class="right_rver"></span>]:</span> <span class="right_rval"></span>
+	    <span class="right_shifter"><span lang="L_SHIFTER_LEFT" />[<span class="right_lver"></span>]:</span> <span class="right_lval"></span>
+	    <span class="right_shifter"><span lang="L_SHIFTER_RIGHT" />[<span class="right_rver"></span>]:</span> <span class="right_rval"></span>
 	</div>
     </div>
     <div class="gxcontent" style="display: none;">
 	<div class="left" type="volts">
-	    <span class="left_rd">RD[<span class="left_rver"></span>]:</span> <span class="left_rval"></span>
+	    <span class="left_rd"><span lang="L_RD" />[<span class="left_rver"></span>]:</span> <span class="left_rval"></span>
 	</div>
 	<div class="right">
-	    <span class="right_shifter">L[<span class="right_lver"></span>]:</span> <span class="right_lval"></span>
-	    <span class="right_shifter">R[<span class="right_rver"></span>]:</span> <span class="right_rval"></span>
+	    <span class="right_shifter"><span lang="L_SHIFTER_LEFT" />[<span class="right_lver"></span>]:</span> <span class="right_lval"></span>
+	    <span class="right_shifter"><span lang="L_SHIFTER_RIGHT" />[<span class="right_rver"></span>]:</span> <span class="right_rval"></span>
 	</div>
     </div>
 </div>
 
 <div class="scan">
-    <div class="button edsscan">Scan for EDS</div>
+    <div class="button edsscan"><span lang="L_SCAN" /></div>
 </div>
 
 <div class="live" style="display: none;">
@@ -52,16 +52,16 @@
     </div>
 
     <div class="action_buttons">
-	<div class="button front" style="display: none;">Front</div>
+	<div class="button front" style="display: none;"><span lang="L_FRONT" /></div>
 	<div style="width: 100%; height: 1em;"></div>
-	<div class="button up">Up</div>
-	<div class="button down">Down</div>
+	<div class="button up"><span lang="L_UP" /></div>
+	<div class="button down"><span lang="L_DOWN" /></div>
     </div>
 </div>
 
 <div class="settings" style="display: none;">
     <div class="action_buttons">
-	<div class="button down">Down</div>
+	<div class="button down"><span lang="L_DOWN" /></div>
 	<div class="button gear"></div>
 	<div class="button gears">
 	    <select>
@@ -79,12 +79,12 @@
 		<option value="14">14</option>
 	    </select>
 	</div>
-	<div class="button up">Up</div>
+	<div class="button up"><span lang="L_UP" /></div>
     </div>
 
     <div class="micro" style="display: none;">
-	<div class="button up">Up</div>
-	<div class="button down">Down</div>
+	<div class="button up"><span lang="L_UP" /></div>
+	<div class="button down"><span lang="L_DOWN" /></div>
     </div>
 
     <div class="gear_values">
@@ -92,8 +92,8 @@
 	    <div class="content"></div>
 	    <div class="buttons">
 		<div class="fake"></div>
-		<div class="button set_all">Set all</div>
-		<div class="button save">Save as</div>
+		<div class="button set_all"><span lang="L_SET_ALL" /></div>
+		<div class="button save"><span lang="L_SAVE_AS" /></div>
 	    </div>
 	</div>
 	<div class="presets"></div>
@@ -102,15 +102,15 @@
     <div class="buttons_function">
 	<div class="content">
 	    <div class="vbox">
-		<div class="vbutton top up">Up</div>
-		<div class="vbutton bottom">Down</div>
+		<div class="vbutton top"><span lang="L_UP" /></div>
+		<div class="vbutton bottom"><span lang="L_DOWN" /></div>
 	    </div>
 	</div>
     </div>
     <div class="buttons_function">
 	<div class="content">
 	    <div class="vbox">
-		<div class="button mode">Race</div>
+		<div class="button mode"><span lang="L_RACE" /></div>
 	    </div>
 	</div>
     </div>
@@ -118,22 +118,22 @@
 
 <div class="txsettings" style="display: none;">
     <div class="fvnone" style="display: none;">
-        No connection to FD - connect and disconnect magnetic charger to the FD until you see blue light on the side of FD blinking and then green light blink. If FD values are not shown after 3-5 seconds click <a href="javascript:location.reload();">here</a>
+        <span lang="L_NO_FD_CONNECTED" /> <a href="javascript:location.reload();"><span lang="L_NO_FD_CONNECTED_HERE" /></a>
     </div>
 
     <div class="front_buttons">
-	<div class="button down">Down</div>
+	<div class="button down"><span lang="L_DOWN" /></div>
 	<div class="button gear"></div>
-	<div class="button up">Up</div>
+	<div class="button up"><span lang="L_UP" /></div>
     </div>
 
     <div class="front_micro" style="display: none;">
-	<div class="button up">Up</div>
-	<div class="button down">Down</div>
+	<div class="button up"><span lang="L_UP" /></div>
+	<div class="button down"><span lang="L_DOWN" /></div>
     </div>
 
     <div class="action_buttons">
-	<div class="button down">Down</div>
+	<div class="button down"><span lang="L_DOWN" /></div>
 	<div class="button gear"></div>
 	<div class="button gears">
 	    <select>
@@ -151,19 +151,19 @@
 		<option value="14">14</option>
 	    </select>
 	</div>
-	<div class="button up">Up</div>
+	<div class="button up"><span lang="L_UP" /></div>
     </div>
 
     <div class="micro" style="display: none;">
-	<div class="button up">Up</div>
-	<div class="button down">Down</div>
+	<div class="button up"><span lang="L_UP" /></div>
+	<div class="button down"><span lang="L_DOWN" /></div>
     </div>
 
     <div class="gear_values">
 	<div class="fvcontent">
 	    <div class="content"></div>
 	    <div class="buttons">
-		<div class="button set_all">Set all</div>
+		<div class="button set_all"><span lang="L_SET_ALL" /></div>
 	    </div>
 	</div>
 
@@ -171,8 +171,8 @@
 	    <div class="content"></div>
 	    <div class="buttons">
 		<div class="fake"></div>
-		<div class="button set_all">Set all</div>
-		<div class="button save">Save as</div>
+		<div class="button set_all"><span lang="L_SET_ALL" /></div>
+		<div class="button save"><span lang="L_SAVE_AS" /></div>
 	    </div>
 	</div>
 	<div class="presets"></div>
@@ -183,25 +183,25 @@
 	    <div class="vbox">
 		<div class="button single">
 		    <select button="single">
-			<option value="front">Front</option>
-			<option value="up">Up shift</option>
-			<option value="down">Down shift</option>
+			<option value="front"><span lang="L_FRONT" /></option>
+			<option value="up"><span lang="L_UP_SHIFT" /></option>
+			<option value="down"><span lang="L_DOWN_SHIFT" /></option>
 		    </select>
 		</div>
 	    </div>
 	    <div class="vbox">
 		<div class="vbutton small">
 		    <select button="small">
-			<option value="front">Front</option>
-			<option value="up">Up shift</option>
-			<option value="down">Down shift</option>
+			<option value="front"><span lang="L_FRONT" /></option>
+			<option value="up"><span lang="L_UP_SHIFT" /></option>
+			<option value="down"><span lang="L_DOWN_SHIFT" /></option>
 		    </select>
 		</div>
 		<div class="vbutton big">
 		    <select button="big">
-			<option value="front">Front</option>
-			<option value="up">Up shift</option>
-			<option value="down">Down shift</option>
+			<option value="front"><span lang="L_FRONT" /></option>
+			<option value="up"><span lang="L_UP_SHIFT" /></option>
+			<option value="down"><span lang="L_DOWN_SHIFT" /></option>
 		    </select>
 		</div>
 	    </div>
@@ -210,9 +210,9 @@
     <div class="buttons_function">
 	<div class="content">
 	    <div class="vbox">
-		<div class="button mode">Race</div>
-		<div class="button sleep">Sleep</div>
-		<div class="button rdprotect">RD Protect</div>
+		<div class="button mode"><span lang="L_RACE" /></div>
+		<div class="button sleep"><span lang="L_SLEEP" /></div>
+		<div class="button rdprotect"><span lang="L_RD_PROTECT" /></div>
 	    </div>
 	</div>
     </div>
@@ -220,7 +220,7 @@
 
 <div class="gxsettings" style="display: none;">
     <div class="action_buttons">
-	<div class="button down">Down</div>
+	<div class="button down"><span lang="L_DOWN" /></div>
 	<div class="button gear"></div>
 	<div class="button gears">
 	    <select>
@@ -238,12 +238,12 @@
 		<option value="14">14</option>
 	    </select>
 	</div>
-	<div class="button up">Up</div>
+	<div class="button up"><span lang="L_UP" /></div>
     </div>
 
     <div class="micro" style="display: none;">
-	<div class="button up">Up</div>
-	<div class="button down">Down</div>
+	<div class="button up"><span lang="L_UP" /></div>
+	<div class="button down"><span lang="L_DOWN" /></div>
     </div>
 
     <div class="gear_values">
@@ -251,8 +251,8 @@
 	    <div class="content"></div>
 	    <div class="buttons">
 		<div class="fake"></div>
-		<div class="button set_all">Set all</div>
-		<div class="button save">Save as</div>
+		<div class="button set_all"><span lang="L_SET_ALL" /></div>
+		<div class="button save"><span lang="L_SAVE_AS" /></div>
 	    </div>
 	</div>
 	<div class="presets"></div>
@@ -263,22 +263,22 @@
 	    <div class="vbox">
 		<div class="button single">
 		    <select button="single">
-			<option value="up">Up shift</option>
-			<option value="down">Down shift</option>
+			<option value="up"><span lang="L_UP_SHIFT" /></option>
+			<option value="down"><span lang="L_DOWN_SHIFT" /></option>
 		    </select>
 		</div>
 	    </div>
 	    <div class="vbox">
 		<div class="vbutton small">
 		    <select button="small">
-			<option value="up">Up shift</option>
-			<option value="down">Down shift</option>
+			<option value="up"><span lang="L_UP_SHIFT" /></option>
+			<option value="down"><span lang="L_DOWN_SHIFT" /></option>
 		    </select>
 		</div>
 		<div class="vbutton big">
 		    <select button="big">
-			<option value="up">Up shift</option>
-			<option value="down">Down shift</option>
+			<option value="up"><span lang="L_UP_SHIFT" /></option>
+			<option value="down"><span lang="L_DOWN_SHIFT" /></option>
 		    </select>
 		</div>
 	    </div>
@@ -287,8 +287,8 @@
     <div class="buttons_function">
 	<div class="content">
 	    <div class="vbox">
-		<div class="button mode">Race</div>
-		<div class="button sleep">Sleep</div>
+		<div class="button mode"><span lang="L_RACE" /></div>
+		<div class="button sleep"><span lang="L_SLEEP" /></div>
 	    </div>
 	</div>
     </div>

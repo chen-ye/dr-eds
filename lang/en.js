@@ -1,5 +1,6 @@
 
 var lang = [];
+
 lang['L_GET_KEY'] = "Get key";
 lang['L_GET_INFO'] = "Getting information";
 
@@ -33,6 +34,7 @@ lang['L_UP'] = "Up";
 lang['L_DOWN'] = "Down";
 lang['L_FRONT'] = "Front";
 lang['L_SET'] = "Set";
+lang['L_SET_ALL'] = "Set all";
 
 lang['L_COMMAND_FAILED'] = 'Command failed';
 
@@ -54,18 +56,21 @@ lang['L_ERROR_INVALID_NUMBER_OF_GEARS'] = "Selected total number of gears is<br 
 lang['L_ERROR_READING_FILE'] = "Error while reading file";
 lang['L_ERROR_CURRENT_VALUES_NOT_INPORTED'] = "Current values not imported - different device";
 
+lang['L_RACE'] = "Race";
 lang['L_WARNING_RACE_MODE'] = "Race mode will drain RD battery faster - continue?";
 lang['L_RACE_MODE'] = "%s race mode";
 lang["L_RACE_MODE_ON"] = "Enable";
 lang['L_RACE_MODE_OFF'] = 'Disable';
 
+lang['L_SLEEP'] = "Sleep";
 lang['L_WARNING_SLEEP_MODE'] = "Disabling sleep mode will drain RD battery faster - continue?";
 lang['L_SLEP_MODE'] = "%s sleep mode";
 lang['L_SLEP_MODE_ON'] = "Enable";
 lang["L_SLEP_MODE_OFF"] = "Disable";
 
+lang['L_RD_PROTECT'] = "RD Protect";
 lang['L_WARNING_RD_PROTECT'] = "Disabling RD protection can damage drivetrain - continue?";
-lang['L_RD_PROTECT'] = "%s RD protection";
+lang['L_RD_PROTECT_MODE'] = "%s RD protection";
 lang['L_RD_PROTECT_ON'] = "Enable";
 lang['L_RD_PROTECT_OFF'] = "Disable";
 
@@ -75,3 +80,16 @@ lang['L_SHUTDOWN'] = "Device shutdown";
 lang['L_DICSONNECTED'] = "Disconnected";
 
 lang['L_COPIED_TO_CLIPBOARD'] = "Copied to clipboard";
+
+lang['L_SCAN'] = "Scan for EDS";
+
+lang['L_RD'] = "RD";
+lang['L_FD'] = "FD";
+lang['L_SHIFTER'] = "Shifter";
+lang['L_SHIFTER_LEFT'] = "L";
+lang['L_SHIFTER_RIGHT'] = "R";
+
+lang['L_SAVE_AS'] = "Save as";
+
+lang['L_NO_FD_CONNECTED'] = "No connection to FD - connect and disconnect magnetic charger to the FD until you see blue light on the side of FD blinking and then green light blink. If FD values are not shown after 3-5 seconds click";
+lang['L_NO_FD_CONNECTED_HERE'] = "here";
