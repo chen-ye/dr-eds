@@ -1,3 +1,11 @@
+## 1.3.2 (2025-01-20)
+
+### feature (2 changes)
+
+- [replace self closing spans with full syntax to fix info panel](https://git.jeckyll.net/published/personal/eds-ox/-/commit/fa598c6ee06cee54d56f328935fcf147bccc016b)
+- [close menu on some menu actions](https://git.jeckyll.net/published/personal/eds-ox/-/commit/2a456f2cb94a629b73828a7e1c2e2d82341f87c3)
+
+
 ## 1.3.1 (2025-01-20)
 
 ### feature (2 changes)
