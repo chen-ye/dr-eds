@@ -24,3 +24,15 @@
 ### feature (1 change)
 
 - [add RD protection function for TX](https://git.jeckyll.net/published/personal/eds-ox/-/commit/e1a61c801e7cb513d4bd5a77cda1548612f0c1e3)
+
+## 1.1.0 (2025-01-14)
+
+### feature (1 change)
+
+- [GeX support](https://git.jeckyll.net/published/personal/eds-ox/-/commit/f424e3754f8786dbf3e77e668ebf2f960a4318cf)
+
+## 1.0.0 (2025-01-09)
+
+### feature (1 change)
+
+- [Initial release](https://git.jeckyll.net/published/personal/eds-ox/-/commit/f424e3754f8786dbf3e77e668ebf2f960a4318cf)
