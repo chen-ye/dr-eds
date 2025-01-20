@@ -192,10 +192,10 @@ function handleCharacteristicValueChanged(event)
 	    if (t == 1) {
 		// show micro shift only on lowest gear
 		$('.' + pr + 'settings .front_micro').show();
-		$('.live .fgear').html('big');
+		$('.live .fgear').html(lang['L_FD_BIG']);
 	    } else {
 		$('.' + pr + 'settings .front_micro').hide();
-		$('.live .fgear').html('small');
+		$('.live .fgear').html(lang['L_FD_SMALL']);
 	    }
 
 	    log("FD gear " + t);
@@ -226,13 +226,13 @@ function handleCharacteristicValueChanged(event)
 		if ($('.settings .buttons_function .vbutton:first-child').hasClass('up')) {
 		    $('.settings .buttons_function .vbutton:first-child').removeClass('up');
 		    $('.settings .buttons_function .vbutton:last-child').addClass('up');
-		    $('.settings .buttons_function .vbutton:first-child').html("Up");
-		    $('.settings .buttons_function .vbutton:last-child').html("Down");
+		    $('.settings .buttons_function .vbutton:first-child').html(lang['L_UP']);
+		    $('.settings .buttons_function .vbutton:last-child').html(lang['L_DOWN']);
 		} else {
 		    $('.settings .buttons_function .vbutton:first-child').addClass('up');
 		    $('.settings .buttons_function .vbutton:last-child').removeClass('up');
-		    $('.settings .buttons_function .vbutton:first-child').html("Down");
-		    $('.settings .buttons_function .vbutton:last-child').html("Up");
+		    $('.settings .buttons_function .vbutton:first-child').html(lang['L_DOWN']);
+		    $('.settings .buttons_function .vbutton:last-child').html(lang['L_UP']);
 		}
 	    }
 	} else
