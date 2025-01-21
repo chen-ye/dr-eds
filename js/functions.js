@@ -1075,7 +1075,7 @@ $(document).ready(function() {
 	$('head').append('<script src="lang/' + locale.language + '.js?' + Math.random() + '"></script>');
     }
     // translate
-    $('span[lang]').each(function() {
+    $('span[lang], option[lang]').each(function() {
 	$(this).html(lang[$(this).attr('lang')]);
     });
 
