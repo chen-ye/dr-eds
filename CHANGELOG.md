@@ -1,3 +1,10 @@
+## 1.3.3 (2025-01-21)
+
+### fix (1 change)
+
+- [- remove span inside option - not supported](https://git.jeckyll.net/published/personal/eds-ox/-/commit/d7634cb5d8ad3bddd8e4ae80a826dbb75dd949e2)
+
+
 ## 1.3.2 (2025-01-20)
 
 ### feature (2 changes)
