@@ -1,0 +1,45 @@
+
+:root {
+    --lang-current: "Actual";
+    --lang-total: "Total";
+
+    --lang-shift: "Cambio";
+
+    --lang-micro: "Fino";
+
+    --lang-gear: "Cambio";
+    --lang-gears: "Cambio";
+
+    --lang-front: "Delantero";
+    --lang-rear: "Trasero";
+    --lang-left: "Izquierda";
+    --lang-right: "Derecha";
+
+    --lang-small: "Pequeño";
+    --lang-big: "Grande";
+
+    --lang-function: "Funcion";
+    --lang-mode: "Modo";
+
+    --lang-limit1: "Limite 1";
+    --lang-limit2: "Limite 2";
+    --lang-limit3: "Limite 3";
+    --lang-limit4: "Limite 4";
+    --lang-limit5: "Limite 5";
+    --lang-limit6: "Limite 6";
+
+    --lang-gear1: "Cambio 1";
+    --lang-gear2: "Cambio 2";
+    --lang-gear3: "Cambio 3";
+    --lang-gear4: "Cambio 4";
+    --lang-gear5: "Cambio 5";
+    --lang-gear6: "Cambio 6";
+    --lang-gear7: "Cambio 7";
+    --lang-gear8: "Cambio 8";
+    --lang-gear9: "Cambio 9";
+    --lang-gear10: "Cambio 10";
+    --lang-gear11: "Cambio 11";
+    --lang-gear12: "Cambio 12";
+    --lang-gear13: "Cambio 13";
+    --lang-gear14: "Cambio 14";
+}
