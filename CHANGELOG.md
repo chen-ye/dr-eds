@@ -1,3 +1,14 @@
+## 1.3.4 (2025-01-26)
+
+### language (1 change)
+
+- [Spanish translation by Jesus Gomez](https://git.jeckyll.net/published/personal/eds-ox/-/commit/5129b0fb0399a49f88d9d84e5fd673903cf9d343)
+
+### fix (1 change)
+
+- [Manifest changes](https://git.jeckyll.net/published/personal/eds-ox/-/commit/178dff98a2476f98b374d50d7cbad58b1314b180)
+
+
 ## 1.3.3 (2025-01-21)
 
 ### fix (1 change)
