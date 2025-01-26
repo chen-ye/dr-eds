@@ -47,10 +47,10 @@
     "display": "fullscreen",
     "dir": "ltr",
     "lang": "en",
-    "start_url": "https://dreds.jeckyl.net/",
+    "start_url": "/",
     "scope": "/",
     "scope_extensions": [
-	{ "origin": "*.jeckyl.net" }
+	{ "origin": "https://*.jeckyl.net" }
     ],
     "related_applications": [],
     "prefer_related_applications": false,
