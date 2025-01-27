@@ -1,3 +1,10 @@
+## 1.3.5 (2025-01-27)
+
+### language (1 change)
+
+- [Deutsch translation by Nils Koss](https://git.jeckyll.net/published/personal/eds-ox/-/commit/f290324abe55176d064ae376bdb1b2d720d38d60)
+
+
 ## 1.3.4 (2025-01-26)
 
 ### language (1 change)
