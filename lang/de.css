@@ -1,0 +1,45 @@
+
+:root {
+    --lang-current: "Aktuell";
+    --lang-total: "Gesamt";
+
+    --lang-shift: "Schalten";
+
+    --lang-micro: "Mikro";
+
+    --lang-gear: "Gang";
+    --lang-gears: "Gänge";
+
+    --lang-front: "vorne";
+    --lang-rear: "hinten";
+    --lang-left: "links";
+    --lang-right: "rechts";
+
+    --lang-small: "klein";
+    --lang-big: "broß";
+
+    --lang-function: "Funktion";
+    --lang-mode: "Modus";
+
+    --lang-limit1: "Limit 1";
+    --lang-limit2: "Limit 2";
+    --lang-limit3: "Limit 3";
+    --lang-limit4: "Limit 4";
+    --lang-limit5: "Limit 5";
+    --lang-limit6: "Limit 6";
+
+    --lang-gear1: "Gang 1";
+    --lang-gear2: "Gang 2";
+    --lang-gear3: "Gang 3";
+    --lang-gear4: "Gang 4";
+    --lang-gear5: "Gang 5";
+    --lang-gear6: "Gang 6";
+    --lang-gear7: "Gang 7";
+    --lang-gear8: "Gang 8";
+    --lang-gear9: "Gang 9";
+    --lang-gear10: "Gang 10";
+    --lang-gear11: "Gang 11";
+    --lang-gear12: "Gang 12";
+    --lang-gear13: "Gang 13";
+    --lang-gear14: "Gang 14";
+}
