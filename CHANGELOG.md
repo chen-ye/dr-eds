@@ -1,3 +1,14 @@
+## 1.4.1 (2025-01-29)
+
+### fix (1 change)
+
+- [fix truncating logs contaning 0x00 - replace it with \n](https://git.jeckyll.net/published/personal/eds-ox/-/commit/34f052b1a5df9ff9399e8825d062dd88108f4975)
+
+### feature (1 change)
+
+- [add timestamps to log](https://git.jeckyll.net/published/personal/eds-ox/-/commit/d7ad88584bb4e484e8e0817b7e91a5c705633767)
+
+
 ## 1.4.0 (2025-01-29)
 
 ### feature (2 changes)
