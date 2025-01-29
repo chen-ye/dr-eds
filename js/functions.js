@@ -55,6 +55,8 @@ var ctimeout;
 function log(s)
 {
     if (debug) {
+	s = s.replace(/\0/g, "\n");
+
 	var d = new Date();
 	var ts = d.getFullYear() +
 	    (d.getMonth() + 1).toString().padStart(2, '0') +
@@ -1882,6 +1884,8 @@ $(document).ready(function() {
 	// Select the text field
 	copyText.select();
 	copyText.setSelectionRange(0, 999999); // For mobile devices
+	// next line do the same, but don't use it for now
+	//copyText.setSelectionRange(0, -1); // For mobile devices
 
 	if (copyText.value != "")
 	{
