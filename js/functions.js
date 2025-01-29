@@ -10,6 +10,8 @@ var show_debug = 1;
 var show_page = 'settings';
 var device_type = "";
 var first_call = 1;
+var chain = null;
+var single_set = 0;
 
 const cmd_getKey = 0x11;
 const cmd_getLockInfo = 0x31;
@@ -178,6 +180,12 @@ function handleCharacteristicValueChanged(event)
 	$('.settings .action_buttons .button.gears select, .txsettings .action_buttons .button.gears select, .gxsettings .action_buttons .button.gears select').val(parseInt(info['TOTAL_CNT']));//.change();
 	$('.live .gear').html(t);
 	$('.live .gears').html('/' + info['TOTAL_CNT']);
+
+	// chain
+	if (chain != null) {
+	    chain();
+	}
+	chain = null;
     } else
     if (r.cmd == cmd_frontStatusReport) {
 	log("Received: frontStatusReport");
@@ -266,7 +274,7 @@ function handleCharacteristicValueChanged(event)
 	log("Send: startRead");
     } else
     if (r.cmd == cmd_setGearUpValue) {
-	log("Received: setGearUpdate");
+	log("Received: setGearUpValue");
 
 	// for some reason this always return 0 after change which may indicate OK,
 	// but we ignore it since we already have it in input field
@@ -290,6 +298,35 @@ function handleCharacteristicValueChanged(event)
 
 		ctimeout = setTimeout(timeoutCheck, 1000);
 	    } else {
+		var cg = parseInt($('.settings .action_buttons .button.gear').html());
+		var tg = parseInt($('.settings .action_buttons .button.gears select').val());
+		if ((single_set > 0) && (tg - single_set + 1 == cg)) {
+		    var a1 = $('.settings .gear_values .vcontent .button.set_move').hasClass('selected');
+		    var a2 = $('.txsettings .gear_values .vcontent .button.set_move').hasClass('selected');
+		    var a3 = $('.gxsettings .gear_values .vcontent .button.set_move').hasClass('selected');
+
+		    if (a1 || a2 || a3) {
+			var f1 = 0x02;
+			var f2 = 0x01;
+			if (cg == tg) {
+			    f1 = 0x01;
+			    f2 = 0x02;
+			}
+
+			var a = new Uint8Array([ 0xfe, 0x32, key, cmd_rearLifting, 0x01, f1, 0x00, 0x00 ]);
+			a = setCRC16(a);
+			characteristic_TX.writeValueWithoutResponse(a);
+			log("Send: rearLifting -> " + f1.toString(16).padStart(2, '0'));
+			chain = function() {
+			    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_rearLifting, 0x01, f2, 0x00, 0x00 ]);
+			    a = setCRC16(a);
+			    characteristic_TX.writeValueWithoutResponse(a);
+			    log("Send: rearLifting -> " + f2.toString(16).padStart(2, '0'));
+			}
+		    }
+		}
+		single_set = 0;
+
 		qalert(lang['L_GEAR_VALUE_UPDATED']);
 	    }
 	} else {
@@ -856,6 +893,8 @@ function bindActionButtons()
 	var v2 = (v & 0xFF);
 	var v1 = ((v >> 8) & 0xFF);
 
+	single_set = g;
+
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setGearUpValue, 0x03, g, v1, v2, 0x00, 0x00 ]);
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
@@ -1404,6 +1443,14 @@ $(document).ready(function() {
 	log("Send: setFrontGearLimit -> " + v.gear.toString(16).padStart(2, '0') + ' = ' + v.value);
 
 	ctimeout = setTimeout(timeoutCheck, 1000);
+    });
+
+    // on/off force gear switch on value set
+    $('.settings .gear_values .vcontent .button.set_move, .txsettings .gear_values .vcontent .button.set_move, .gxsettings .gear_values .vcontent .button.set_move').on('click', function() {
+	if ($(this).hasClass('selected'))
+	    $(this).removeClass('selected');
+	else
+	    $(this).addClass('selected');
     });
 
     // save as gear values
