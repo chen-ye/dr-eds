@@ -1450,7 +1450,8 @@ $(document).ready(function() {
 	if ($(this).hasClass('selected'))
 	    $(this).removeClass('selected');
 	else
-	    $(this).addClass('selected');
+	    if (confirm(lang['L_CONFIRM_SET_MOVE']))
+		$(this).addClass('selected');
     });
 
     // save as gear values

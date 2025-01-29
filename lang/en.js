@@ -35,7 +35,9 @@ lang['L_DOWN'] = "Down";
 lang['L_FRONT'] = "Front";
 lang['L_SET'] = "Set";
 lang['L_SET_ALL'] = "Set all";
+
 lang['L_SET_MOVE'] = "Preview";
+lang['L_CONFIRM_SET_MOVE'] = "This function will move RD up or down after setting a value to apply changes. Activate?";
 
 lang['L_COMMAND_FAILED'] = 'Command failed';
 
