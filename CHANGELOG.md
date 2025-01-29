@@ -1,3 +1,10 @@
+## 1.4.0 (2025-01-29)
+
+### feature (2 changes)
+
+- [add confirmation for preview activation](https://git.jeckyll.net/published/personal/eds-ox/-/commit/43a91c084da1eb93c1f46674478c5cfbe42358f6)
+- [add preview function - switch gear after RD gear value is set to apply changes](https://git.jeckyll.net/published/personal/eds-ox/-/commit/5cdaafa2fa259ec08059c501ae1f8da7e1eb9e35) ([merge request](https://git.jeckyll.net/published/personal/eds-ox/-/merge_requests/3))
+
 ## 1.3.5 (2025-01-27)
 
 ### language (1 change)
