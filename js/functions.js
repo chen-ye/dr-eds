@@ -55,7 +55,17 @@ var ctimeout;
 function log(s)
 {
     if (debug) {
-	$('.debug').append(s.trim() + '\n');
+	var d = new Date();
+	var ts = d.getFullYear() +
+	    (d.getMonth() + 1).toString().padStart(2, '0') +
+	    d.getDate().toString().padStart(2, '0') +
+	    d.getHours().toString().padStart(2, '0') +
+	    d.getMinutes().toString().padStart(2, '0') +
+	    d.getSeconds().toString().padStart(2, '0') +
+	    '.' +
+	    d.getMilliseconds().toString().padStart(3, '0');
+
+	$('.debug').append(ts + '> ' + s.trim() + '\n');
 	$('.debug').scrollTop($('.debug').prop("scrollHeight"));
 
 	console.log(s.trim());
