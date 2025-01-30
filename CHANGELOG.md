@@ -1,3 +1,9 @@
+## 1.6.0 (2025-01-30)
+
+### feature (1 change)
+
+- [add upload debug log feature](https://git.jeckyll.net/published/personal/eds-ox/-/commit/b5ac0aafd2ed248e8d00f79569da72a860dd4319)
+
 ## 1.5.0 (2025-01-30)
 
 ### feature (1 change)
