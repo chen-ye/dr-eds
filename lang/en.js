@@ -84,6 +84,8 @@ lang['L_CONNECTED'] = "Connected to";
 lang['L_DICSONNECTED'] = "Disconnected";
 
 lang['L_COPIED_TO_CLIPBOARD'] = "Copied to clipboard";
+lang['L_CONFIRM_SEND_LOG'] = "Share debug log with developer for future analyzing?";
+lang['L_LOG_SENDED'] = "Debug log was uploaded";
 
 lang['L_SCAN'] = "Scan for EDS";
 

@@ -1990,6 +1990,25 @@ $(document).ready(function() {
 	    copyText.setSelectionRange(0, 0);
 
 	    qalert(lang['L_COPIED_TO_CLIPBOARD']);
+
+	    if (confirm(lang['L_CONFIRM_SEND_LOG'])) {
+		$.ajax({
+		    method: "POST",
+		    url: "/upload.php",
+		    data: { step: "allow" }
+		}).done(function(response) {
+		    var r = JSON.parse(response);
+		    if (r.result == "OK") {
+			$.ajax({
+			    method: "POST",
+			    url: "/upload.php",
+			    data: { step: "put", hash: r.hash, log: copyText.value }
+			}).done(function(response) {
+			    qalert(lang['L_LOG_SENDED']);
+			});
+		    }
+		});
+	    }
 	}
     });
 
