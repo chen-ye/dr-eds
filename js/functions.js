@@ -7,6 +7,7 @@
 
 var debug = 1;
 var show_debug = 1;
+var debug_log = [];
 var show_page = 'settings';
 var device_type = "";
 var first_call = 1;
@@ -67,8 +68,12 @@ function log(s)
 	    '.' +
 	    d.getMilliseconds().toString().padStart(3, '0');
 
-	$('.debug').append(ts + '> ' + s.trim() + '\n');
-	$('.debug').scrollTop($('.debug').prop("scrollHeight"));
+	if (show_debug) {
+	    $('.debug').append(ts + '> ' + s.trim() + '\n');
+	    $('.debug').scrollTop($('.debug').prop("scrollHeight"));
+	}
+
+	debug_log.push(ts + '> ' + s.trim());
 
 	console.log(s.trim());
     }
@@ -1160,7 +1165,7 @@ $(document).ready(function() {
     // set show_debug by default
     if (show_debug == null) show_debug = 1;
     if (show_debug == 1) {
-	$('.debug').show();
+	$('.debug').html(debug_log.join("\n")).show().scrollTop($('.debug').prop("scrollHeight"));
 	$('body').addClass('logs');
 	$('.button_debug').addClass('selected');
     } else {
@@ -1594,7 +1599,7 @@ $(document).ready(function() {
 		if (g != null) {
 		    if (g.hasOwnProperty('debug'))
 			if (g.debug) {
-			    $('.debug').show();
+			    $('.debug').html(debug_log.join("\n")).show().scrollTop($('.debug').prop("scrollHeight"));
 			    $('body').addClass('logs');
 			    $('.button_debug').addClass('selected');
 			    localStorage.setItem('show_debug', 1);
@@ -1801,7 +1806,7 @@ $(document).ready(function() {
 	    localStorage.setItem('show_debug', 0);
 	    $('.button_menu').trigger('click');
 	} else {
-	    $('.debug').show();
+	    $('.debug').html(debug_log.join("\n")).show().scrollTop($('.debug').prop("scrollHeight"));
 	    $('body').addClass('logs');
 	    $(this).addClass('selected');
 	    localStorage.setItem('show_debug', 1);
