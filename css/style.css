@@ -48,6 +48,10 @@
 	--error-text-color: #fff;
 
 	--debug-font: "Courier New", monospace;
+
+	.live .gear {
+	    color: var(--text-color);
+	}
     }
 }
 
@@ -93,7 +97,7 @@ body.logs {
     font-size: calc(var(--font-size-live) * 15);
     line-height: calc(var(--font-size-live) * 0.8);
     text-align: center;
-    color: var(--text-color);
+    color: var(--main-color);
 }
 .live .gears {
     margin-top: 0.5em;
