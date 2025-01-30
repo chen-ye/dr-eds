@@ -1144,6 +1144,11 @@ $(document).ready(function() {
 	;;;
     }
 
+    if (parseInt(localStorage.getItem('lock')) == 1) {
+	screen.orientation.lock("portrait");
+	$('.menus .bmenus .button_lock_screen').addClass('selected');
+    }
+
     if (navigator.bluetooth == null) {
 	log('Sorry, no web bluetooth support');
 	log('Try to install Chrome browser on your device first and try this app again');
@@ -1534,6 +1539,7 @@ $(document).ready(function() {
 		'debug': $('.button_debug').hasClass('selected'),
 		'page': $('.button_page').hasClass('icon-wrench') ? "live" : "settings",
 		'battery': localStorage.getItem('battery'),
+		'lock': localStorage.getItem('lock'),
 		'current': {
 		    'device': device_type,
 		    'rear': []
@@ -1637,6 +1643,14 @@ $(document).ready(function() {
 		    if (g.hasOwnProperty('battery')) {
 			localStorage.setItem('battery', g.battery);
 			updateBattery();
+		    }
+
+		    if (g.hasOwnProperty('lock')) {
+			localStorage.setItem('lock', g.lock);
+			if (parseInt(g.lock) == 1) {
+			    screen.orientation.lock("portrait");
+			    $('.menus .bmenus .button_lock_screen').addClass('selected');
+			}
 		    }
 
 		    if (g.hasOwnProperty('current')) {
@@ -1882,32 +1896,6 @@ $(document).ready(function() {
 	dev.gatt.disconnect();
     });
 
-    // copy to clipboard
-    document.querySelector('.debug').addEventListener('doubletap', (event) => {
-	var copyText = $('.debug')[0];
-
-	// Select the text field
-	copyText.select();
-	copyText.setSelectionRange(0, 999999); // For mobile devices
-	// next line do the same, but don't use it for now
-	//copyText.setSelectionRange(0, -1); // For mobile devices
-
-	if (copyText.value != "")
-	{
-	    // Copy the text inside the text field
-	    navigator.clipboard.writeText(copyText.value);
-
-	    copyText.setSelectionRange(0, 0);
-
-	    qalert(lang['L_COPIED_TO_CLIPBOARD']);
-	}
-    });
-
-    // hide qalert in click
-    $('.qalert').on('click', function() {
-	$(this).fadeOut();
-    });
-
     // zoom
     $('.button_zoom_in').on('click', function() {
 	try {
@@ -1964,5 +1952,49 @@ $(document).ready(function() {
 	    z.settings = a + 'em';
 	}
 	localStorage.setItem('zoom', JSON.stringify(z));
+    });
+
+    // lock screen orientation
+    $('.button_lock_screen').on('click', function() {
+	if ($(this).hasClass('selected')) {
+	    $(this).removeClass('selected');
+
+	    screen.orientation.unlock();
+	    localStorage.setItem('lock', 0);
+	} else {
+	    $(this).addClass('selected');
+
+	    screen.orientation.lock("portrait");
+	    localStorage.setItem('lock', 1);
+	}
+
+	$('.button_menu').removeClass('selected');
+	$('.bmenus').hide();
+    });
+
+    // copy to clipboard
+    document.querySelector('.debug').addEventListener('doubletap', (event) => {
+	var copyText = $('.debug')[0];
+
+	// Select the text field
+	copyText.select();
+	copyText.setSelectionRange(0, 999999); // For mobile devices
+	// next line do the same, but don't use it for now
+	//copyText.setSelectionRange(0, -1); // For mobile devices
+
+	if (copyText.value != "")
+	{
+	    // Copy the text inside the text field
+	    navigator.clipboard.writeText(copyText.value);
+
+	    copyText.setSelectionRange(0, 0);
+
+	    qalert(lang['L_COPIED_TO_CLIPBOARD']);
+	}
+    });
+
+    // hide qalert in click
+    $('.qalert').on('click', function() {
+	$(this).fadeOut();
     });
 });
