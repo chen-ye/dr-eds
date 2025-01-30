@@ -93,7 +93,7 @@ body.logs {
     font-size: calc(var(--font-size-live) * 15);
     line-height: calc(var(--font-size-live) * 0.8);
     text-align: center;
-    color: var(--main-color);
+    color: var(--text-color);
 }
 .live .gears {
     margin-top: 0.5em;
