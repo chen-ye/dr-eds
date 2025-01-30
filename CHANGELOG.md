@@ -1,3 +1,13 @@
+## 1.5.0 (2025-01-30)
+
+### feature (1 change)
+
+- [implement lock screen orientation](https://git.jeckyll.net/published/personal/eds-ox/-/commit/b52f05f0419a406c8c0fe2e36ce4dbe6d84acacd)
+
+### optimization (1 change)
+
+- [optimize debug log](https://git.jeckyll.net/published/personal/eds-ox/-/commit/844bae21f2556462f763a796d521732c0bdc1fe1)
+
 ## 1.4.1 (2025-01-29)
 
 ### fix (1 change)
