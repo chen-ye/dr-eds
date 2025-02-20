@@ -1,8 +1,8 @@
 
 # Open source WEB/PWA app
-This repo now contain open source WEB/PWA app for EDS OX/TX/GeX which is hosted at https://dreds.jeckyll.net/.
+This repo now contain open source WEB/PWA app for EDS OX EQ/OX YQ/TX/GeX which is hosted at https://dreds.jeckyll.net/.
 
-APK file can be downloaed from: https://dreds.jeckyll.net/releases/1.0.0.0/drEDS-1.0.0.0.apk (buld from published source trough APK Builder)
+Android APK file can be downloaed from: https://dreds.jeckyll.net/releases/1.0.0.0/drEDS-1.0.0.0.apk (buld from published source trough APK Builder)
 
 You can clone repo and host it yourself or use it from supplied URL.
 
@@ -27,7 +27,10 @@ You can clone repo and host it yourself or use it from supplied URL.
 - Sleep mode (TX, GeX only - experimental) - official app use `casual mode` - can be turned on or off independent from `race mode`
 - RD protection (TX only - experimental) - when on smallest chain ring don't allow RD to go to two smallest cogs
 - Live view - useful if riding with a phone - display gear, battery and allow shifting
-- Multi languge mode - It will follow your device language and fall back to english if translation if not found or not full. (EN and BG, needed more translators for others)
+- Multi language support - EN, BG, ES, DE (translator needed). It will follow your device language and fall back to english if translation is not found or not full.
+- Preview function - switch gear after RD gear value is set to apply changes
+- Lock screen function - prevent landscape orientation
+- Auto upload debug logs - after double tap on debug logs for copy to clipboard will prompt to upload debug log for future analyzing
 
 ### What's missing:
 
@@ -40,15 +43,15 @@ You can clone repo and host it yourself or use it from supplied URL.
 
 ### Requirements:
 
-- Google chrome/Brave/Vivaldi browser (may be other Chromium based browsers) installed on the device - Firefox don't support WEB Bluetooth, Opera don't work for some reason
-- Enabled WEB Bluetooth on the browser - check for WEB Bluetooth in `chrome://flags`, `brave://flags` & etc (new Chrome and Vivaldi versions have flag enabled, Brave have it disabled) and enable flag if needed
+- For Android (you can use supplied APK too), Windows, Linux - Google chrome/Brave/Vivaldi browser (may be other Chromium based browsers) installed on the device - Firefox don't support WEB Bluetooth, Opera don't work for some reason
+- For iOS - First install [WebBLE](https://apps.apple.com/gb/app/webble/id1193531073) and then open https://dreds.jeckyll.net/ in it.
+- Enabled WEB Bluetooth on the browser - check for WEB Bluetooth in chrome://flags, brave://flags & etc (new Chrome and Vivaldi versions have flag enabled, Brave have it disabled) and enable flag if needed
 - Internet access - at least for now
 - Bluetooth
 
 ### Something not working: 
 
-Make sure `logs` button in the menu is pressed and debug messages are visible, then douple tap on them and logs will be copied to the clipboard. Open new issue here and paste debug information, so it can be analized and problem to be fixed.
-
+Make sure `logs` button in the menu is pressed and debug messages are visible, then double tap on them and they will be copied to the clipboard and optinal confirmation dialog to upload them will be displayed. Open new issue here and paste debug information, so they can be analyzed and problem to be fixed.
 
 ### Sreenshots OX:
 ![Main screen without debug info](images/shot1.png){width=33%}
