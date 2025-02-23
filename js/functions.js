@@ -1125,10 +1125,14 @@ function endBlock()
 $(document).ready(function() {
     var bt_supported = 0;
 
+    if ('serviceWorker' in navigator) {
+	navigator.serviceWorker.register("/sw.js");
+    }
+
     // switch language if not en
     if (locale.language != "en") {
-	$('head').append('<link rel="stylesheet" type="text/css" href="/lang/' + locale.language + '.css?' + Math.random() + '">');
-	$('head').append('<script src="lang/' + locale.language + '.js?' + Math.random() + '"></script>');
+	$('head').append('<link rel="stylesheet" type="text/css" href="/lang/' + locale.language + '.css">');
+	$('head').append('<script src="lang/' + locale.language + '.js"></script>');
     }
     // translate
     $('span[lang], option[lang]').each(function() {
