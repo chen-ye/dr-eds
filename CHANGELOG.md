@@ -1,3 +1,14 @@
+## 2.0.0 (2025-02-23)
+
+### feature (1 change)
+
+- [cache app via servive worker - it must work offline too now](https://git.jeckyll.net/published/personal/eds-ox/-/commit/c019b48fa01dd105772531b65c5f8ed20fec89f2)
+
+### fix (2 changes)
+
+- [proper fix for live gear color](https://git.jeckyll.net/published/personal/eds-ox/-/commit/42f4c7ffe0592722aae215b1744af075db05a46c)
+- [fix for dark theme current gear not so visible](https://git.jeckyll.net/published/personal/eds-ox/-/commit/321f649169a3de72e5c2c8a0f50562dd2e22bb88)
+
 ## 1.6.0 (2025-01-30)
 
 ### feature (1 change)
