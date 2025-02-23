@@ -4,6 +4,8 @@ This repo now contain open source WEB/PWA app for EDS OX EQ/OX YQ/TX/GeX which i
 
 Android APK file can be downloaed from: https://dreds.jeckyll.net/releases/1.0.0.0/drEDS-1.0.0.0.apk (buld from published source trough APK Builder)
 
+For iOS see [requirements](#requirements) bellow
+
 You can clone repo and host it yourself or use it from supplied URL.
 
 ### What's working:
@@ -31,10 +33,10 @@ You can clone repo and host it yourself or use it from supplied URL.
 - Preview function - switch gear after RD gear value is set to apply changes
 - Lock screen function - prevent landscape orientation
 - Auto upload debug logs - after double tap on debug logs for copy to clipboard will prompt to upload debug log for future analyzing
+- Offline mode - app must be loaded at least once before that when Internet connection is available
 
 ### What's missing:
 
-- Offline mode - at that point app load all need files from Internet. On later stage it may become entirely offline
 - Firmware upgrade - if it is even possible, since it require some AES encryption
 - Please, feel free to add more ...
 
