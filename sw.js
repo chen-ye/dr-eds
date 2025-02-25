@@ -1,21 +1,5 @@
 
-const cacheName = 'drEDS-v7';
-
-/*const contentToCache = [
-    '/index.html',
-
-    '/css/style.css',
-    '/css/opensans.css',
-
-    '/lang/en.js',
-    '/lang/bg.js',
-    '/lang/es.js',
-    '/lang/de.js',
-    '/lang/en.css',
-    '/lang/bg.css',
-    '/lang/es.css',
-    '/lang/de.css',
-];*/
+const cacheName = 'drEDS-v8';
 
 const broadcast = new BroadcastChannel('version-channel');
 broadcast.onmessage = (event) => {
@@ -26,17 +10,10 @@ broadcast.onmessage = (event) => {
 
 self.addEventListener('install', (e) => {
     console.log('[Service Worker] install');
-
-    /*e.waitUntil((async () => {
-	const cache = await caches.open(cacheName);
-	console.log('[Service Worker] caching all: app shell and content');
-	await cache.addAll(contentToCache);
-    })());*/
 });
 
 self.addEventListener('activate', (e) => {
-    //console.log('[Service Worker] activate');
-    //return self.clients.claim();
+    console.log('[Service Worker] activate');
 
     e.waitUntil(
         caches.keys().then((keyList) => {
