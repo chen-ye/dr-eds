@@ -1,3 +1,9 @@
+## 2.0.2 (2025-02-25)
+
+### fix (1 change)
+
+- [fix: better recognizing sw.js for cache](https://git.jeckyll.net/published/personal/eds-ox/-/commit/171d7a75c98648333760c6b285d0f31801ced000)
+
 ## 2.0.1 (2025-02-25)
 
 ### fix (1 change)
