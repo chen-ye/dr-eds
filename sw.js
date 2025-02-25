@@ -1,5 +1,5 @@
 
-const cacheName = 'drEDS-v6';
+const cacheName = 'drEDS-v7';
 
 /*const contentToCache = [
     '/index.html',
@@ -70,8 +70,8 @@ self.addEventListener("fetch", (e) => {
 	const response = await fetch(e.request);
 	const cache = await caches.open(cacheName);
 	console.log(`[Service Worker] new caching resource: ${e.request.url}`);
-	if (e.request.url != "https://dreds.jeckyll.net/sw.js")
-	cache.put(e.request, response.clone());
+	if (e.request.url.split(/[\\/]/).pop() != "sw.js")
+	    cache.put(e.request, response.clone());
 	return response;
     })());
 });
