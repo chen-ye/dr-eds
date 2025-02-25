@@ -1,3 +1,11 @@
+## 2.0.1 (2025-02-25)
+
+### fix (1 change)
+
+- [feat: log version of sw](https://git.jeckyll.net/published/personal/eds-ox/-/commit/a0f204aeb963c07e680c1ec7bf8f9007e4b0e3b2)
+- [fix: don't cache sw.js, so it can be updated when there is a change](https://git.jeckyll.net/published/personal/eds-ox/-/commit/a0f204aeb963c07e680c1ec7bf8f9007e4b0e3b2)
+
+
 ## 2.0.0 (2025-02-23)
 
 ### feature (1 change)
