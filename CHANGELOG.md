@@ -1,3 +1,9 @@
+## 2.0.3 (2025-02-25)
+
+### sw.js cleanup (1 change)
+
+- [refactor: sw.js cleanup](https://git.jeckyll.net/published/personal/eds-ox/-/commit/86156c30b2627dd548f7c256f90e0ebf134ff626)
+
 ## 2.0.2 (2025-02-25)
 
 ### fix (1 change)
