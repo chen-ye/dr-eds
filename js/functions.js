@@ -53,6 +53,11 @@ var all_gears = [];
 var qtimeout;
 var ctimeout;
 
+const broadcast = new BroadcastChannel('version-channel');
+broadcast.onmessage = (event) => {
+    log(event.data.payload);
+};
+
 function log(s)
 {
     if (debug) {
@@ -1154,6 +1159,9 @@ $(document).ready(function() {
     }
 
     if (navigator.bluetooth == null) {
+	broadcast.postMessage({
+	    type: 'VERSION',
+	});
 	log('Sorry, no web bluetooth support');
 	log('Try to install Chrome browser on your device first and try this app again');
 	log('Running on: ' + navigator.userAgent + ' | ' + navigator.appCodeName + ' | ' + navigator.appName + ' | ' + navigator.appVersion + ' | ' + navigator.platform);
@@ -1161,6 +1169,9 @@ $(document).ready(function() {
     }
     navigator.bluetooth.getAvailability().then((available) => {
 	if (!available) {
+	    broadcast.postMessage({
+		type: 'VERSION',
+	    });
 	    log('Seems there is web bluetooth support, but it is not enabled');
 	    log('Google Chrome: open chrome://flags and enable web bluetooth support');
 	    log('Brave: open brave://flags and enable web bluetooth support');
@@ -1194,6 +1205,9 @@ $(document).ready(function() {
 	    startBlock(lang['L_CONNECTED'] + ' ' + device_type);
 	    $('.scan').hide();
 
+	    broadcast.postMessage({
+		type: 'VERSION',
+	    });
 	    log('Running on: ' + navigator.userAgent + ' | ' + navigator.appCodeName + ' | ' + navigator.appName + ' | ' + navigator.appVersion + ' | ' + navigator.platform);
 	    log('Detected language: ' + locale.language);
 	    log('Connected to ' + device_type);

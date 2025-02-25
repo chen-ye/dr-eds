@@ -1,5 +1,5 @@
 
-const cacheName = 'drEDS-v1';
+const cacheName = 'drEDS-v6';
 
 /*const contentToCache = [
     '/index.html',
@@ -17,6 +17,13 @@ const cacheName = 'drEDS-v1';
     '/lang/de.css',
 ];*/
 
+const broadcast = new BroadcastChannel('version-channel');
+broadcast.onmessage = (event) => {
+    if (event.data && event.data.type === 'VERSION') {
+	broadcast.postMessage({ payload: cacheName });
+    }
+};
+
 self.addEventListener('install', (e) => {
     console.log('[Service Worker] install');
 
@@ -30,6 +37,19 @@ self.addEventListener('install', (e) => {
 self.addEventListener('activate', (e) => {
     //console.log('[Service Worker] activate');
     //return self.clients.claim();
+
+    e.waitUntil(
+        caches.keys().then((keyList) => {
+	    return Promise.all(
+		keyList.map((key) => {
+		    if (key === cacheName) {
+		        return;
+        	    }
+        	    return caches.delete(key);
+    		}),
+    	    );
+	}),
+    );
 });
 
 self.addEventListener("fetch", (e) => {
@@ -50,6 +70,7 @@ self.addEventListener("fetch", (e) => {
 	const response = await fetch(e.request);
 	const cache = await caches.open(cacheName);
 	console.log(`[Service Worker] new caching resource: ${e.request.url}`);
+	if (e.request.url != "https://dreds.jeckyll.net/sw.js")
 	cache.put(e.request, response.clone());
 	return response;
     })());
