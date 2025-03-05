@@ -57,7 +57,7 @@ if ($step == "put")
 	preg_match_all('#block [0-9]{1,2}\: [\w\W]{1,16}#is', $slog, $m2);
 	$m2 = preg_replace('#block [0-9]{1,2}\: #', '', $m2[0]);
 
-	file_put_contents("logs/" . $device . "/" . microtime(true), join("", $m2) . "\n\n=== raw low ===\n\n" . $log);
+	file_put_contents("logs/" . $device . "/" . microtime(true), join("", $m2) . "\n\n=== raw log ===\n\n" . $log);
 
 	echo json_encode(array("result" => "OK"));
     }
