@@ -36,7 +36,8 @@ if ($step == "put")
 	if (
 	    ($device != "EDS OX") &&
 	    ($device != "EDS TX") &&
-	    ($device != "EDS GeX")
+	    ($device != "EDS GeX") &&
+	    ($device != "EDS OX2")
 	) $device = "unknown";
 
 	if (!file_exists("logs")) mkdir("logs");

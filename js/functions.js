@@ -89,11 +89,13 @@ function setup()
     $('.settings').hide();
     $('.txsettings').hide();
     $('.gxsettings').hide();
+    $('.ox2settings').hide();
     $('.scan').show();
     $('.debug').html('');
     $('.info .content').hide();
     $('.info .txcontent').hide();
     $('.info .gxcontent').hide();
+    $('.info .ox2content').hide();
     $('.live').hide();
     $('.button_page').hide();
     $('.button_shutdown').hide();
@@ -193,13 +195,14 @@ function handleCharacteristicValueChanged(event)
 	var pr = "";
 	if (device_type == "EDS TX") pr = "tx";
 	if (device_type == "EDS GeX") pr = "gx";
+	if (device_type == "EDS OX2") pr = "ox2";
 	if (info['NUM'] == 1)
 	    $('.' + pr + 'settings .micro').show();
 	else
 	    $('.' + pr + 'settings .micro').hide();
 
-	$('.settings .action_buttons .button.gear, .txsettings .action_buttons .button.gear, .gxsettings .action_buttons .button.gear').html(t);
-	$('.settings .action_buttons .button.gears select, .txsettings .action_buttons .button.gears select, .gxsettings .action_buttons .button.gears select').val(parseInt(info['TOTAL_CNT']));//.change();
+	$('.settings .action_buttons .button.gear, .ox2settings .action_buttons .button.gear, .txsettings .action_buttons .button.gear, .gxsettings .action_buttons .button.gear').html(t);
+	$('.settings .action_buttons .button.gears select, .ox2settings .action_buttons .button.gears select, .txsettings .action_buttons .button.gears select, .gxsettings .action_buttons .button.gears select').val(parseInt(info['TOTAL_CNT']));//.change();
 	$('.live .gear').html(t);
 	$('.live .gears').html('/' + info['TOTAL_CNT']);
 
@@ -241,7 +244,10 @@ function handleCharacteristicValueChanged(event)
 	// for some reason this always return 0 after change which may indicate OK,
 	// but we ignore it - we just assume it switched buttons
 	endBlock();
-	if (device_type == "EDS OX") {
+	if (
+	    (device_type == "EDS OX") ||
+	    (device_type == "EDS OX2")
+	) {
 	    if (r.payload[0] == 0x00) {
 		clearTimeout(ctimeout);
 
@@ -326,8 +332,9 @@ function handleCharacteristicValueChanged(event)
 		    var a1 = $('.settings .gear_values .vcontent .button.set_move').hasClass('selected');
 		    var a2 = $('.txsettings .gear_values .vcontent .button.set_move').hasClass('selected');
 		    var a3 = $('.gxsettings .gear_values .vcontent .button.set_move').hasClass('selected');
+		    var a4 = $('.ox2settings .gear_values .vcontent .button.set_move').hasClass('selected');
 
-		    if (a1 || a2 || a3) {
+		    if (a1 || a2 || a3 || a4) {
 			var f1 = 0x02;
 			var f2 = 0x01;
 			if (cg == tg) {
@@ -434,9 +441,9 @@ function handleCharacteristicValueChanged(event)
 	info['L_POWER'] = r.payload[8] * 256 + r.payload[9];
 
 	if (parseInt(r.payload[12]) == 0)
-	    $('.txsettings .buttons_function .button.sleep, .gxsettings .buttons_function .button.sleep').addClass('selected');
+	    $('.ox2settings .buttons_function .button.sleep, .txsettings .buttons_function .button.sleep, .gxsettings .buttons_function .button.sleep').addClass('selected');
 	else
-	    $('.txsettings .buttons_function .button.sleep, .gxsettings .buttons_function .button.sleep').removeClass('selected');
+	    $('.ox2settings .buttons_function .button.sleep, .txsettings .buttons_function .button.sleep, .gxsettings .buttons_function .button.sleep').removeClass('selected');
 
 	updateBattery();
 
@@ -490,6 +497,11 @@ function handleCharacteristicValueChanged(event)
 		$('.settings .buttons_function .button.mode').removeClass('selected');
 	    else
 		$('.settings .buttons_function .button.mode').addClass('selected');
+
+	    if ($('.ox2settings .buttons_function .button.mode').hasClass('selected'))
+		$('.ox2settings .buttons_function .button.mode').removeClass('selected');
+	    else
+		$('.ox2settings .buttons_function .button.mode').addClass('selected');
 
 	    if ($('.txsettings .buttons_function .button.mode').hasClass('selected'))
 		$('.txsettings .buttons_function .button.mode').removeClass('selected');
@@ -638,6 +650,9 @@ function parsePacket(hex, check_confirm = 0)
 	    if (device_type == "EDS OX")
 		$('.settings').show();
 	    else
+	    if (device_type == "EDS OX2")
+		$('.ox2settings').show();
+	    else
 	    if (device_type == "EDS TX") {
 		$('.txsettings').show();
 		$('.live .action_buttons .button.front').show();
@@ -649,6 +664,9 @@ function parsePacket(hex, check_confirm = 0)
 	    if (device_type == "EDS OX")
 		$('.info .content').show();
 	    else
+	    if (device_type == "EDS OX2")
+		$('.info .ox2content').show();
+	    else
 	    if (device_type == "EDS TX")
 		$('.info .txcontent').show();
 	    else
@@ -656,7 +674,7 @@ function parsePacket(hex, check_confirm = 0)
 		$('.info .gxcontent').show();
 	    $('.button_page').show();
 	    $('.button_disconnect').show();
-	    if ((device_type == "EDS TX") || (device_type == "EDS GeX"))
+	    if ((device_type == "EDS TX") || (device_type == "EDS GeX") || (device_type == "EDS OX2"))
 		$('.button_shutdown').show();
 	    $('.button_export').show();
 	    $('.button_import').show();
@@ -667,6 +685,9 @@ function parsePacket(hex, check_confirm = 0)
 	    if (show_page == 'settings') {
 		if (device_type == "EDS OX")
 		    $('.settings').show();
+		else
+		if (device_type == "EDS OX2")
+		    $('.ox2settings').show();
 		else
 		if (device_type == "EDS TX")
 		    $('.txsettings').show();
@@ -686,8 +707,8 @@ function parsePacket(hex, check_confirm = 0)
 
 	    var t = parseInt(info['NUM']);
 	    t = parseInt(info['TOTAL_CNT']) - t + 1;
-	    $('.settings .action_buttons .button.gear, .txsettings .action_buttons .button.gear, .gxsettings .action_buttons .button.gear').html(t);
-	    $('.settings .action_buttons .button.gears select, .txsettings .action_buttons .button.gears select, .gxsettings .action_buttons .button.gears select').val(parseInt(info['TOTAL_CNT']));//.change();
+	    $('.settings .action_buttons .button.gear, .ox2settings .action_buttons .button.gear, .txsettings .action_buttons .button.gear, .gxsettings .action_buttons .button.gear').html(t);
+	    $('.settings .action_buttons .button.gears select, .ox2settings .action_buttons .button.gears select, .txsettings .action_buttons .button.gears select, .gxsettings .action_buttons .button.gears select').val(parseInt(info['TOTAL_CNT']));//.change();
 	    $('.live .gear').html(t);
 	    $('.live .gears').html('/' + info['TOTAL_CNT']);
 
@@ -724,6 +745,13 @@ function parsePacket(hex, check_confirm = 0)
 		    $('.settings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['GEARS[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
 		}
 	    } else
+	    if (device_type == "EDS OX2") {
+		$('.ox2settings .gear_values .vcontent .content').html('');
+		for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
+		    var r = parseInt(info['TOTAL_CNT']) - t;
+		    $('.ox2settings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['GEARS[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
+		}
+	    } else
 	    if (device_type == "EDS TX") {
 		buildFrontValues();
 
@@ -745,6 +773,7 @@ function parsePacket(hex, check_confirm = 0)
 	    var pr = "";
 	    if (device_type == "EDS TX") pr = "tx";
 	    if (device_type == "EDS GeX") pr = "gx";
+	    if (device_type == "EDS OX2") pr = "ox2";
 	    if (info['NUM'] == 1)
 		$('.' + pr + 'settings .micro').show();
 	    else
@@ -755,14 +784,26 @@ function parsePacket(hex, check_confirm = 0)
 
 	    // race mode
 	    if (info['PTOTECT'] == 1)
-		$('.settings .buttons_function .button.mode, .txsettings .buttons_function .button.mode, .gxsettings .buttons_function .button.mode').addClass('selected');
+		$('.settings .buttons_function .button.mode, .ox2settings .buttons_function .button.mode, .txsettings .buttons_function .button.mode, .gxsettings .buttons_function .button.mode').addClass('selected');
 	    else
-		$('.settings .buttons_function .button.mode, .txsettings .buttons_function .button.mode, .gxsettings .buttons_function .button.mode').removeClass('selected');
+		$('.settings .buttons_function .button.mode, .ox2settings .buttons_function .button.mode, .txsettings .buttons_function .button.mode, .gxsettings .buttons_function .button.mode').removeClass('selected');
 
 	    // buttons
 	    if (device_type == "EDS OX") {
 		//$('.settings .buttons_function .button').removeClass('selected');
 		if (parseInt(info['KeySwitch']) == 0) {
+		    $('.settings .buttons_function .vbutton:first-child').addClass('up');
+	    	    $('.settings .buttons_function .vbutton.top').html(lang['L_UP']);
+	    	    $('.settings .buttons_function .vbutton.bottom').html(lang['L_DOWN']);
+		} else {
+		    $('.settings .buttons_function .vbutton:last-child').addClass('up');
+	    	    $('.settings .buttons_function .vbutton.top').html(lang['L_DOWN']);
+	    	    $('.settings .buttons_function .vbutton.bottom').html(lang['L_UP']);
+		}
+	    } else
+	    if (device_type == "EDS OX2") {
+		//$('.settings .buttons_function .button').removeClass('selected');
+		if (info['KeySwitch'].substring(1, 2) == 2) {
 		    $('.settings .buttons_function .vbutton:first-child').addClass('up');
 	    	    $('.settings .buttons_function .vbutton.top').html(lang['L_UP']);
 	    	    $('.settings .buttons_function .vbutton.bottom').html(lang['L_DOWN']);
@@ -796,7 +837,7 @@ function parsePacket(hex, check_confirm = 0)
 		if (parseInt(info['KeySwitch'].substring(2, 3)) == 2) $('.gxsettings .buttons_function .button.single select').val(lang['L_DOWN'].toLowerCase());
 	    }
 
-	    if ((device_type == "EDS TX") || (device_type == "EDS GeX")) {
+	    if ((device_type == "EDS TX") || (device_type == "EDS GeX") || (device_type == "EDS OX2")) {
 		// send getTransmissionVersionInfo to get sleep status
 		var a = new Uint8Array([ 0xfe, 0x32, key, cmd_getTransmissionVersionInfo, 0x00, 0x00, 0x00 ]);
 		a = setCRC16(a);
@@ -844,6 +885,7 @@ function buildPresets()
     var pr = "";
     if (device_type == "EDS TX") pr = "tx";
     if (device_type == "EDS GeX") pr = "gx";
+    if (device_type == "EDS OX2") pr = "ox2";
     $('.' + pr + 'settings .gear_values .presets').html(s);
 
     $('.' + pr + 'settings .gear_values .presets .preset').off('click').on('click', function() {
@@ -896,17 +938,17 @@ function buildFrontValues()
 function bindActionButtons()
 {
     // set gear values
-    $('.settings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .fvcontent .content .button.minus, .gxsettings .gear_values .vcontent .content .button.minus').off('click').on('click', function() {
+    $('.settings .gear_values .vcontent .content .button.minus, .ox2settings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .fvcontent .content .button.minus, .gxsettings .gear_values .vcontent .content .button.minus').off('click').on('click', function() {
 	var v = $(this).next().val();
 	if (v > 0) v--;
 	$(this).next().val(v);
     });
-    $('.settings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .fvcontent .content .button.plus, .gxsettings .gear_values .vcontent .content .button.plus').off('click').on('click', function() {
+    $('.settings .gear_values .vcontent .content .button.plus, .ox2settings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .fvcontent .content .button.plus, .gxsettings .gear_values .vcontent .content .button.plus').off('click').on('click', function() {
 	var v = $(this).prev().val();
 	v++;
 	$(this).prev().val(v);
     });
-    $('.settings .gear_values .vcontent .content .button.set, .txsettings .gear_values .vcontent .content .button.set, .gxsettings .gear_values .vcontent .content .button.set').off('click').on('click', function() {
+    $('.settings .gear_values .vcontent .content .button.set, .ox2settings .gear_values .vcontent .content .button.set, .txsettings .gear_values .vcontent .content .button.set, .gxsettings .gear_values .vcontent .content .button.set').off('click').on('click', function() {
 	startBlock(lang['L_UPDATE_VALUE']);
 
 	var g = $(this).parent().attr('gear');
@@ -958,6 +1000,19 @@ function updateBattery()
 	$('.info .content .right .right_ver').html(info['REMOTE_V']);
 	$('.info .content .right .right_val').html((parseInt(info['POWER_1']) / 100).toFixed(2) + 'V');
     } else
+    if (device_type == "EDS OX2") {
+	$('.info .content .left .left_ver').html(info['H_Ver']);
+	if (b == 'percent') {
+	    $('.info .content').attr('type', 'percent');
+	    $('.info .content .left .left_val').html(percentage(info['H_POWER']) + '%');
+	} else {
+	    $('.info .content').attr('type', 'volts');
+	    $('.info .content .left .left_val').html((parseInt(info['H_POWER']) / 100).toFixed(2) + 'V');
+	}
+
+	$('.info .content .right .right_ver').html(info['R_Ver']);
+	$('.info .content .right .right_val').html((parseInt(info['R_POWER']) / 100).toFixed(2) + 'V');
+    }
     if (device_type == "EDS TX") {
         $('.info .txcontent .left .left_rver').html(info['H_Ver']);
         $('.info .txcontent .left .left_fver').html(info['Q_Ver']);
@@ -1008,6 +1063,17 @@ function updateBattery()
 	    $(this).attr('type', 'percent');
 	} else {
 	    $('.info .content .left .left_val').html((parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
+	    $(this).attr('type', 'volts');
+	}
+	localStorage.setItem('battery', $(this).attr('type'));
+    });
+    $('.info .ox2content').off('click').on('click', function() {
+	//$('.info .content .left .left_ver').html(info['GEARS_V']);
+	if ($(this).attr('type') == 'volts') {
+	    $('.info .ox2content .left .left_val').html(percentage(parseInt(info['H_POWER'])) + '%');
+	    $(this).attr('type', 'percent');
+	} else {
+	    $('.info .ox2content .left .left_val').html((parseInt(info['H_POWER']) / 100).toFixed(2) + 'V');
 	    $(this).attr('type', 'volts');
 	}
 	localStorage.setItem('battery', $(this).attr('type'));
@@ -1255,7 +1321,7 @@ $(document).ready(function() {
     });
 
     // shift up
-    $('.settings .action_buttons .button.up, .txsettings .action_buttons .button.up, .gxsettings .action_buttons .button.up, .live .action_buttons .button.up').on('click', function() {
+    $('.settings .action_buttons .button.up, .ox2settings .action_buttons .button.up, .txsettings .action_buttons .button.up, .gxsettings .action_buttons .button.up, .live .action_buttons .button.up').on('click', function() {
 	qalert(lang['L_UP_SHIFT']);
 
 	var f = 0x02;
@@ -1265,7 +1331,7 @@ $(document).ready(function() {
 	log("Send: rearLifting -> " + f.toString(16).padStart(2, '0'));
     });
     // shift down
-    $('.settings .action_buttons .button.down, .txsettings .action_buttons .button.down, .gxsettings .action_buttons .button.down, .live .action_buttons .button.down').on('click', function() {
+    $('.settings .action_buttons .button.down, .ox2settings .action_buttons .button.down, .txsettings .action_buttons .button.down, .gxsettings .action_buttons .button.down, .live .action_buttons .button.down').on('click', function() {
 	qalert(lang['L_DOWN_SHIFT']);
 
 	var f = 0x01;
@@ -1314,7 +1380,7 @@ $(document).ready(function() {
     });
 
     // number of gears
-    $('.settings .action_buttons .button.gears select, .txsettings .action_buttons .button.gears select, .gxsettings .action_buttons .button.gears select').on('change', function() {
+    $('.settings .action_buttons .button.gears select, .ox2settings .action_buttons .button.gears select, .txsettings .action_buttons .button.gears select, .gxsettings .action_buttons .button.gears select').on('change', function() {
 	var t = $(this).val();
 	if (t < parseInt(info['NUM']) + 1) {
 	    endBlock();
@@ -1334,7 +1400,7 @@ $(document).ready(function() {
     });
 
     // micro shift up
-    $('.settings .micro .up, .txsettings .micro .up, .gxsettings .micro .up').on('click', function() {
+    $('.settings .micro .up, .ox2settings .micro .up, .txsettings .micro .up, .gxsettings .micro .up').on('click', function() {
 	qalert(lang['L_UP_MICRO_SHIFT']);
 
 	var f = 0x02;
@@ -1344,7 +1410,7 @@ $(document).ready(function() {
 	log("Send: fineTuneGear -> " + f.toString(16).padStart(2, '0'));
     });
     // micro shift down
-    $('.settings .micro .down, .txsettings .micro .down, .gxsettings .micro .down').on('click', function() {
+    $('.settings .micro .down, .ox2settings .micro .down, .txsettings .micro .down, .gxsettings .micro .down').on('click', function() {
 	qalert(lang['L_DOWN_MICRO_SHIFT']);
 
 	var f = 0x01;
@@ -1380,6 +1446,33 @@ $(document).ready(function() {
 
 	all_gears = [];
 	$('.settings .gear_values .vcontent .content input').each(function() {
+	    var g = $(this).parent().attr('gear');
+	    var v = $(this).val();
+
+	    all_gears.push({
+		'gear': g,
+		'value': v
+	    });
+	});
+
+	// start iteration of all_gears
+	var v = all_gears.shift();
+
+	var v2 = (v.value & 0xFF);
+	var v1 = ((v.value >> 8) & 0xFF);
+
+	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setGearUpValue, 0x03, v.gear, v1, v2, 0x00, 0x00 ]);
+	a = setCRC16(a);
+	characteristic_TX.writeValueWithoutResponse(a);
+	log("Send: setGearUpValue -> " + v.gear.toString(16).padStart(2, '0') + ' = ' + v.value);
+
+	ctimeout = setTimeout(timeoutCheck, 1000);
+    });
+    $('.ox2settings .gear_values .vcontent .button.set_all').on('click', function() {
+	startBlock(lang['L_UPDATE_ALL_VALUES']);
+
+	all_gears = [];
+	$('.ox2settings .gear_values .vcontent .content input').each(function() {
 	    var g = $(this).parent().attr('gear');
 	    var v = $(this).val();
 
@@ -1486,7 +1579,7 @@ $(document).ready(function() {
     });
 
     // on/off force gear switch on value set
-    $('.settings .gear_values .vcontent .button.set_move, .txsettings .gear_values .vcontent .button.set_move, .gxsettings .gear_values .vcontent .button.set_move').on('click', function() {
+    $('.settings .gear_values .vcontent .button.set_move, .ox2settings .gear_values .vcontent .button.set_move, .txsettings .gear_values .vcontent .button.set_move, .gxsettings .gear_values .vcontent .button.set_move').on('click', function() {
 	if ($(this).hasClass('selected'))
 	    $(this).removeClass('selected');
 	else
@@ -1520,6 +1613,7 @@ $(document).ready(function() {
 		s[device_type][n]['front'] = r;
 	    }
 	    if (device_type == "EDS GeX") pr = "gx";
+	    if (device_type == "EDS OX2") pr = "ox2";
 
 	    r = [];
 	    $('.' + pr + 'settings .gear_values .vcontent input').each(function() {
@@ -1569,6 +1663,7 @@ $(document).ready(function() {
 		exp.current.front = [];
 	    }
 	    if (device_type == "EDS GeX") pr = "gx";
+	    if (device_type == "EDS OX2") pr = "ox2";
 	    $('.' + pr + 'settings .gear_values .vcontent input').each(function() {
 		var g = $(this).parent().attr('gear');
 		var v = $(this).val();
@@ -1638,6 +1733,9 @@ $(document).ready(function() {
 			    if (device_type == "EDS OX")
 				$('.settings').show();
 			    else
+			    if (device_type == "EDS OX2")
+				$('.ox2settings').show();
+			    else
 			    if (device_type == "EDS TX")
 				$('.txsettings').show();
 			    else
@@ -1650,6 +1748,7 @@ $(document).ready(function() {
 			    show_page = "settings";
 			} else {
 			    $('.settings').hide();
+			    $('.ox2settings').hide();
 			    $('.txsettings').hide();
 			    $('.gxsettings').hide();
 			    $('.live').show();
@@ -1682,6 +1781,7 @@ $(document).ready(function() {
 				    }
 				}
 				if (device_type == "EDS GeX") pr = "gx";
+				if (device_type == "EDS OX2") pr = "ox2";
 				for (var t in g.current.rear) {
 				    $('.' + pr + 'settings .gear_values .vcontent .gear[gear="' + g.current.rear[t].gear + '"] input').val(g.current.rear[t].value);
 				}
@@ -1716,6 +1816,24 @@ $(document).ready(function() {
 	startBlock((f == 0 ? lang['L_NORMAL_BUTTONS'] : lang['L_REVERSED_BUTTONS']));
 
 	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_switchFingerOrder, 0x01, f, 0x00, 0x00 ]);
+	a = setCRC16(a);
+	characteristic_TX.writeValueWithoutResponse(a);
+	log("Send: switchFingerOrder -> " + f.toString(16).padStart(2, '0'));
+
+	ctimeout = setTimeout(timeoutCheck, 1000);
+    });
+    $('.ox2settings .buttons_function .vbutton').on('click', function() {
+	if ($('.ox2settings .buttons_function .vbutton:first-child').hasClass('up')) {
+	    var f1 = 0x02;
+	    var f2 = 0x01;
+	} else {
+	    var f1 = 0x01;
+	    var f2 = 0x02;
+	}
+
+	startBlock((f1 == 0x01 ? lang['L_NORMAL_BUTTONS'] : lang['L_REVERSED_BUTTONS']));
+
+	var a = new Uint8Array([ 0xfe, 0x32, key, cmd_switchFingerOrder, 0x04, 0, f1, 0, f2, 0x00, 0x00 ]);
 	a = setCRC16(a);
 	characteristic_TX.writeValueWithoutResponse(a);
 	log("Send: switchFingerOrder -> " + f.toString(16).padStart(2, '0'));
@@ -1767,7 +1885,7 @@ $(document).ready(function() {
     });
 
     // set race mode
-    $('.settings .buttons_function .button.mode, .txsettings .buttons_function .button.mode, .gxsettings .buttons_function .button.mode').on('click', function() {
+    $('.settings .buttons_function .button.mode, .ox2settings .buttons_function .button.mode, .txsettings .buttons_function .button.mode, .gxsettings .buttons_function .button.mode').on('click', function() {
 	var f = 2;
 	if (!$(this).hasClass('selected')) f = 1;
 
@@ -1788,7 +1906,7 @@ $(document).ready(function() {
     });
 
     // set sleep mode
-    $('.txsettings .buttons_function .button.sleep, .gxsettings .buttons_function .button.sleep').on('click', function() {
+    $('.ox2settings .buttons_function .button.sleep, .txsettings .buttons_function .button.sleep, .gxsettings .buttons_function .button.sleep').on('click', function() {
 	var f = 1;
 	if (!$(this).hasClass('selected')) f = 0;
 
@@ -1863,6 +1981,9 @@ $(document).ready(function() {
 	    if (device_type == "EDS OX")
 		$('.settings').show();
 	    else
+	    if (device_type == "EDS OX2")
+		$('.ox2settings').show();
+	    else
 	    if (device_type == "EDS TX")
 		$('.txsettings').show();
 	    else
@@ -1876,6 +1997,7 @@ $(document).ready(function() {
 	    $('.button_menu').trigger('click');
 	} else {
 	    $('.settings').hide();
+	    $('.ox2settings').hide();
 	    $('.txsettings').hide();
 	    $('.gxsettings').hide();
 	    $('.live').show();
