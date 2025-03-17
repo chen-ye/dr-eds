@@ -1,6 +1,6 @@
 
 # Open source WEB/PWA app
-This repo now contain open source WEB/PWA app for EDS OX EQ/OX YQ/TX/GeX which is hosted at https://dreds.jeckyll.net/.
+This repo now contain open source WEB/PWA app for EDS OX EQ/OX YQ/OX 2.0/TX/GeX which is hosted at https://dreds.jeckyll.net/.
 
 Android APK file can be downloaed from: https://dreds.jeckyll.net/releases/1.0.0.0/drEDS-1.0.0.0.apk (buld from published source trough APK Builder)
 
