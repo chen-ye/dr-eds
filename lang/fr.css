@@ -1,0 +1,45 @@
+
+:root {
+    --lang-current: "actuel";
+    --lang-total: "total";
+
+    --lang-shift: "changement";
+
+    --lang-micro: "micro";
+
+    --lang-gear: "vitesse";
+    --lang-gears: "vitesses";
+
+    --lang-front: "avant";
+    --lang-rear: "arrière";
+    --lang-left: "gauche";
+    --lang-right: "droite";
+
+    --lang-small: "petit";
+    --lang-big: "grand";
+
+    --lang-function: "fonction";
+    --lang-mode: "mode";
+
+    --lang-limit1: "limite 1";
+    --lang-limit2: "limite 2";
+    --lang-limit3: "limite 3";
+    --lang-limit4: "limite 4";
+    --lang-limit5: "limite 5";
+    --lang-limit6: "limite 6";
+
+    --lang-gear1: "vitesse 1";
+    --lang-gear2: "vitesse 2";
+    --lang-gear3: "vitesse 3";
+    --lang-gear4: "vitesse 4";
+    --lang-gear5: "vitesse 5";
+    --lang-gear6: "vitesse 6";
+    --lang-gear7: "vitesse 7";
+    --lang-gear8: "vitesse 8";
+    --lang-gear9: "vitesse 9";
+    --lang-gear10: "vitesse 10";
+    --lang-gear11: "vitesse 11";
+    --lang-gear12: "vitesse 12";
+    --lang-gear13: "vitesse 13";
+    --lang-gear14: "vitesse 14";
+}
