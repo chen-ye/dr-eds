@@ -326,15 +326,16 @@ function handleCharacteristicValueChanged(event)
 
 		ctimeout = setTimeout(timeoutCheck, 1000);
 	    } else {
-		var cg = parseInt($('.settings .action_buttons .button.gear').html());
-		var tg = parseInt($('.settings .action_buttons .button.gears select').val());
+		var prefix = "";
+		if (device_type == "EDS TX") prefix = "tx";
+		if (device_type == "EDS GeX") prefix = "gx";
+		if (device_type == "EDS OX2") prefix = "ox2";
+		var cg = parseInt($('.' + prefix + 'settings .action_buttons .button.gear').html());
+		var tg = parseInt($('.' + prefix + 'settings .action_buttons .button.gears select').val());
 		if ((single_set > 0) && (tg - single_set + 1 == cg)) {
-		    var a1 = $('.settings .gear_values .vcontent .button.set_move').hasClass('selected');
-		    var a2 = $('.txsettings .gear_values .vcontent .button.set_move').hasClass('selected');
-		    var a3 = $('.gxsettings .gear_values .vcontent .button.set_move').hasClass('selected');
-		    var a4 = $('.ox2settings .gear_values .vcontent .button.set_move').hasClass('selected');
+		    var a = $('.' + prefix + 'settings .gear_values .vcontent .button.set_move').hasClass('selected');
 
-		    if (a1 || a2 || a3 || a4) {
+		    if (a) {
 			var f1 = 0x02;
 			var f2 = 0x01;
 			if (cg == tg) {
