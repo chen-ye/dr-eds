@@ -750,7 +750,7 @@ function parsePacket(hex, check_confirm = 0)
 		$('.ox2settings .gear_values .vcontent .content').html('');
 		for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
 		    var r = parseInt(info['TOTAL_CNT']) - t;
-		    $('.ox2settings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['GEARS[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
+		    $('.ox2settings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
 		}
 	    } else
 	    if (device_type == "EDS TX") {
