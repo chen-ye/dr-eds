@@ -1,3 +1,18 @@
+## 3.0.0 (2025-03-17)
+
+### feature (2 changes)
+
+- [french translation - thanks to Kevin BERTIN](https://git.jeckyll.net/published/personal/eds-ox/-/commit/bcf36f047f5d56b05e5d59ba8e0010ef482aa36a)
+- [Initial EDS OX2 support](https://git.jeckyll.net/published/personal/eds-ox/-/commit/a3d61237898691c81a704ced68b9db0028d85069)
+
+### fix (5 changes)
+
+- [better app update - chnages to service worker](https://git.jeckyll.net/published/personal/eds-ox/-/commit/9b9198551fb39b3e1589e621ec724752d5be72f3)
+- [fix OX2 gear values](https://git.jeckyll.net/published/personal/eds-ox/-/commit/3a38774ccd8c21d8d12699d0a5c55583959d7b62)
+- [rework preview gear set, incliding OX2](https://git.jeckyll.net/published/personal/eds-ox/-/commit/2ff30eadb98867edc58fad4771cd338eb3e7222b)
+- [more work for OX2 support](https://git.jeckyll.net/published/personal/eds-ox/-/commit/033d5cd0837147c32a806a3c452a52e25b8a36e5)
+- [fix misspel](https://git.jeckyll.net/published/personal/eds-ox/-/commit/109fc4528afbffbab19f07f8404b245abf3ca7af)
+
 ## 2.0.3 (2025-02-25)
 
 ### sw.js cleanup (1 change)
