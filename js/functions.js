@@ -1001,17 +1001,17 @@ function updateBattery()
 	$('.info .content .right .right_val').html((parseInt(info['POWER_1']) / 100).toFixed(2) + 'V');
     } else
     if (device_type == "EDS OX2") {
-	$('.info .content .left .left_ver').html(info['H_Ver']);
+	$('.info .ox2content .left .left_ver').html(info['H_Ver']);
 	if (b == 'percent') {
-	    $('.info .content').attr('type', 'percent');
-	    $('.info .content .left .left_val').html(percentage(info['H_POWER']) + '%');
+	    $('.info .ox2content').attr('type', 'percent');
+	    $('.info .ox2content .left .left_val').html(percentage(info['H_POWER']) + '%');
 	} else {
-	    $('.info .content').attr('type', 'volts');
-	    $('.info .content .left .left_val').html((parseInt(info['H_POWER']) / 100).toFixed(2) + 'V');
+	    $('.info .ox2content').attr('type', 'volts');
+	    $('.info .ox2content .left .left_val').html((parseInt(info['H_POWER']) / 100).toFixed(2) + 'V');
 	}
 
-	$('.info .content .right .right_ver').html(info['R_Ver']);
-	$('.info .content .right .right_val').html((parseInt(info['R_POWER']) / 100).toFixed(2) + 'V');
+	$('.info .ox2content .right .right_ver').html(info['R_Ver']);
+	$('.info .ox2content .right .right_val').html((parseInt(info['R_POWER']) / 100).toFixed(2) + 'V');
     }
     if (device_type == "EDS TX") {
         $('.info .txcontent .left .left_rver').html(info['H_Ver']);
