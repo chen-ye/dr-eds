@@ -1,5 +1,5 @@
 
-const cacheName = 'drEDS-v11';
+const cacheName = 'drEDS-v15';
 
 const broadcast = new BroadcastChannel('version-channel');
 broadcast.onmessage = (event) => {
@@ -10,11 +10,15 @@ broadcast.onmessage = (event) => {
 
 self.addEventListener('install', (e) => {
     console.log('[Service Worker] install');
+
+    // force new service worker to be used
+    self.skipWaiting();
 });
 
 self.addEventListener('activate', (e) => {
     console.log('[Service Worker] activate');
 
+    // delete old cache
     e.waitUntil(
         caches.keys().then((keyList) => {
 	    return Promise.all(
@@ -27,6 +31,9 @@ self.addEventListener('activate', (e) => {
     	    );
 	}),
     );
+
+    // force new service worker to be used
+    e.waitUntil(clients.claim());
 });
 
 self.addEventListener("fetch", (e) => {
