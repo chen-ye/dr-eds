@@ -29,7 +29,7 @@ You can clone repo and host it yourself or use it from supplied URL.
 - Sleep mode (TX, GeX only - experimental) - official app use `casual mode` - can be turned on or off independent from `race mode`
 - RD protection (TX only - experimental) - when on smallest chain ring don't allow RD to go to two smallest cogs
 - Live view - useful if riding with a phone - display gear, battery and allow shifting
-- Multi language support - EN, BG, ES, DE (translator needed). It will follow your device language and fall back to english if translation is not found or not full.
+- Multi language support - EN, BG, ES, DE, FR (translator needed). It will follow your device language and fall back to english if translation is not found or not full.
 - Preview function - switch gear after RD gear value is set to apply changes
 - Lock screen function - prevent landscape orientation
 - Auto upload debug logs - after double tap on debug logs for copy to clipboard will prompt to upload debug log for future analyzing
