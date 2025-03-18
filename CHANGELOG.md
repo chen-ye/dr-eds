@@ -1,3 +1,9 @@
+## 3.0.2 (2025-03-18)
+
+### fix (1 change)
+
+- [fix live view/settings view for GeX and OX2](https://git.jeckyll.net/published/personal/eds-ox/-/commit/c921bdd76263d042fff916188ce1bf679462c980)
+
 ## 3.0.1 (2025-03-18)
 
 ### fix (1 change)
