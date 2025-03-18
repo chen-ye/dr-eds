@@ -53,9 +53,19 @@ var all_gears = [];
 var qtimeout;
 var ctimeout;
 
-const broadcast = new BroadcastChannel('version-channel');
+const broadcast = new BroadcastChannel('dreds-channel');
 broadcast.onmessage = (event) => {
-    log(event.data.payload);
+    if (event.data && event.data.type == "VERSION")
+	log(event.data.payload);
+    else
+    if (event.data && event.data.type == "CACHE")
+	for (var t in event.data.payload)
+	    log(event.data.payload[t]);
+    else
+    if (event.data && event.data.type == "ACTIVATE") {
+	if (event.data.payload == "RELOAD")
+	    window.location.reload();
+    }
 };
 
 function log(s)
@@ -1229,6 +1239,9 @@ $(document).ready(function() {
 	broadcast.postMessage({
 	    type: 'VERSION',
 	});
+	/*broadcast.postMessage({
+	    type: 'CACHE',
+	});*/
 	log('Sorry, no web bluetooth support');
 	log('Try to install Chrome browser on your device first and try this app again');
 	log('Running on: ' + navigator.userAgent + ' | ' + navigator.appCodeName + ' | ' + navigator.appName + ' | ' + navigator.appVersion + ' | ' + navigator.platform);

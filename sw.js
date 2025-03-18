@@ -1,10 +1,27 @@
 
-const cacheName = 'drEDS-v16';
+const cacheName = 'drEDS-v17';
 
-const broadcast = new BroadcastChannel('version-channel');
+const broadcast = new BroadcastChannel('dreds-channel');
 broadcast.onmessage = (event) => {
     if (event.data && event.data.type === 'VERSION') {
-	broadcast.postMessage({ payload: cacheName });
+	console.log('[Service Worker] get version');
+	broadcast.postMessage({ type: event.data.type, payload: cacheName });
+    } else
+    if (event.data && event.data.type === "CACHE") {
+	console.log('[Service Worker] get cache');
+	var url = [];
+	caches.open(cacheName).then(function (cache) {
+	    cache.keys().then(function(keys) {
+		return Promise.all(
+                    keys.map(function(k) {
+                	url.push(k.url);
+                	return k.url;
+		    })
+                )
+            }).then(function(u) {
+        	broadcast.postMessage({ type: event.data.type, payload: url });
+	    })
+	});
     }
 };
 
@@ -34,6 +51,9 @@ self.addEventListener('activate', (e) => {
 
     // force new service worker to be used
     e.waitUntil(clients.claim());
+
+    // notify app to reload itself to cache files
+    broadcast.postMessage({ type: "ACTIVATE", payload: "RELOAD" });
 });
 
 self.addEventListener("fetch", (e) => {
@@ -47,8 +67,10 @@ self.addEventListener("fetch", (e) => {
     e.respondWith((async () => {
 	// we got item in cache
 	const r = await caches.match(e.request);
-	console.log(`[Service Worker] get cached resource: ${e.request.url}`);
-	if (r) return r;
+	if (r) {
+	    console.log(`[Service Worker] get cached resource: ${e.request.url}`);
+	    return r;
+	}
 
 	// not in cache
 	const response = await fetch(e.request);
@@ -57,5 +79,5 @@ self.addEventListener("fetch", (e) => {
 	if (e.request.url.split(/[\\/]/).pop() != "sw.js")
 	    cache.put(e.request, response.clone());
 	return response;
-    })());
+    }) ());
 });
