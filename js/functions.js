@@ -711,6 +711,8 @@ function parsePacket(hex, check_confirm = 0)
 	    } else {
 		$('.settings').hide();
 		$('.txsettings').hide();
+		$('.gxsettings').hide();
+		$('.ox2settings').hide();
 		$('.live').show();
 		$('.info').addClass('big');
 		$('.button_page').removeClass('icon-bike').addClass('icon-wrench');
