@@ -1,3 +1,9 @@
+## 3.0.1 (2025-03-18)
+
+### fix (1 change)
+
+- [better ws update and cache](https://git.jeckyll.net/published/personal/eds-ox/-/commit/e30bef6892fbf1d76167a4bcef416ac86738bf7b)
+
 ## 3.0.0 (2025-03-17)
 
 ### feature (2 changes)
