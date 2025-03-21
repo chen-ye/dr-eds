@@ -52,6 +52,7 @@ var raw_info = [];
 var all_gears = [];
 var qtimeout;
 var ctimeout;
+var _localStorage = !!window.localStorage && $.isFunction(localStorage.getItem) && $.isFunction(localStorage.setItem) && $.isFunction(localStorage.removeItem);
 
 const broadcast = new BroadcastChannel('dreds-channel');
 broadcast.onmessage = (event) => {
@@ -96,12 +97,48 @@ function log(s)
 
 function _setItem(item, value)
 {
-    return localStorage.setItem(item, value);
+    if (_localStorage)
+	return localStorage.setItem(item, value);
+    else {
+	var expires = (new Date(Date.now() + (365 * 24 * 60 * 60) * 1000)).toUTCString();
+
+	var c = document.cookie.split(";");
+	if (c[0].trim() != "") {
+	    var c = c[0].trim().split('=');
+	    if (c[0] == "storage") {
+		var c = JSON.parse(c[1]);
+		c[item] = value;
+	    }
+	} else {
+	    var c = { item: value };
+	}
+
+	document.cookie = "storage=" + JSON.stringify(c) + '; expires=' + expires;
+
+	return true;
+    }
 }
 
 function _getItem(item)
 {
-    return localStorage.getItem(item);
+    if (_localStorage)
+	return localStorage.getItem(item);
+    else {
+	var c = document.cookie.split(";");
+	if (c[0].trim() != "") {
+	    var c = c[0].trim().split('=');
+	    if (c[0] == "storage") {
+		var c = JSON.parse(c[1]);
+		var expires = (new Date(Date.now() + (365 * 24 * 60 * 60) * 1000)).toUTCString();
+		document.cookie = "storage=" + JSON.stringify(c) + '; expires=' + expires;
+
+		if (c.hasOwnProperty(item)) {
+		    return c[item];
+		} else
+		    return null;
+	    }
+	}
+    }
 }
 
 function setup()
