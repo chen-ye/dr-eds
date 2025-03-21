@@ -94,6 +94,16 @@ function log(s)
     }
 }
 
+function _setItem(item, value)
+{
+    return localStorage.setItem(item, value);
+}
+
+function _getItem(item)
+{
+    return localStorage.getItem(item);
+}
+
 function setup()
 {
     $('.settings').hide();
@@ -690,7 +700,7 @@ function parsePacket(hex, check_confirm = 0)
 	    $('.button_export').show();
 	    $('.button_import').show();
 
-	    show_page = localStorage.getItem('show_page');
+	    show_page = _getItem('show_page');
 	    // set show_page by default
 	    if (show_page == null) show_page = 'settings';
 	    if (show_page == 'settings') {
@@ -884,7 +894,7 @@ function timeoutCheck()
 function buildPresets()
 {
     try {
-	var gears = JSON.parse(localStorage.getItem('gears'));
+	var gears = JSON.parse(_getItem('gears'));
     } catch(error) {
 	gears = {};
     }
@@ -903,7 +913,7 @@ function buildPresets()
 
     $('.' + pr + 'settings .gear_values .presets .preset').off('click').on('click', function() {
 	try {
-	    var a = JSON.parse(localStorage.getItem('gears'));
+	    var a = JSON.parse(_getItem('gears'));
 	    if (a[device_type] != null) {
 		for (var t in a[device_type][$(this).attr('preset')]['rear'])
 		{
@@ -924,11 +934,11 @@ function buildPresets()
 	var pname =  $(this).attr('preset');
 	if (confirm(lang['L_PRESET_CONFIRM_DELETE'].replace('%s', pname))) {
 	    try {
-		var a = JSON.parse(localStorage.getItem('gears'));
+		var a = JSON.parse(_getItem('gears'));
 		if (a[device_type] != null)
 		    delete a[device_type][$(this).attr('preset')];
 
-		localStorage.setItem('gears', JSON.stringify(a));
+		_setItem('gears', JSON.stringify(a));
 
 		buildPresets();
 
@@ -999,7 +1009,7 @@ function bindActionButtons()
 
 function updateBattery()
 {
-    var b = localStorage.getItem('battery');
+    var b = _getItem('battery');
     if (device_type == "EDS OX") {
 	$('.info .content .left .left_ver').html(info['GEARS_V']);
 	if (b == 'percent') {
@@ -1040,7 +1050,7 @@ function updateBattery()
 	    $('.info .txcontent .left .left_fval').html((parseInt(info['Q_POWER']) / 100).toFixed(2) + 'V');
 	    $('.info .txcontent .left .left_rval').html((parseInt(info['H_POWER']) / 100).toFixed(2) + 'V');
 
-	    if (b == null) localStorage.setItem('battery', 'volts');
+	    if (b == null) _setItem('battery', 'volts');
 	}
 
 	$('.info .txcontent .right .right_lver').html(info['L_Ver']);
@@ -1059,7 +1069,7 @@ function updateBattery()
 
 	    $('.info .gxcontent .left .left_rval').html((parseInt(info['H_POWER']) / 100).toFixed(2) + 'V');
 
-	    if (b == null) localStorage.setItem('battery', 'volts');
+	    if (b == null) _setItem('battery', 'volts');
 	}
 
 	$('.info .gxcontent .right .right_lver').html(info['L_Ver']);
@@ -1078,7 +1088,7 @@ function updateBattery()
 	    $('.info .content .left .left_val').html((parseInt(info['POWER_2']) / 100).toFixed(2) + 'V');
 	    $(this).attr('type', 'volts');
 	}
-	localStorage.setItem('battery', $(this).attr('type'));
+	_setItem('battery', $(this).attr('type'));
     });
     $('.info .ox2content').off('click').on('click', function() {
 	//$('.info .content .left .left_ver').html(info['GEARS_V']);
@@ -1089,7 +1099,7 @@ function updateBattery()
 	    $('.info .ox2content .left .left_val').html((parseInt(info['H_POWER']) / 100).toFixed(2) + 'V');
 	    $(this).attr('type', 'volts');
 	}
-	localStorage.setItem('battery', $(this).attr('type'));
+	_setItem('battery', $(this).attr('type'));
     });
     $('.info .txcontent').off('click').on('click', function() {
 	if ($(this).attr('type') == 'volts') {
@@ -1101,7 +1111,7 @@ function updateBattery()
 	    $('.info .txcontent .left .left_rval').html((parseInt(info['H_POWER']) / 100).toFixed(2) + 'V');
 	    $(this).attr('type', 'volts');
 	}
-	localStorage.setItem('battery', $(this).attr('type'));
+	_setItem('battery', $(this).attr('type'));
     });
     $('.info .gxcontent').off('click').on('click', function() {
 	if ($(this).attr('type') == 'volts') {
@@ -1111,7 +1121,7 @@ function updateBattery()
 	    $('.info .gxcontent .left .left_rval').html((parseInt(info['H_POWER']) / 100).toFixed(2) + 'V');
 	    $(this).attr('type', 'volts');
 	}
-	localStorage.setItem('battery', $(this).attr('type'));
+	_setItem('battery', $(this).attr('type'));
     });
 }
 
@@ -1224,7 +1234,7 @@ $(document).ready(function() {
     });
 
     try {
-	var z = JSON.parse(localStorage.getItem('zoom'));
+	var z = JSON.parse(_getItem('zoom'));
 	document.documentElement.style.setProperty('--font-size-info', z.info);
 	document.documentElement.style.setProperty('--font-size-live', z.live);
 	document.documentElement.style.setProperty('--font-size-settings', z.settings);
@@ -1232,7 +1242,7 @@ $(document).ready(function() {
 	;;;
     }
 
-    if (parseInt(localStorage.getItem('lock')) == 1) {
+    if (parseInt(_getItem('lock')) == 1) {
 	screen.orientation.lock("portrait");
 	$('.menus .bmenus .button_lock_screen').addClass('selected');
     }
@@ -1263,7 +1273,7 @@ $(document).ready(function() {
 	}
     });
 
-    show_debug = localStorage.getItem('show_debug');
+    show_debug = _getItem('show_debug');
     // set show_debug by default
     if (show_debug == null) show_debug = 1;
     if (show_debug == 1) {
@@ -1607,7 +1617,7 @@ $(document).ready(function() {
     $('.gear_values .button.save').on('click', function() {
 	var n = prompt(lang['L_PROMPT_NAME_PRESET']);
 	if ((n != null) && (n != "")) {
-	    var s = localStorage.getItem('gears');
+	    var s = _getItem('gears');
 	    if (s == null) s = {}; else s = JSON.parse(s);
 	    if (s[device_type] == null) s[device_type] = {};
 
@@ -1643,7 +1653,7 @@ $(document).ready(function() {
 	    });
 	    s[device_type][n]['rear'] = r;
 
-	    localStorage.setItem('gears', JSON.stringify(s));
+	    _setItem('gears', JSON.stringify(s));
 
 	    buildPresets();
 	}
@@ -1666,8 +1676,8 @@ $(document).ready(function() {
 	    var exp = {
 		'debug': $('.button_debug').hasClass('selected'),
 		'page': $('.button_page').hasClass('icon-wrench') ? "live" : "settings",
-		'battery': localStorage.getItem('battery'),
-		'lock': localStorage.getItem('lock'),
+		'battery': _getItem('battery'),
+		'lock': _getItem('lock'),
 		'current': {
 		    'device': device_type,
 		    'rear': []
@@ -1699,7 +1709,7 @@ $(document).ready(function() {
 		});
 	    });
 
-	    var gears = localStorage.getItem('gears');
+	    var gears = _getItem('gears');
 	    if (gears != null)
 		exp.gears = JSON.parse(gears);
 
@@ -1737,12 +1747,12 @@ $(document).ready(function() {
 			    $('.debug').html(debug_log.join("\n")).show().scrollTop($('.debug').prop("scrollHeight"));
 			    $('body').addClass('logs');
 			    $('.button_debug').addClass('selected');
-			    localStorage.setItem('show_debug', 1);
+			    _setItem('show_debug', 1);
 			} else {
 			    $('.debug').hide();
 			    $('body').removeClass('logs');
 			    $('.button_debug').removeClass('selected');
-			    localStorage.setItem('show_debug', 0);
+			    _setItem('show_debug', 0);
 			}
 		    if (g.hasOwnProperty('page'))
 			if (g.page == "settings") {
@@ -1760,7 +1770,7 @@ $(document).ready(function() {
 			    $('.live').hide();
 			    $('.info').removeClass('big');
 			    $('.button_page').removeClass('icon-wrench').addClass('icon-bike');
-			    localStorage.setItem('show_page', "settings");
+			    _setItem('show_page', "settings");
 			    show_page = "settings";
 			} else {
 			    $('.settings').hide();
@@ -1770,16 +1780,16 @@ $(document).ready(function() {
 			    $('.live').show();
 			    $('.info').addClass('big');
 			    $('.button_page').removeClass('icon-bike').addClass('icon-wrench');
-			    localStorage.setItem('show_page', "live");
+			    _setItem('show_page', "live");
 			    show_page = "live";
 			}
 		    if (g.hasOwnProperty('battery')) {
-			localStorage.setItem('battery', g.battery);
+			_setItem('battery', g.battery);
 			updateBattery();
 		    }
 
 		    if (g.hasOwnProperty('lock')) {
-			localStorage.setItem('lock', g.lock);
+			_setItem('lock', g.lock);
 			if (parseInt(g.lock) == 1) {
 			    screen.orientation.lock("portrait");
 			    $('.menus .bmenus .button_lock_screen').addClass('selected');
@@ -1807,7 +1817,7 @@ $(document).ready(function() {
 			}
 		    }
 		    if (g.hasOwnProperty('gears')) {
-			localStorage.setItem('gears', JSON.stringify(g.gears));
+			_setItem('gears', JSON.stringify(g.gears));
 		    }
 
 		    buildPresets();
@@ -1969,13 +1979,13 @@ $(document).ready(function() {
 	    $('.debug').hide();
 	    $('body').removeClass('logs');
 	    $(this).removeClass('selected');
-	    localStorage.setItem('show_debug', 0);
+	    _setItem('show_debug', 0);
 	    $('.button_menu').trigger('click');
 	} else {
 	    $('.debug').html(debug_log.join("\n")).show().scrollTop($('.debug').prop("scrollHeight"));
 	    $('body').addClass('logs');
 	    $(this).addClass('selected');
-	    localStorage.setItem('show_debug', 1);
+	    _setItem('show_debug', 1);
 	    $('.button_menu').trigger('click');
 	}
     });
@@ -2008,7 +2018,7 @@ $(document).ready(function() {
 	    $('.live').hide();
 	    $('.info').removeClass('big');
 	    $(this).removeClass('icon-wrench').addClass('icon-bike');
-	    localStorage.setItem('show_page', 'settings');
+	    _setItem('show_page', 'settings');
 	    show_page = "settings";
 	    $('.button_menu').trigger('click');
 	} else {
@@ -2019,7 +2029,7 @@ $(document).ready(function() {
 	    $('.live').show();
 	    $('.info').addClass('big');
 	    $(this).removeClass('icon-bike').addClass('icon-wrench');
-	    localStorage.setItem('show_page', 'live');
+	    _setItem('show_page', 'live');
 	    show_page = "live";
 	    $('.button_menu').trigger('click');
 	}
@@ -2055,7 +2065,7 @@ $(document).ready(function() {
     // zoom
     $('.button_zoom_in').on('click', function() {
 	try {
-	    var z = JSON.parse(localStorage.getItem('zoom'));
+	    var z = JSON.parse(_getItem('zoom'));
 	} catch(error) {
 	    z = {
 		'info': '0.8em',
@@ -2079,11 +2089,11 @@ $(document).ready(function() {
 	    document.documentElement.style.setProperty('--font-size-settings', a + 'em');
 	    z.settings = a + 'em';
 	}
-	localStorage.setItem('zoom', JSON.stringify(z));
+	_setItem('zoom', JSON.stringify(z));
     });
     $('.button_zoom_out').on('click', function() {
 	try {
-	    z = JSON.parse(localStorage.getItem('zoom'));
+	    z = JSON.parse(_getItem('zoom'));
 	} catch(error) {
 	    z = {
 		'info': '0.8em',
@@ -2107,7 +2117,7 @@ $(document).ready(function() {
 	    document.documentElement.style.setProperty('--font-size-settings', a + 'em');
 	    z.settings = a + 'em';
 	}
-	localStorage.setItem('zoom', JSON.stringify(z));
+	_setItem('zoom', JSON.stringify(z));
     });
 
     // lock screen orientation
@@ -2116,12 +2126,12 @@ $(document).ready(function() {
 	    $(this).removeClass('selected');
 
 	    screen.orientation.unlock();
-	    localStorage.setItem('lock', 0);
+	    _setItem('lock', 0);
 	} else {
 	    $(this).addClass('selected');
 
 	    screen.orientation.lock("portrait");
-	    localStorage.setItem('lock', 1);
+	    _setItem('lock', 1);
 	}
 
 	$('.button_menu').removeClass('selected');
