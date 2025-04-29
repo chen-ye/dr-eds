@@ -1,5 +1,10 @@
+## 3.0.4 (2025-04-29)
+
+### fix (1 change)
+
+- [fix RD protection command causing app to freeze](https://git.jeckyll.net/published/personal/eds-ox/-/commit/5eb96a036927444b24d76d1d8b67c0ca8948cf17)
+
 ## 3.0.3 (2025-04-29)
- (2025-04-29)
 
 ### fix (1 change)
 
