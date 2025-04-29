@@ -1998,7 +1998,7 @@ $(document).ready(function() {
 	) {
 	    startBlock(lang['L_RD_PROTECT_MODE'].replace("%s", (f == 0 ? lang['L_RD_PROTECT_OFF'] : lang['L_RD_PROTECT_ON'])));
 
-	    var a = new Uint8Array([ 0xfe, 0x32, key, backSetting2p, 0x08, f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ]);
+	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_backSetting2p, 0x08, f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ]);
 	    a = setCRC16(a);
 	    characteristic_TX.writeValueWithoutResponse(a);
 	    log("Send: backSetting2p -> " + f.toString(16).padStart(2, '0'));
