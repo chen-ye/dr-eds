@@ -874,27 +874,27 @@ function parsePacket(hex, check_confirm = 0)
 		}
 	    } else
 	    if (device_type == "EDS TX") {
-		if (parseInt(info['KeySwitch'].substring(0, 1)) == 1) $('.txsettings .buttons_function .vbutton.small select').val(lang['L_UP'].toLowerCase());
-		if (parseInt(info['KeySwitch'].substring(0, 1)) == 2) $('.txsettings .buttons_function .vbutton.small select').val(lang['L_DOWN'].toLowerCase());
-		if (parseInt(info['KeySwitch'].substring(0, 1)) == 3) $('.txsettings .buttons_function .vbutton.small select').val(lang['L_FRONT'].toLowerCase());
+		if (parseInt(info['KeySwitch'].substring(0, 1)) == 1) $('.txsettings .buttons_function .vbutton.small select').val('up');//lang['L_UP'].toLowerCase()
+		if (parseInt(info['KeySwitch'].substring(0, 1)) == 2) $('.txsettings .buttons_function .vbutton.small select').val('down');//lang['L_DOWN'].toLowerCase()
+		if (parseInt(info['KeySwitch'].substring(0, 1)) == 3) $('.txsettings .buttons_function .vbutton.small select').val('front');//lang['L_FRONT'].toLowerCase()
 
-		if (parseInt(info['KeySwitch'].substring(1, 2)) == 1) $('.txsettings .buttons_function .vbutton.big select').val(lang['L_UP'].toLowerCase());
-		if (parseInt(info['KeySwitch'].substring(1, 2)) == 2) $('.txsettings .buttons_function .vbutton.big select').val(lang['L_DOWN'].toLowerCase());
-		if (parseInt(info['KeySwitch'].substring(1, 2)) == 3) $('.txsettings .buttons_function .vbutton.big select').val(lang['L_FRONT'].toLowerCase());
+		if (parseInt(info['KeySwitch'].substring(1, 2)) == 1) $('.txsettings .buttons_function .vbutton.big select').val('up');//lang['L_UP'].toLowerCase()
+		if (parseInt(info['KeySwitch'].substring(1, 2)) == 2) $('.txsettings .buttons_function .vbutton.big select').val('down');//lang['L_DOWN'].toLowerCase()
+		if (parseInt(info['KeySwitch'].substring(1, 2)) == 3) $('.txsettings .buttons_function .vbutton.big select').val('front');//lang['L_FRONT'].toLowerCase()
 
-		if (parseInt(info['KeySwitch'].substring(2, 3)) == 1) $('.txsettings .buttons_function .button.single select').val(lang['L_UP'].toLowerCase());
-		if (parseInt(info['KeySwitch'].substring(2, 3)) == 2) $('.txsettings .buttons_function .button.single select').val(lang['L_DOWN'].toLowerCase());
-		if (parseInt(info['KeySwitch'].substring(2, 3)) == 3) $('.txsettings .buttons_function .button.single select').val(lang['L_FRONT'].toLowerCase());
+		if (parseInt(info['KeySwitch'].substring(2, 3)) == 1) $('.txsettings .buttons_function .button.single select').val('up');//lang['L_UP'].toLowerCase()
+		if (parseInt(info['KeySwitch'].substring(2, 3)) == 2) $('.txsettings .buttons_function .button.single select').val('down');//lang['L_DOWN'].toLowerCase()
+		if (parseInt(info['KeySwitch'].substring(2, 3)) == 3) $('.txsettings .buttons_function .button.single select').val('front');//lang['L_FRONT'].toLowerCase()
 	    } else
 	    if (device_type == "EDS GeX") {
-		if (parseInt(info['KeySwitch'].substring(0, 1)) == 1) $('.gxsettings .buttons_function .vbutton.small select').val(lang['L_UP'].toLowerCase());
-		if (parseInt(info['KeySwitch'].substring(0, 1)) == 2) $('.gxsettings .buttons_function .vbutton.small select').val(lang['L_DOWN'].toLowerCase());
+		if (parseInt(info['KeySwitch'].substring(0, 1)) == 1) $('.gxsettings .buttons_function .vbutton.small select').val('up');//lang['L_UP'].toLowerCase()
+		if (parseInt(info['KeySwitch'].substring(0, 1)) == 2) $('.gxsettings .buttons_function .vbutton.small select').val('down');//lang['L_DOWN'].toLowerCase()
 
-		if (parseInt(info['KeySwitch'].substring(1, 2)) == 1) $('.gxsettings .buttons_function .vbutton.big select').val(lang['L_UP'].toLowerCase());
-		if (parseInt(info['KeySwitch'].substring(1, 2)) == 2) $('.gxsettings .buttons_function .vbutton.big select').val(lang['L_DOWN'].toLowerCase());
+		if (parseInt(info['KeySwitch'].substring(1, 2)) == 1) $('.gxsettings .buttons_function .vbutton.big select').val('up');//lang['L_UP'].toLowerCase()
+		if (parseInt(info['KeySwitch'].substring(1, 2)) == 2) $('.gxsettings .buttons_function .vbutton.big select').val('down');//lang['L_DOWN'].toLowerCase()
 
-		if (parseInt(info['KeySwitch'].substring(2, 3)) == 1) $('.gxsettings .buttons_function .button.single select').val(lang['L_UP'].toLowerCase());
-		if (parseInt(info['KeySwitch'].substring(2, 3)) == 2) $('.gxsettings .buttons_function .button.single select').val(lang['L_DOWN'].toLowerCase());
+		if (parseInt(info['KeySwitch'].substring(2, 3)) == 1) $('.gxsettings .buttons_function .button.single select').val('up');//lang['L_UP'].toLowerCase()
+		if (parseInt(info['KeySwitch'].substring(2, 3)) == 2) $('.gxsettings .buttons_function .button.single select').val('down');//lang['L_DOWN'].toLowerCase()
 	    }
 
 	    if ((device_type == "EDS TX") || (device_type == "EDS GeX") || (device_type == "EDS OX2")) {
@@ -930,11 +930,8 @@ function timeoutCheck()
 
 function buildPresets()
 {
-    try {
-	var gears = JSON.parse(_getItem('gears'));
-    } catch(error) {
-	gears = {};
-    }
+    var gears = JSON.parse(_getItem('gears'));
+    if (gears == null) gears = {};
 
     if (gears[device_type] == null) return;
 
