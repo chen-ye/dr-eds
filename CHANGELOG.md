@@ -1,3 +1,15 @@
+## 3.0.3 (2025-04-29)
+ (2025-04-29)
+
+### fix (1 change)
+
+- [fix wrong display of buttons assignments and modes buttons](https://git.jeckyll.net/published/personal/eds-ox/-/commit/6f9411e8cc0926e18da7d8c046c1d315a2bc3842)
+
+### feature (2 changes)
+
+- [use cookie to store data when localStorage is not available](https://git.jeckyll.net/published/personal/eds-ox/-/commit/d1d972f526627c9a3ef051f31525cc5322696f9c)
+- [localStorage wrapper, so we can use storage in cookie insted of localStorage...](https://git.jeckyll.net/published/personal/eds-ox/-/commit/418d9dd4e6f0694d5fe5e8103551a2ed36c3cdd2)
+
 ## 3.0.2 (2025-03-18)
 
 ### fix (1 change)
