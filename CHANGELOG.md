@@ -1,3 +1,10 @@
+## 3.0.5
+ (2025-05-30)
+
+### fix (1 change)
+
+- [fix button functins](https://git.jeckyll.net/published/personal/eds-ox/-/commit/e4b76808fd5b5ed3e9aebca89e12a3070df115d8)
+
 ## 3.0.4 (2025-04-29)
 
 ### fix (1 change)
