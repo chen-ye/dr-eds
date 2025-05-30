@@ -1,5 +1,5 @@
 
-const cacheName = 'drEDS-v26';
+const cacheName = 'drEDS-v31';
 
 const broadcast = new BroadcastChannel('dreds-channel');
 broadcast.onmessage = (event) => {

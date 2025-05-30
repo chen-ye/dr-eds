@@ -582,6 +582,21 @@ function handleCharacteristicValueChanged(event)
 	if (r.payload[0] == 0x00)
 	{
 	    clearTimeout(ctimeout);
+
+	    if ($('.ox2settings .buttons_function .button.sleep').hasClass('selected'))
+		$('.ox2settings .buttons_function .button.sleep').removeClass('selected');
+	    else
+		$('.ox2settings .buttons_function .button.sleep').addClass('selected');
+
+	    if ($('.txsettings .buttons_function .button.sleep').hasClass('selected'))
+		$('.txsettings .buttons_function .button.sleep').removeClass('selected');
+	    else
+		$('.txsettings .buttons_function .button.sleep').addClass('selected');
+
+	    if ($('.gxsettings .buttons_function .button.sleep').hasClass('selected'))
+		$('.gxsettings .buttons_function .button.sleep').removeClass('selected');
+	    else
+		$('.gxsettings .buttons_function .button.sleep').addClass('selected');
 	} else {
 	    error(lang['L_COMMAND_FAILED']);
 	}
@@ -605,6 +620,11 @@ function handleCharacteristicValueChanged(event)
 	if (r.payload[0] == 0x00)
 	{
 	    clearTimeout(ctimeout);
+
+	    if ($('.txsettings .buttons_function .button.rdprotect').hasClass('selected'))
+		$('.txsettings .buttons_function .button.rdprotect').removeClass('selected');
+	    else
+		$('.txsettings .buttons_function .button.rdprotect').addClass('selected');
 	} else {
 	    error(lang['L_COMMAND_FAILED']);
 	}
@@ -1901,17 +1921,17 @@ $(document).ready(function() {
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
     $('.txsettings .buttons_function select').on('change', function() {
-	var f1 = $('.txsettings .buttons_function select[button="big"]').val();
-	if (f1 == "up") f1 = 2;
-	if (f1 == "down") f1 = 1;
+	var f1 = $('.txsettings .buttons_function select[button="small"]').val();
+	if (f1 == "up") f1 = 1;
+	if (f1 == "down") f1 = 2;
 	if (f1 == "front") f1 = 3;
-	var f2 = $('.txsettings .buttons_function select[button="small"]').val();
-	if (f2 == "up") f2 = 2;
-	if (f2 == "down") f2 = 1;
+	var f2 = $('.txsettings .buttons_function select[button="big"]').val();
+	if (f2 == "up") f2 = 1;
+	if (f2 == "down") f2 = 2;
 	if (f2 == "front") f2 = 3;
 	var f3 = $('.txsettings .buttons_function select[button="single"]').val();
-	if (f3 == "up") f3 = 2;
-	if (f3 == "down") f3 = 1;
+	if (f3 == "up") f3 = 1;
+	if (f3 == "down") f3 = 2;
 	if (f3 == "front") f3 = 3;
 
 	startBlock(lang['L_SET_BUTTON_COMMANDS']);
@@ -1924,15 +1944,15 @@ $(document).ready(function() {
 	ctimeout = setTimeout(timeoutCheck, 1000);
     });
     $('.gxsettings .buttons_function select').on('change', function() {
-	var f1 = $('.gxsettings .buttons_function select[button="big"]').val();
-	if (f1 == "up") f1 = 2;
-	if (f1 == "down") f1 = 1;
-	var f2 = $('.gxsettings .buttons_function select[button="small"]').val();
-	if (f2 == "up") f2 = 2;
-	if (f2 == "down") f2 = 1;
+	var f1 = $('.gxsettings .buttons_function select[button="small"]').val();
+	if (f1 == "up") f1 = 1;
+	if (f1 == "down") f1 = 2;
+	var f2 = $('.gxsettings .buttons_function select[button="big"]').val();
+	if (f2 == "up") f2 = 1;
+	if (f2 == "down") f2 = 2;
 	var f3 = $('.gxsettings .buttons_function select[button="single"]').val();
-	if (f3 == "up") f3 = 2;
-	if (f3 == "down") f3 = 1;
+	if (f3 == "up") f3 = 1;
+	if (f3 == "down") f3 = 2;
 
 	startBlock(lang['L_SET_BUTTON_COMMANDS']);
 
@@ -1989,12 +2009,12 @@ $(document).ready(function() {
     // set RD protection
     $('.txsettings .buttons_function .button.rdprotect').on('click', function() {
 	var f = 1;
-	if (!$(this).hasClass('selected')) f = 0;
+	if ($(this).hasClass('selected')) f = 0;
 
 	if (
-	    ((f == 1) && (confirm(lang['L_WARNING_RD_PROTECT'])))
+	    ((f == 0) && (confirm(lang['L_WARNING_RD_PROTECT'])))
 	    ||
-	    (f == 0)
+	    (f == 1)
 	) {
 	    startBlock(lang['L_RD_PROTECT_MODE'].replace("%s", (f == 0 ? lang['L_RD_PROTECT_OFF'] : lang['L_RD_PROTECT_ON'])));
 
