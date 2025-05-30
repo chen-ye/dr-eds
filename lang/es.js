@@ -44,7 +44,7 @@ lang['L_SET_BUTTON_COMMANDS'] = "Configurar comandos de botón";
 lang['L_PRESET_LOADED'] = 'Valores de marcha cargados desde preset"%s"<br />Haga clic en «Ajustar Todos» para cargar a continuación a RD';
 lang['L_PRESET_CONFIRM_DELETE'] = '¿Eliminar el valor predeterminado "%s"?';
 lang['L_PRESET_DELETED'] = 'Predeterminado "%s" eliminado';
-lang['L_PROMPT_NAME_PRESET'] = "Ingrese el nombre del valor preestablecido de los engranajes (solo letras y números):";
+lang['L_PROMPT_NAME_PRESET'] = 'Ingrese el nombre del valor preestablecido de los engranajes (solo letras y números):<br /><br /><input type="text" class="preset" value="" />';
 lang['L_PROMPT_SAVE_PRESET'] = '¿Exportar configuraciones, valores y valores preestablecidos al archivo "%s"?';
 
 lang['L_EXPORT_SUCCESS' ] = "Configuración, valores y ajustes preestablecidos guardados";

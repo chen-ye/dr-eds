@@ -49,6 +49,8 @@
 
 	--debug-font: "Courier New", monospace;
 
+	--dialog-border: 1px solid purple;
+
 	.live .gear {
 	    color: var(--text-color);
 	}
@@ -843,4 +845,86 @@ select {
     right: 0;
     z-index: 1;
     background: rgba(0, 0, 0, 0.3);
+}
+
+#dim {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    z-index: 1001;
+    display: table;
+}
+#dimm {
+    display: table-cell;
+    vertical-align: middle;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 499;
+}
+
+#dialog_popup {
+    z-index: 500;
+    width: 80%;
+    max-width: 60em;
+    min-height: 5em;
+    height: auto;
+    overflow: hidden;
+    background: var(--background-color);
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    margin: 0 auto;
+    color: var(--text-color);
+    border: var(--dialog-border);
+}
+#dialog_popup .in {
+    margin: 1em 2em 1.3em 2em;
+}
+#dialog_popup .text {
+    width: 100%;
+    font-size: 1em;
+    font-weight: 300;
+    text-align: center;
+    padding-top: 0.5em;
+}
+#dialog_popup .fields {
+    margin-top: 1em;
+    display: none;
+}
+#dialog_popup .buttons {
+    width: 90%;
+    margin: 1em auto 0 auto;
+    font-size: 1.1em;
+    font-weight: 300;
+    overflow: hidden;
+}
+#dialog_popup .buttons a {
+    display: block;
+    float: left;
+    text-decoration: none;
+    color: var(--main-color)
+}
+#dialog_popup .buttons a:last-child {
+    float: right;
+}
+#dialog_popup input[type="text"] {
+    border: 1px solid var(--main-color);
+    border-radius: 2em;
+    font-size: 1rem;
+    font-family: var(--main-font);
+    padding: 0.7em 1em;
+    box-sizing: border-box;
+    /*width: 100%;*/
+    margin: 0.5em 0;
+    color: var(--text-color);
+}
+
+.prompt_save_options {
+    width: 70%;
+    margin: 0 auto;
+    list-style: none;
+}
+.prompt_save_options li {
+    margin: 0.2em 0;
 }

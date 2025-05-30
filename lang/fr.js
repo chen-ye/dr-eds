@@ -47,7 +47,7 @@ lang['L_SET_BUTTON_COMMANDS'] = "Définir les commandes des boutons";
 lang['L_PRESET_LOADED'] = 'Valeurs de vitesse chargées depuis le préréglage "%s"<br />Cliquez sur "Tout définir" pour les télécharger vers le dérailleur arrière';
 lang['L_PRESET_CONFIRM_DELETE'] = 'Supprimer le préréglage "%s" ?';
 lang['L_PRESET_DELETED'] = 'Préréglage "%s" supprimé';
-lang['L_PROMPT_NAME_PRESET'] = "Entrez le nom du préréglage des valeurs de vitesse (lettres et chiffres uniquement) :";
+lang['L_PROMPT_NAME_PRESET'] = 'Entrez le nom du préréglage des valeurs de vitesse (lettres et chiffres uniquement):<br /><br /><input type="text" class="preset" value="" />';
 lang['L_PROMPT_SAVE_PRESET'] = 'Exporter les paramètres, valeurs et préréglages vers le fichier "%s" ?';
 
 lang['L_EXPORT_SUCCESS'] = "Paramètres, valeurs et préréglages sauvegardés";
