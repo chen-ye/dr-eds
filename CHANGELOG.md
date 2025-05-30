@@ -1,3 +1,10 @@
+## 4.0.0
+ (2025-05-30)
+
+### feature (1 change)
+
+- [replace native alert/confirm/prompt with custom ones - better webble support for iOS](https://git.jeckyll.net/published/personal/eds-ox/-/commit/56f743841923e1cb5c5354f3fb3a9001093e4dbb)
+
 ## 3.0.5
  (2025-05-30)
 
