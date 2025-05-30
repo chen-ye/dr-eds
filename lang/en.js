@@ -49,7 +49,7 @@ lang['L_SET_BUTTON_COMMANDS'] = "Set button commands";
 lang['L_PRESET_LOADED'] = 'Gear values loaded from preset "%s"<br />Click "Set all" to upload then to RD';
 lang['L_PRESET_CONFIRM_DELETE'] = 'Delete preset "%s"?';
 lang['L_PRESET_DELETED'] = 'Preset "%s" deleted';
-lang['L_PROMPT_NAME_PRESET'] = "Enter gear values preset name (only letters and numbers):";
+lang['L_PROMPT_NAME_PRESET'] = 'Enter gear values preset name (only letters and numbers):<br /><br /><input type="text" class="preset" value="" />';
 lang['L_PROMPT_SAVE_PRESET'] = 'Export settings, values and presets to file "%s"?';
 
 lang['L_EXPORT_SUCCESS'] = "Settings, values and presets saved";
@@ -99,3 +99,6 @@ lang['L_SAVE_AS'] = "Save as";
 
 lang['L_NO_FD_CONNECTED'] = "No connection to FD - connect and disconnect magnetic charger to the FD until you see blue light on the side of FD blinking and then green light blink. If FD values are not shown after 3-5 seconds click";
 lang['L_NO_FD_CONNECTED_HERE'] = "here";
+
+lang['L_BUTTON_CANCEL'] = "Cancel";
+lang['L_BUTTON_OK'] = "OK";

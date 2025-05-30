@@ -986,7 +986,30 @@ function buildPresets()
     });
     $('.' + pr + 'settings .gear_values .presets .del').off('click').on('click', function() {
 	var pname =  $(this).attr('preset');
-	if (confirm(lang['L_PRESET_CONFIRM_DELETE'].replace('%s', pname))) {
+
+       _dialog(lang['L_PRESET_CONFIRM_DELETE'].replace('%s', pname), '', function(e) {
+           e.preventDefault();
+           closePopup();
+       }, function(e) {
+           e.preventDefault();
+           try {
+               var a = JSON.parse(_getItem('gears'));
+               if (a[device_type] != null)
+                   delete a[device_type][pname];
+
+               _setItem('gears', JSON.stringify(a));
+
+               buildPresets();
+
+               qalert(lang['L_PRESET_DELETED'].replace('%s', pname));
+
+               closePopup();
+           } catch(error) {
+               ;;;
+           }
+       });
+
+	/*if (confirm(lang['L_PRESET_CONFIRM_DELETE'].replace('%s', pname))) {
 	    try {
 		var a = JSON.parse(_getItem('gears'));
 		if (a[device_type] != null)
@@ -1000,7 +1023,7 @@ function buildPresets()
 	    } catch(error) {
 		;;;
 	    }
-	}
+	}*/
     });
 }
 
@@ -1238,6 +1261,42 @@ function detectDoubleTap(doubleTapMs)
     }
 }
 
+function _raceMode(f)
+{
+    startBlock(lang['L_RACE_MODE'].replace("%s", (f == 1 ? lang["L_RACE_MODE_ON"] : lang['L_RACE_MODE_OFF'])));
+
+    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setProtectionThreshold, 0x01, f, 0x00, 0x00 ]);
+    a = setCRC16(a);
+    characteristic_TX.writeValueWithoutResponse(a);
+    log("Send: setProtectionThreshold");
+
+    ctimeout = setTimeout(timeoutCheck, 1000);
+}
+
+function _sleepMode(f)
+{
+    startBlock(lang['L_SLEP_MODE'].replace("%s", (f == 0 ? lang["L_SLEEP_MODE_ON"] : lang['L_SLEEP_MODE_OFF'])));
+
+    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_backDialSleep, 0x01, f, 0x00, 0x00 ]);
+    a = setCRC16(a);
+    characteristic_TX.writeValueWithoutResponse(a);
+    log("Send: backDialSleep -> " + f.toString(16).padStart(2, '0'));
+
+    ctimeout = setTimeout(timeoutCheck, 1000);
+}
+
+function _protectMode(f)
+{
+    startBlock(lang['L_RD_PROTECT_MODE'].replace("%s", (f == 0 ? lang['L_RD_PROTECT_OFF'] : lang['L_RD_PROTECT_ON'])));
+
+    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_backSetting2p, 0x08, f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ]);
+    a = setCRC16(a);
+    characteristic_TX.writeValueWithoutResponse(a);
+    log("Send: backSetting2p -> " + f.toString(16).padStart(2, '0'));
+
+    ctimeout = setTimeout(timeoutCheck, 1000);
+}
+
 function error(s)
 {
     $('.error').html(s).fadeIn();
@@ -1269,6 +1328,46 @@ function endBlock()
     $('.qalert').hide();
     $('.dim').hide();
 }
+
+function closePopup(popup)
+{
+    $('#dim').hide();
+    $('.popup').hide();
+    $('body').unbind('mousewheel DOMMouseScroll touchmove');
+}
+
+function showPopup(popup)
+{
+    $('#dim').show();
+    $('#' + popup + '_popup').show();
+
+    $('body').bind('mousewheel DOMMouseScroll touchmove', function(e) {
+       e.preventDefault();
+    });
+}
+
+function _dialog(msg)
+{
+    closePopup();
+
+    $('#dialog_popup .text').html(msg);
+    $('#dialog_popup .fields').hide();;
+
+    if ((arguments[1] != undefined) && (arguments[1] != null) && (arguments[1] != '')) {
+       $('#dialog_popup .fields').html(arguments[1]).show();
+    }
+    if ((arguments[2] != undefined) && (arguments[2] != null)) {
+       $('#dialog_popup .dcancel').off('click').on('click', arguments[2]);
+    }
+    if ((arguments[3] != undefined) && (arguments[3] != null)) {
+       $('#dialog_popup .dok').off('click').on('click', arguments[3]);
+    }
+
+    showPopup('dialog');
+
+    $('#dialog_popup .in input').first().focus();
+}
+
 
 $(document).ready(function() {
     var bt_supported = 0;
@@ -1660,29 +1759,63 @@ $(document).ready(function() {
 
     // on/off force gear switch on value set
     $('.settings .gear_values .vcontent .button.set_move, .ox2settings .gear_values .vcontent .button.set_move, .txsettings .gear_values .vcontent .button.set_move, .gxsettings .gear_values .vcontent .button.set_move').on('click', function() {
+	var p = $(this);
 	if ($(this).hasClass('selected'))
 	    $(this).removeClass('selected');
 	else
-	    if (confirm(lang['L_CONFIRM_SET_MOVE']))
-		$(this).addClass('selected');
+           _dialog(lang['L_CONFIRM_SET_MOVE'], '', function(e) {
+               e.preventDefault();
+               closePopup();
+           }, function(e) {
+               e.preventDefault();
+               $(p).addClass('selected');
+               closePopup();
+           });
+	    /*if (confirm(lang['L_CONFIRM_SET_MOVE']))
+		$(this).addClass('selected');*/
     });
 
     // save as gear values
     $('.gear_values .button.save').on('click', function() {
-	var n = prompt(lang['L_PROMPT_NAME_PRESET']);
-	if ((n != null) && (n != "")) {
-	    var s = _getItem('gears');
-	    if (s == null) s = {}; else s = JSON.parse(s);
-	    if (s[device_type] == null) s[device_type] = {};
 
-	    s[device_type][n] = {};
+	//var n = prompt(lang['L_PROMPT_NAME_PRESET']);
 
-	    var r = [];
-	    var pr = "";
-	    if (device_type == "EDS TX") {
-		pr = "tx";
-		$('.txsettings .gear_values .fvcontent input').each(function() {
-		    var g = $(this).parent().attr('front');
+	_dialog(lang['L_PROMPT_NAME_PRESET'], '', function(e) {
+	    e.preventDefault();
+            closePopup();
+        }, function(e) {
+	    e.preventDefault();
+	    var n = $('#dialog_popup .in .text input.preset').val();
+            closePopup();
+
+	    if ((n != null) && (n != "")) {
+		var s = _getItem('gears');
+		if (s == null) s = {}; else s = JSON.parse(s);
+		if (s[device_type] == null) s[device_type] = {};
+
+		s[device_type][n] = {};
+
+	        var r = [];
+		var pr = "";
+		if (device_type == "EDS TX") {
+		    pr = "tx";
+		    $('.txsettings .gear_values .fvcontent input').each(function() {
+			var g = $(this).parent().attr('front');
+			var v = $(this).val();
+
+			r.push({
+			    'gear': g,
+			    'value': v
+			});
+		    });
+		    s[device_type][n]['front'] = r;
+		}
+		if (device_type == "EDS GeX") pr = "gx";
+		if (device_type == "EDS OX2") pr = "ox2";
+
+		r = [];
+		$('.' + pr + 'settings .gear_values .vcontent input').each(function() {
+		    var g = $(this).parent().attr('gear');
 		    var v = $(this).val();
 
 		    r.push({
@@ -1690,27 +1823,13 @@ $(document).ready(function() {
 			'value': v
 		    });
 		});
-		s[device_type][n]['front'] = r;
+		s[device_type][n]['rear'] = r;
+
+		_setItem('gears', JSON.stringify(s));
+
+		buildPresets();
 	    }
-	    if (device_type == "EDS GeX") pr = "gx";
-	    if (device_type == "EDS OX2") pr = "ox2";
-
-	    r = [];
-	    $('.' + pr + 'settings .gear_values .vcontent input').each(function() {
-		var g = $(this).parent().attr('gear');
-		var v = $(this).val();
-
-		r.push({
-		    'gear': g,
-		    'value': v
-		});
-	    });
-	    s[device_type][n]['rear'] = r;
-
-	    _setItem('gears', JSON.stringify(s));
-
-	    buildPresets();
-	}
+	});
     });
 
     // export
@@ -1726,7 +1845,13 @@ $(document).ready(function() {
 	    d.getSeconds().toString().padStart(2, 0) +
 	    '.json';
 
-	if (confirm(lang['L_PROMPT_SAVE_PRESET'].replace('%s', fname))) {
+	_dialog(lang['L_PROMPT_SAVE_PRESET'].replace('%s', fname), '', function(e) {
+	    e.preventDefault();
+	    closePopup();
+	}, function(e) {
+	    e.preventDefault();
+	    closePopup();
+
 	    var exp = {
 		'debug': $('.button_debug').hasClass('selected'),
 		'page': $('.button_page').hasClass('icon-wrench') ? "live" : "settings",
@@ -1776,7 +1901,59 @@ $(document).ready(function() {
 	    a.click();
 
 	    qalert(lang['L_EXPORT_SUCCESS']);
-	}
+	});
+
+	/*if (confirm(lang['L_PROMPT_SAVE_PRESET'].replace('%s', fname))) {
+	    var exp = {
+		'debug': $('.button_debug').hasClass('selected'),
+		'page': $('.button_page').hasClass('icon-wrench') ? "live" : "settings",
+		'battery': _getItem('battery'),
+		'lock': _getItem('lock'),
+		'current': {
+		    'device': device_type,
+		    'rear': []
+		}
+	    };
+	    var pr = "";
+	    if (device_type == "EDS TX") {
+		pr = "tx";
+		exp.current.front = [];
+	    }
+	    if (device_type == "EDS GeX") pr = "gx";
+	    if (device_type == "EDS OX2") pr = "ox2";
+	    $('.' + pr + 'settings .gear_values .vcontent input').each(function() {
+		var g = $(this).parent().attr('gear');
+		var v = $(this).val();
+
+		exp.current.rear.push({
+		    'gear': g,
+		    'value': v
+		});
+	    });
+	    $('.' + pr + 'settings .gear_values .fvcontent input').each(function() {
+		var g = $(this).parent().attr('front');
+		var v = $(this).val();
+
+		exp.current.front.push({
+		    'gear': g,
+		    'value': v
+		});
+	    });
+
+	    var gears = _getItem('gears');
+	    if (gears != null)
+		exp.gears = JSON.parse(gears);
+
+	    var json = JSON.stringify(exp);
+	    var blob = new Blob([json], {type: "octet/stream"});
+	    var url = window.URL.createObjectURL(blob);
+	    var a = document.createElement("a");
+	    a.href = url;
+	    a.download = fname;
+	    a.click();
+
+	    qalert(lang['L_EXPORT_SUCCESS']);
+	}*/
     });
     // import
     $('.button_import').on('click', function() {
@@ -1969,20 +2146,25 @@ $(document).ready(function() {
 	var f = 2;
 	if (!$(this).hasClass('selected')) f = 1;
 
-	if (
+	if (f == 2) _raceMode(f); else
+	if (f == 1) {
+	    _dialog(lang['L_WARNING_RACE_MODE'], '', function(e) {
+		e.preventDefault();
+		closePopup();
+	    }, function(e) {
+		e.preventDefault();
+		closePopup();
+
+		_raceMode(f);
+	    });
+	}
+
+	/*if (
 	    ((f == 1) && (confirm(lang['L_WARNING_RACE_MODE'])))
 	    ||
 	    (f == 2)
 	) {
-	    startBlock(lang['L_RACE_MODE'].replace("%s", (f == 1 ? lang["L_RACE_MODE_ON"] : lang['L_RACE_MODE_OFF'])));
-
-	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_setProtectionThreshold, 0x01, f, 0x00, 0x00 ]);
-	    a = setCRC16(a);
-	    characteristic_TX.writeValueWithoutResponse(a);
-	    log("Send: setProtectionThreshold");
-
-	    ctimeout = setTimeout(timeoutCheck, 1000);
-	}
+	}*/
     });
 
     // set sleep mode
@@ -1990,20 +2172,25 @@ $(document).ready(function() {
 	var f = 1;
 	if (!$(this).hasClass('selected')) f = 0;
 
-	if (
+	if (f == 0) _sleepMode(f); else 
+	if (f == 1) {
+	    _dialog(lang['L_WARNING_SLEEP_MODE'], '', function(e) {
+		e.preventDefault();
+		closePopup();
+	    }, function(e) {
+		e.preventDefault();
+		closePopup();
+
+		_sleepMode(f);
+	    });
+	}
+
+	/*if (
 	    ((f == 1) && (confirm(lang['L_WARNING_SLEEP_MODE'])))
 	    ||
 	    (f == 0)
 	) {
-	    startBlock(lang['L_SLEP_MODE'].replace("%s", (f == 0 ? lang["L_SLEEP_MODE_ON"] : lang['L_SLEEP_MODE_OFF'])));
-
-	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_backDialSleep, 0x01, f, 0x00, 0x00 ]);
-	    a = setCRC16(a);
-	    characteristic_TX.writeValueWithoutResponse(a);
-	    log("Send: backDialSleep -> " + f.toString(16).padStart(2, '0'));
-
-	    ctimeout = setTimeout(timeoutCheck, 1000);
-	}
+	}*/
     });
 
     // set RD protection
@@ -2011,20 +2198,25 @@ $(document).ready(function() {
 	var f = 1;
 	if ($(this).hasClass('selected')) f = 0;
 
-	if (
+	if (f == 0) _protectMode(f); else 
+	if (f == 1) {
+	    _dialog(lang['L_WARNING_RD_PROTECT'], '', function(e) {
+		e.preventDefault();
+		closePopup();
+	    }, function(e) {
+		e.preventDefault();
+		closePopup();
+
+		_protectMode(f);
+	    });
+	}
+
+	/*if (
 	    ((f == 0) && (confirm(lang['L_WARNING_RD_PROTECT'])))
 	    ||
 	    (f == 1)
 	) {
-	    startBlock(lang['L_RD_PROTECT_MODE'].replace("%s", (f == 0 ? lang['L_RD_PROTECT_OFF'] : lang['L_RD_PROTECT_ON'])));
-
-	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_backSetting2p, 0x08, f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ]);
-	    a = setCRC16(a);
-	    characteristic_TX.writeValueWithoutResponse(a);
-	    log("Send: backSetting2p -> " + f.toString(16).padStart(2, '0'));
-
-	    ctimeout = setTimeout(timeoutCheck, 1000);
-	}
+	}*/
     });
 
     // debug
@@ -2091,7 +2283,12 @@ $(document).ready(function() {
 
     // shutdown
     $('.button_shutdown').on('click', function() {
-	if (confirm(lang['L_CONFIRM_SHUTDOWN'] + ' ' + device_type + '?')) {
+	_dialog(lang['L_CONFIRM_SHUTDOWN'] + ' ' + device_type + '?', '', function(e) {
+	    e.preventDefault();
+	    closePopup();
+	}, function(e) {
+	    e.preventDefault();
+
 	    qalert(lang['L_SHUTDOWN']);
 
 	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_shutdown, 0x00, 0x00, 0x00 ]);
@@ -2103,7 +2300,23 @@ $(document).ready(function() {
 	    $('.bmenus').hide();
 
 	    dev.gatt.disconnect();
-	}
+
+	    closePopup();
+	});
+
+	/*if (confirm(lang['L_CONFIRM_SHUTDOWN'] + ' ' + device_type + '?')) {
+	    qalert(lang['L_SHUTDOWN']);
+
+	    var a = new Uint8Array([ 0xfe, 0x32, key, cmd_shutdown, 0x00, 0x00, 0x00 ]);
+	    a = setCRC16(a);
+	    characteristic_TX.writeValueWithoutResponse(a);
+	    log("Send: shutdown");
+
+	    $('.button_menu').removeClass('selected');
+	    $('.bmenus').hide();
+
+	    dev.gatt.disconnect();
+	}*/
     });
 
     // disconnect
@@ -2211,7 +2424,12 @@ $(document).ready(function() {
 
 	    qalert(lang['L_COPIED_TO_CLIPBOARD']);
 
-	    if (confirm(lang['L_CONFIRM_SEND_LOG'])) {
+	    _dialog(lang['L_CONFIRM_SEND_LOG'], '', function(e) {
+		e.preventDefault();
+		closePopup();
+	    }, function(e) {
+		e.preventDefault();
+
 		$.ajax({
 		    method: "POST",
 		    url: "/upload.php",
@@ -2228,7 +2446,27 @@ $(document).ready(function() {
 			});
 		    }
 		});
-	    }
+
+		closePopup();
+	    });
+	    /*if (confirm(lang['L_CONFIRM_SEND_LOG'])) {
+		$.ajax({
+		    method: "POST",
+		    url: "/upload.php",
+		    data: { step: "allow" }
+		}).done(function(response) {
+		    var r = JSON.parse(response);
+		    if (r.result == "OK") {
+			$.ajax({
+			    method: "POST",
+			    url: "/upload.php",
+			    data: { step: "put", hash: r.hash, log: copyText.value }
+			}).done(function(response) {
+			    qalert(lang['L_LOG_SENDED']);
+			});
+		    }
+		});
+	    }*/
 	}
     });
 

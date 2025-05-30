@@ -44,7 +44,7 @@ lang['L_SET_BUTTON_COMMANDS'] = "Schaltknopfbelegung bestätigen";
 lang['L_PRESET_LOADED'] = 'Gang-Vorlage wiederhergestellt von Vorlage "%s"<br />Klick "Alle bestätigen", um diese zum Schaltwerk zu übertragung';
 lang['L_PRESET_CONFIRM_DELETE'] = 'Gang-Vorlage "%s" löschen?';
 lang['L_PRESET_DELETED'] = 'Gang-Vorlage "%s" gelöscht';
-lang['L_PROMPT_NAME_PRESET'] = "Gib eine Bezeichnung für die Gang-Vorlage der Gangwerte ein (nur Buchstaben und Zahlen):";
+lang['L_PROMPT_NAME_PRESET'] = 'Gib eine Bezeichnung für die Gang-Vorlage der Gangwerte ein (nur Buchstaben und Zahlen):<br /><br /><input type="text" class="preset" value="" />';
 lang['L_PROMPT_SAVE_PRESET'] = 'Exportiere Einstellungen, Gangwerte und Gang-Vorlagen in Datei "%s"?';
 
 lang['L_EXPORT_SUCCESS'] = "Einstellungen, Gangwerte und Gang-Vorlagen gespeichert";
