@@ -1,3 +1,10 @@
+## 4.1.0 (2026-01-07)
+
+### fix (1 change)
+
+- [fix debug lag for GeX and OX2](https://git.jeckyll.net/published/personal/eds-ox/-/commit/004aa4424f4b279ab0a0482b29ccdbdde4ff5746)
+- [disable debug logs by default](https://git.jeckyll.net/published/personal/eds-ox/-/commit/004aa4424f4b279ab0a0482b29ccdbdde4ff5746)
+
 ## 4.0.0
  (2025-05-30)
 
