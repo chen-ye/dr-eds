@@ -6,7 +6,7 @@
 */
 
 var debug = 1;
-var show_debug = 1;
+var show_debug = 0;
 var debug_log = [];
 var show_page = 'settings';
 var device_type = "";
@@ -72,7 +72,7 @@ broadcast.onmessage = (event) => {
 function log(s)
 {
     if (debug) {
-	s = s.replace(/\0/g, "\n");
+	s = s.replace(/\0/g, "\n").trim();
 
 	var d = new Date();
 	var ts = d.getFullYear() +
@@ -84,14 +84,16 @@ function log(s)
 	    '.' +
 	    d.getMilliseconds().toString().padStart(3, '0');
 
+	// GeX and OX2 spam with multiple messages when gear change which app to lag, so update logs only when debug is shown via menu button
 	if (show_debug) {
-	    $('.debug').append(ts + '> ' + s.trim() + '\n');
+	if ((device_type != "EDS OX2") && (device_type != "EDS GeX"))
+	    $('.debug').append(ts + '> ' + s + '\n');
 	    $('.debug').scrollTop($('.debug').prop("scrollHeight"));
 	}
 
-	debug_log.push(ts + '> ' + s.trim());
+	debug_log.push(ts + '> ' + s);
 
-	console.log(s.trim());
+	console.log(s);
     }
 }
 
@@ -1428,7 +1430,7 @@ $(document).ready(function() {
 
     show_debug = _getItem('show_debug');
     // set show_debug by default
-    if (show_debug == null) show_debug = 1;
+    if (show_debug == null) show_debug = 0;
     if (show_debug == 1) {
 	$('.debug').html(debug_log.join("\n")).show().scrollTop($('.debug').prop("scrollHeight"));
 	$('body').addClass('logs');
