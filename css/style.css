@@ -148,6 +148,7 @@ body.logs {
     flex-direction: row;
 }
 .info .content .right,
+.info .gxcontent .right,
 .info .ox2content .right {
     margin-left: auto;
 }
