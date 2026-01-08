@@ -1,3 +1,9 @@
+## 4.1.1 (2026-01-08)
+
+### fix (1 change)
+
+- [fix GeX header - right info was not aligned to the right](https://git.jeckyll.net/published/personal/eds-ox/-/commit/ae2125fc053c0f4caef23c8974fa9f5d6f0397b0)
+
 ## 4.1.0 (2026-01-07)
 
 ### fix (1 change)
