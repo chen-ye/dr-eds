@@ -980,6 +980,8 @@ function buildPresets()
 			$('.txsettings .gear_values .fvcontent .content .front[front="' + a[device_type][$(this).attr('preset')]['front'][t].gear + '"] input').val(a[device_type][$(this).attr('preset')]['front'][t].value);
 		}
 	    }
+	    
+	    updateSparklines();
 
 	    qalert(lang['L_PRESET_LOADED'].replace('%s', $(this).attr('preset')));
 	} catch(error) {
@@ -1033,22 +1035,68 @@ function buildFrontValues()
 {
     $('.txsettings .gear_values .fvcontent .content').html('');
     for (var t = 1; t <= parseInt(info['Q_TOTAL']); t++) {
-        $('.txsettings .gear_values .fvcontent .content').append('<div class="front" front="' + t + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['Q_GEA[' + t + ']']) + '"><div class="button plus front' + t + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
+        $('.txsettings .gear_values .fvcontent .content').append('<div class="front" front="' + t + '"><div class="sparkline"><div class="dot"></div></div><div class="button minus">-</div><input type="text" value="' + parseInt(info['Q_GEA[' + t + ']']) + '"><div class="button plus front' + t + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
     }
+}
+
+function updateSparklines() {
+    var prefixes = ['.settings', '.ox2settings', '.txsettings', '.gxsettings'];
+    prefixes.forEach(function(pr) {
+        var blocks = [pr + ' .gear_values .vcontent .content', pr + ' .gear_values .fvcontent .content'];
+        blocks.forEach(function(blockSel) {
+            var container = $(blockSel);
+            if (container.length === 0) return;
+
+            var inputs = container.find('input');
+            if (inputs.length === 0) return;
+
+            var min = Infinity;
+            var max = -Infinity;
+
+            inputs.each(function() {
+                var v = parseInt($(this).val());
+                if (!isNaN(v)) {
+                    if (v < min) min = v;
+                    if (v > max) max = v;
+                }
+            });
+
+            if (min === Infinity || max === -Infinity) return;
+
+            inputs.each(function() {
+                var v = parseInt($(this).val());
+                if (!isNaN(v)) {
+                    var percent = 0;
+                    if (max > min) {
+                        percent = ((v - min) / (max - min)) * 100;
+                    }
+                    $(this).siblings('.sparkline').find('.dot').css('left', percent + '%');
+                }
+            });
+        });
+    });
 }
 
 function bindActionButtons()
 {
+    updateSparklines();
+
+    $('.settings, .ox2settings, .txsettings, .gxsettings').off('keyup change', '.gear_values .content input').on('keyup change', '.gear_values .content input', function() {
+        updateSparklines();
+    });
+
     // set gear values
     $('.settings .gear_values .vcontent .content .button.minus, .ox2settings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .fvcontent .content .button.minus, .gxsettings .gear_values .vcontent .content .button.minus').off('click').on('click', function() {
 	var v = $(this).next().val();
 	if (v > 0) v--;
 	$(this).next().val(v);
+	updateSparklines();
     });
     $('.settings .gear_values .vcontent .content .button.plus, .ox2settings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .fvcontent .content .button.plus, .gxsettings .gear_values .vcontent .content .button.plus').off('click').on('click', function() {
 	var v = $(this).prev().val();
 	v++;
 	$(this).prev().val(v);
+	updateSparklines();
     });
     $('.settings .gear_values .vcontent .content .button.set, .ox2settings .gear_values .vcontent .content .button.set, .txsettings .gear_values .vcontent .content .button.set, .gxsettings .gear_values .vcontent .content .button.set').off('click').on('click', function() {
 	startBlock(lang['L_UPDATE_VALUE']);
@@ -2474,6 +2522,6 @@ $(document).ready(function() {
 
     // hide qalert in click
     $('.qalert').on('click', function() {
-	$(this).fadeOut();
+        $(this).fadeOut();
     });
-});
+    });

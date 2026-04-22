@@ -402,6 +402,24 @@ body.logs {
 .ox2settings .gear_values .buttons .button {
     margin-bottom: 0.2em;
 }
+.sparkline {
+    width: 60px;
+    height: 2px;
+    background-color: var(--main-text-light-color);
+    position: relative;
+    display: inline-block;
+    margin-right: 0.5em;
+    vertical-align: middle;
+}
+.sparkline .dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--main-text-color);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
 .settings .gear_values .content .button.plus,
 .txsettings .gear_values .content .button.plus,
 .gxsettings .gear_values .content .button.plus,
