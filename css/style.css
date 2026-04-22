@@ -430,6 +430,9 @@ body.logs {
 .ox2settings .gear_values .presets {
     margin-top: 1em;
     margin-bottom: 1em;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
 }
 .settings .gear_values .preset_wrap,
 .txsettings .gear_values .preset_wrap,
