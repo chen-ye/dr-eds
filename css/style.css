@@ -950,3 +950,31 @@ select {
 .prompt_save_options li {
     margin: 0.2em 0;
 }
+
+.segmented-control {
+    display: flex;
+    border: 2px solid var(--main-color);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0 0.5em;
+    align-items: stretch;
+}
+.segmented-control .step-btn {
+    padding: 0.4em 0.8em;
+    cursor: pointer;
+    background-color: var(--main-background-color);
+    color: var(--main-text-color);
+    border-right: 1px solid var(--main-color);
+    font-size: calc(var(--font-size-settings) * 0.9);
+    font-family: var(--main-font);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.segmented-control .step-btn:last-child {
+    border-right: none;
+}
+.segmented-control .step-btn.selected {
+    background-color: var(--selected-background-color);
+    color: var(--selected-text-color);
+}

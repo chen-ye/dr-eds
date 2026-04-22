@@ -1086,15 +1086,23 @@ function bindActionButtons()
     });
 
     // set gear values
+    $(document).off('click', '.step-btn').on('click', '.step-btn', function() {
+        $(this).siblings().removeClass('selected');
+        $(this).addClass('selected');
+    });
+
     $('.settings .gear_values .vcontent .content .button.minus, .ox2settings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .fvcontent .content .button.minus, .gxsettings .gear_values .vcontent .content .button.minus').off('click').on('click', function() {
-	var v = $(this).next().val();
-	if (v > 0) v--;
+	var step = parseInt($(this).closest('.gear_values').find('.step-control .selected').attr('data-step')) || 1;
+	var v = parseInt($(this).next().val());
+	if (v >= step) v -= step;
+	else v = 0;
 	$(this).next().val(v);
 	updateSparklines();
     });
     $('.settings .gear_values .vcontent .content .button.plus, .ox2settings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .fvcontent .content .button.plus, .gxsettings .gear_values .vcontent .content .button.plus').off('click').on('click', function() {
-	var v = $(this).prev().val();
-	v++;
+	var step = parseInt($(this).closest('.gear_values').find('.step-control .selected').attr('data-step')) || 1;
+	var v = parseInt($(this).prev().val());
+	v += step;
 	$(this).prev().val(v);
 	updateSparklines();
     });
