@@ -348,6 +348,14 @@ body.logs {
 .ox2settings .gear_values .gear {
     margin-bottom: 0.2em;
     white-space: nowrap;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 .settings .gear_values .vcontent,
 .txsettings .gear_values .fvcontent,
@@ -403,13 +411,16 @@ body.logs {
     margin: 0 0.5em;
 }
 .sparkline {
-    width: 60px;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    min-width: 20px;
     height: 2px;
     background-color: var(--main-text-light-color);
     position: relative;
-    display: inline-block;
     margin-right: 0.5em;
-    vertical-align: middle;
 }
 .sparkline .dot {
     width: 8px;
@@ -977,4 +988,18 @@ select {
 .segmented-control .step-btn.selected {
     background-color: var(--selected-background-color);
     color: var(--selected-text-color);
+}
+
+@media only screen and (max-width: 600px) {
+    .settings, .ox2settings, .txsettings, .gxsettings {
+        width: 100%;
+    }
+}
+
+.settings .gear_values .vcontent .content,
+.txsettings .gear_values .fvcontent .content,
+.txsettings .gear_values .vcontent .content,
+.gxsettings .gear_values .vcontent .content,
+.ox2settings .gear_values .vcontent .content {
+    width: 100%;
 }
