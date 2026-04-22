@@ -1,0 +1,23 @@
+{
+  "name": "dr-eds",
+  "version": "1.0.0",
+  "description": "This repo now contain open source WEB/PWA app for EDS OX EQ/OX YQ/OX 2.0/TX/GeX which is hosted at https://dreds.jeckyll.net/.",
+  "main": "sw.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chen-ye/dr-eds.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/chen-ye/dr-eds/issues"
+  },
+  "homepage": "https://github.com/chen-ye/dr-eds#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^25.6.0"
+  }
+}
