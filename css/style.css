@@ -361,8 +361,8 @@ body.logs {
     display: flex;
     /*-webkit-flex-wrap: wrap;
     flex-wrap: wrap;*/
-    -webkit-flex-direction: row;
-    flex-direction: row;
+    -webkit-flex-direction: column;
+    flex-direction: column;
     justify-content: center;
 }
 .txsettings .gear_values .fvcontent {
@@ -390,17 +390,17 @@ body.logs {
     display: flex;
     /*-webkit-flex-wrap: wrap;
     flex-wrap: wrap;*/
-    -webkit-flex-direction: column;
-    flex-direction: column;
+    -webkit-flex-direction: row;
+    flex-direction: row;
     /*align-items: flex-start;*/
-    justify-content: space-between;
-    margin-left: 1em;
+    justify-content: center;
+    margin-top: 1em;
 }
 .settings .gear_values .buttons .button,
 .txsettings .gear_values .buttons .button,
 .gxsettings .gear_values .buttons .button,
 .ox2settings .gear_values .buttons .button {
-    margin-bottom: 0.2em;
+    margin: 0 0.5em;
 }
 .sparkline {
     width: 60px;

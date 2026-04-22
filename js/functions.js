@@ -824,14 +824,14 @@ function parsePacket(hex, check_confirm = 0)
 		$('.settings .gear_values .vcontent .content').html('');
 		for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
 		    var r = parseInt(info['TOTAL_CNT']) - t;
-		    $('.settings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['GEARS[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
+		    $('.settings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="sparkline"><div class="dot"></div></div><div class="button minus">-</div><input type="text" inputmode="numeric" pattern="[0-9]*" value="' + parseInt(info['GEARS[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
 		}
 	    } else
 	    if (device_type == "EDS OX2") {
 		$('.ox2settings .gear_values .vcontent .content').html('');
 		for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
 		    var r = parseInt(info['TOTAL_CNT']) - t;
-		    $('.ox2settings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
+		    $('.ox2settings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="sparkline"><div class="dot"></div></div><div class="button minus">-</div><input type="text" inputmode="numeric" pattern="[0-9]*" value="' + parseInt(info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
 		}
 	    } else
 	    if (device_type == "EDS TX") {
@@ -840,14 +840,14 @@ function parsePacket(hex, check_confirm = 0)
 		$('.txsettings .gear_values .vcontent .content').html('');
 		for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
 		    var r = parseInt(info['TOTAL_CNT']) - t;
-		    $('.txsettings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
+		    $('.txsettings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="sparkline"><div class="dot"></div></div><div class="button minus">-</div><input type="text" inputmode="numeric" pattern="[0-9]*" value="' + parseInt(info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
 		}
 	    } else
 	    if (device_type == "EDS GeX") {
 		$('.gxsettings .gear_values .vcontent .content').html('');
 		for (var t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
 		    var r = parseInt(info['TOTAL_CNT']) - t;
-		    $('.gxsettings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" value="' + parseInt(info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
+		    $('.gxsettings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="sparkline"><div class="dot"></div></div><div class="button minus">-</div><input type="text" inputmode="numeric" pattern="[0-9]*" value="' + parseInt(info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
 		}
 	    }
 
@@ -1035,7 +1035,7 @@ function buildFrontValues()
 {
     $('.txsettings .gear_values .fvcontent .content').html('');
     for (var t = 1; t <= parseInt(info['Q_TOTAL']); t++) {
-        $('.txsettings .gear_values .fvcontent .content').append('<div class="front" front="' + t + '"><div class="sparkline"><div class="dot"></div></div><div class="button minus">-</div><input type="text" value="' + parseInt(info['Q_GEA[' + t + ']']) + '"><div class="button plus front' + t + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
+        $('.txsettings .gear_values .fvcontent .content').append('<div class="front" front="' + t + '"><div class="sparkline"><div class="dot"></div></div><div class="button minus">-</div><input type="text" inputmode="numeric" pattern="[0-9]*" value="' + parseInt(info['Q_GEA[' + t + ']']) + '"><div class="button plus front' + t + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
     }
 }
 
