@@ -1,5 +1,7 @@
 window.mockGattServer = {
+  connect: async () => window.mockGattServer,
   getPrimaryService: async () => window.mockGattService,
+  getPrimaryServices: async () => [window.mockGattService],
   connected: true,
   disconnect: () => {
     console.log('Mock disconnect called');
@@ -10,6 +12,7 @@ window.mockGattServer = {
 window.location.reload = () => { console.log('Mock reload called'); };
 
 window.mockGattService = {
+  getCharacteristics: async () => [window.mockTxCharacteristic, window.mockRxCharacteristic],
   getCharacteristic: async (uuid) => {
     // TX characteristic: 6e400002-...
     if (uuid.startsWith('6e400002')) return window.mockTxCharacteristic;
@@ -45,6 +48,7 @@ window.mockRxCharacteristic = {
 };
 
 navigator.bluetooth = {
+  getAvailability: async () => true,
   requestDevice: async () => window.mockBluetoothDevice
 };
 

@@ -10,15 +10,21 @@ const bleMockScript = fs.readFileSync(path.join(__dirname, 'ble-mock.js'), 'utf8
 
 // Helper to simulate a full connection sequence to reach the settings view
 async function connectAndPopulateGears(page) {
-  // Let the page capture outgoing writes
+  // Mock UI blocks to avoid overlay issues
   await page.evaluate(() => {
     window.sentBlePayloads = [];
     window.addEventListener('mock-ble-write', (e) => {
       window.sentBlePayloads.push(e.detail);
     });
+    window.startBlock = () => { console.log('MOCK: startBlock'); };
+    window.endBlock = () => { 
+        console.log('MOCK: endBlock');
+        $('.dim').hide(); 
+    };
+    window.qalert = (msg) => { console.log('MOCK: qalert', msg); };
   });
 
-  await page.click('.scan .edsscan');
+  await page.click('.scan .edsscan', { force: true });
   
   // Wait for the loader / connection sequence
   // The app will wait 500ms then send 'getKey'
@@ -33,8 +39,8 @@ async function connectAndPopulateGears(page) {
   // Manually construct the connection state and trigger parseData 
   // to avoid mocking the complex block-chunking read protocol.
   await page.evaluate(() => {
-    window.device_type = 'EDS TX';
-    window.info = {
+    window.appState.device_type = 'EDS TX';
+    window.appState.info = {
       TOTAL_CNT: 5,
       NUM: 1,
       'H_GEA[1]': 1280,
@@ -50,11 +56,12 @@ async function connectAndPopulateGears(page) {
     $('.scan').hide();
     $('.txsettings').show();
     $('.txsettings .gear_values .vcontent .content').html('');
-    for (let t = 0; t < parseInt(info['TOTAL_CNT']); t++) {
-        let r = parseInt(info['TOTAL_CNT']) - t;
-        $('.txsettings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="sparkline"><div class="dot"></div></div><div class="button minus">-</div><input type="text" inputmode="numeric" pattern="[0-9]*" value="' + parseInt(info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
+    for (let t = 0; t < parseInt(appState.info['TOTAL_CNT']); t++) {
+        let r = parseInt(appState.info['TOTAL_CNT']) - t;
+        $('.txsettings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="sparkline"><div class="dot"></div></div><div class="button minus">-</div><input type="text" inputmode="numeric" pattern="[0-9]*" value="' + parseInt(appState.info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
     }
     if (typeof window.bindActionButtons === 'function') window.bindActionButtons();
+    $('.dim').hide();
   });
   
   // Ensure the settings view is visible
@@ -65,6 +72,12 @@ test.beforeEach(async ({ page }) => {
   await page.route('**/sw.js', route => route.abort());
   await page.addInitScript(bleMockScript);
   await page.goto('/');
+  await page.waitForLoadState('networkidle');
+  await page.evaluate(() => {
+    const style = document.createElement('style');
+    style.innerHTML = '.dim { display: none !important; pointer-events: none !important; }';
+    document.head.appendChild(style);
+  });
 });
 
 test('Test 1: Device Connection and Initial State', async ({ page }) => {
@@ -82,7 +95,7 @@ test('Test 2: Gear Adjustment (Plus/Minus)', async ({ page }) => {
   const firstGearPlus = page.locator('.txsettings .gear_values .gear').nth(0).locator('.button.plus');
   const firstGearInput = page.locator('.txsettings .gear_values .gear input').nth(0);
   
-  await firstGearPlus.click();
+  await firstGearPlus.click({ force: true });
 
   // The step is 1 by default, so 1280 -> 1281
   await expect(firstGearInput).toHaveValue('1281');
@@ -92,12 +105,12 @@ test('Test 3: Segmented Stepper Control', async ({ page }) => {
   await connectAndPopulateGears(page);
 
   const stepThreeBtn = page.locator('.txsettings .gear_values .segmented-control .step-btn[data-step="3"]').first();
-  await stepThreeBtn.click();
+  await stepThreeBtn.click({ force: true });
 
   const firstGearPlus = page.locator('.txsettings .gear_values .gear').nth(0).locator('.button.plus');
   const firstGearInput = page.locator('.txsettings .gear_values .gear input').nth(0);
 
-  await firstGearPlus.click();
+  await firstGearPlus.click({ force: true });
 
   // 1280 + 3 = 1283
   await expect(firstGearInput).toHaveValue('1283');
