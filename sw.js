@@ -57,9 +57,9 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener("fetch", (e) => {
-    // Cache http and https only, skip unsupported chrome-extension:// and file://...
+    // Only intercept requests for the same origin
     if (!(
-	e.request.url.startsWith('http:') || e.request.url.startsWith('https:')
+	e.request.url.startsWith(self.location.origin)
     )) {
 	return;
     }

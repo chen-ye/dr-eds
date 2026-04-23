@@ -493,8 +493,6 @@ function handleCharacteristicValueChanged(event)
 	}
 	appState.info['Q_TOTAL'] = r.payload_length / 2;
 
-	buildFrontValues();
-	bindActionButtons();
     } else
     if (r.cmd == cmd_getTransmissionVersionInfo)
     {
@@ -636,6 +634,7 @@ function handleCharacteristicValueChanged(event)
 	    error(lang['L_COMMAND_FAILED']);
 	}
     }
+    bleClient.notifyStateChanged();
 }
 
 function parsePacket(hex, check_confirm = 0)
@@ -825,37 +824,6 @@ function parsePacket(hex, check_confirm = 0)
 
 	    updateBattery();
 
-	    if (appState.device_type == "EDS OX") {
-		$('.settings .gear_values .vcontent .content').html('');
-		for (var t = 0; t < parseInt(appState.info['TOTAL_CNT']); t++) {
-		    var r = parseInt(appState.info['TOTAL_CNT']) - t;
-		    $('.settings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="sparkline"><div class="dot"></div></div><div class="button minus">-</div><input type="text" inputmode="numeric" pattern="[0-9]*" value="' + parseInt(appState.info['GEARS[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
-		}
-	    } else
-	    if (appState.device_type == "EDS OX2") {
-		$('.ox2settings .gear_values .vcontent .content').html('');
-		for (var t = 0; t < parseInt(appState.info['TOTAL_CNT']); t++) {
-		    var r = parseInt(appState.info['TOTAL_CNT']) - t;
-		    $('.ox2settings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="sparkline"><div class="dot"></div></div><div class="button minus">-</div><input type="text" inputmode="numeric" pattern="[0-9]*" value="' + parseInt(appState.info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
-		}
-	    } else
-	    if (appState.device_type == "EDS TX") {
-		buildFrontValues();
-
-		$('.txsettings .gear_values .vcontent .content').html('');
-		for (var t = 0; t < parseInt(appState.info['TOTAL_CNT']); t++) {
-		    var r = parseInt(appState.info['TOTAL_CNT']) - t;
-		    $('.txsettings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="sparkline"><div class="dot"></div></div><div class="button minus">-</div><input type="text" inputmode="numeric" pattern="[0-9]*" value="' + parseInt(appState.info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
-		}
-	    } else
-	    if (appState.device_type == "EDS GeX") {
-		$('.gxsettings .gear_values .vcontent .content').html('');
-		for (var t = 0; t < parseInt(appState.info['TOTAL_CNT']); t++) {
-		    var r = parseInt(appState.info['TOTAL_CNT']) - t;
-		    $('.gxsettings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="sparkline"><div class="dot"></div></div><div class="button minus">-</div><input type="text" inputmode="numeric" pattern="[0-9]*" value="' + parseInt(appState.info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
-		}
-	    }
-
 	    // show micro shift only on lowest gear
 	    var pr = "";
 	    if (appState.device_type == "EDS TX") pr = "tx";
@@ -1036,116 +1004,6 @@ function buildPresets()
     });
 }
 
-function buildFrontValues()
-{
-    $('.txsettings .gear_values .fvcontent .content').html('');
-    for (var t = 1; t <= parseInt(appState.info['Q_TOTAL']); t++) {
-        $('.txsettings .gear_values .fvcontent .content').append('<div class="front" front="' + t + '"><div class="sparkline"><div class="dot"></div></div><div class="button minus">-</div><input type="text" inputmode="numeric" pattern="[0-9]*" value="' + parseInt(appState.info['Q_GEA[' + t + ']']) + '"><div class="button plus front' + t + '">+</div><div class="button set">' + lang['L_SET'] + '</div></div>');
-    }
-}
-
-function updateSparklines() {
-    var prefixes = ['.settings', '.ox2settings', '.txsettings', '.gxsettings'];
-    prefixes.forEach(function(pr) {
-        var local_blocks = [pr + ' .gear_values .vcontent .content', pr + ' .gear_values .fvcontent .content'];
-        local_blocks.forEach(function(blockSel) {
-            var container = $(blockSel);
-            if (container.length === 0) return;
-
-            var inputs = container.find('input');
-            if (inputs.length === 0) return;
-
-            var min = Infinity;
-            var max = -Infinity;
-
-            inputs.each(function() {
-                var v = parseInt($(this).val());
-                if (!isNaN(v)) {
-                    if (v < min) min = v;
-                    if (v > max) max = v;
-                }
-            });
-
-            if (min === Infinity || max === -Infinity) return;
-
-            inputs.each(function() {
-                var v = parseInt($(this).val());
-                if (!isNaN(v)) {
-                    var percent = 0;
-                    if (max > min) {
-                        percent = ((v - min) / (max - min)) * 100;
-                    }
-                    $(this).siblings('.sparkline').find('.dot').css('left', percent + '%');
-                }
-            });
-        });
-    });
-}
-
-function bindActionButtons()
-{
-    updateSparklines();
-
-    $('.settings, .ox2settings, .txsettings, .gxsettings').off('keyup change', '.gear_values .content input').on('keyup change', '.gear_values .content input', function() {
-        updateSparklines();
-    });
-
-    // set gear values
-    $(document).off('click', '.step-btn').on('click', '.step-btn', function() {
-        $(this).siblings().removeClass('selected');
-        $(this).addClass('selected');
-    });
-
-    $('.settings .gear_values .vcontent .content .button.minus, .ox2settings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .vcontent .content .button.minus, .txsettings .gear_values .fvcontent .content .button.minus, .gxsettings .gear_values .vcontent .content .button.minus').off('click').on('click', function() {
-	var step = parseInt($(this).closest('.gear_values').find('.step-control .selected').attr('data-step')) || 1;
-	var v = parseInt($(this).next().val());
-	if (v >= step) v -= step;
-	else v = 0;
-	$(this).next().val(v);
-	updateSparklines();
-    });
-    $('.settings .gear_values .vcontent .content .button.plus, .ox2settings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .vcontent .content .button.plus, .txsettings .gear_values .fvcontent .content .button.plus, .gxsettings .gear_values .vcontent .content .button.plus').off('click').on('click', function() {
-	var step = parseInt($(this).closest('.gear_values').find('.step-control .selected').attr('data-step')) || 1;
-	var v = parseInt($(this).prev().val());
-	v += step;
-	$(this).prev().val(v);
-	updateSparklines();
-    });
-    $('.settings .gear_values .vcontent .content .button.set, .ox2settings .gear_values .vcontent .content .button.set, .txsettings .gear_values .vcontent .content .button.set, .gxsettings .gear_values .vcontent .content .button.set').off('click').on('click', function() {
-	startBlock(lang['L_UPDATE_VALUE']);
-
-	var g = $(this).parent().attr('gear');
-	var v = $(this).prev().prev().val();
-
-	var v2 = (v & 0xFF);
-	var v1 = ((v >> 8) & 0xFF);
-
-	appState.single_set = g;
-
-	var a = new Uint8Array([ 0xfe, 0x32, appState.key, cmd_setGearUpValue, 0x03, g, v1, v2, 0x00, 0x00 ]);
-	a = setCRC16(a);
-	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: setGearUpValue -> " + g.toString(16).padStart(2, '0') + ' = ' + v);
-
-	appState.ctimeout = setTimeout(timeoutCheck, 1000);
-    });
-    $('.txsettings .gear_values .fvcontent .content .button.set').off('click').on('click', function() {
-	startBlock(lang['L_UPDATE_LIMIT']);
-
-	var g = $(this).parent().attr('front');
-	var v = $(this).prev().prev().val();
-
-	var v2 = (v & 0xFF);
-	var v1 = ((v >> 8) & 0xFF);
-
-	var a = new Uint8Array([ 0xfe, 0x32, appState.key, cmd_setFrontGearLimit, 0x03, g, v1, v2, 0x00, 0x00 ]);
-	a = setCRC16(a);
-	characteristic_TX.writeValueWithoutResponse(a);
-	log("Send: setFrontGearLimit -> " + g.toString(16).padStart(2, '0') + ' = ' + v);
-
-	appState.ctimeout = setTimeout(timeoutCheck, 1000);
-    });
-}
 
 function updateBattery()
 {
@@ -1492,6 +1350,14 @@ export class BleClient extends EventTarget {
             dev.gatt.disconnect();
         }
     }
+
+    notifyStateChanged() {
+        this.dispatchEvent(new CustomEvent('state-changed', { detail: appState }));
+    }
+
+    get state() {
+        return appState;
+    }
 }
 
 export const bleClient = new BleClient();
@@ -1502,5 +1368,5 @@ export {
     cmd_rearLifting, cmd_setGearUpValue, cmd_setFrontGearLimit, cmd_setTotalGear, 
     cmd_getCurrentGear, cmd_frontLifting, cmd_shutdown, cmd_backDialSleep,
     log, setup, _setItem, _getItem, qalert, error, startBlock, endBlock, closePopup, _dialog,
-    characteristic_TX, setCRC16, buildPresets, buildFrontValues, bindActionButtons, updateSparklines, detectDoubleTap, timeoutCheck
+    characteristic_TX, setCRC16, buildPresets, detectDoubleTap, timeoutCheck
 };

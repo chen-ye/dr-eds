@@ -18,7 +18,8 @@ test.beforeEach(async ({ page }) => {
     window.sentBlePayloads = [];
   });
   await page.goto('/');
-  await page.addStyleTag({ content: '.dim { display: none !important; }' });
+  await page.waitForLoadState('networkidle');
+  await page.addStyleTag({ content: '.dim { display: none !important; pointer-events: none !important; }' });
 });
 
 test('BLE Interop: payloads match legacy baseline', async ({ page }) => {
@@ -45,7 +46,7 @@ test('BLE Interop: payloads match legacy baseline', async ({ page }) => {
   // Wait for the app to send startRead (0xfa)
   await page.waitForFunction(() => window.sentBlePayloads.some(p => p[3] === 0xfa));
 
-  // 2. Populate UI manually (to avoid full block-read protocol)
+  // 2. Populate UI manually
   await page.evaluate(() => {
     appState.device_type = 'EDS TX';
     appState.info = {
@@ -68,39 +69,35 @@ test('BLE Interop: payloads match legacy baseline', async ({ page }) => {
 
     $('.scan').hide();
     $('.txsettings').show();
-    $('.txsettings .gear_values .vcontent .content').html('');
-    for (let t = 0; t < parseInt(appState.info['TOTAL_CNT']); t++) {
-        let r = parseInt(appState.info['TOTAL_CNT']) - t;
-        $('.txsettings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="button minus">-</div><input type="text" inputmode="numeric" pattern="[0-9]*" value="' + parseInt(appState.info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
-    }
-    if (typeof bindActionButtons === 'function') bindActionButtons();
+    
+    // Notify components
+    bleClient.notifyStateChanged();
   });
 
-  await page.waitForSelector('.txsettings');
+  await expect(page.locator('.txsettings')).toBeVisible();
+  // Wait for components to render
+  await expect(page.locator('.txsettings gear-list[type="rear"] gear-input-row')).toHaveCount(5);
 
   // 3. Perform actions and assert payloads
   // Clear startup writes (getKey, startRead)
   await page.evaluate(() => { window.sentBlePayloads = []; });
 
   // ACTION 1: Shift Up
+  // This is still in legacy ui-legacy.js or app.js handlers
   await page.evaluate(() => {
     console.log('TEST: clicking shift up');
     $('.txsettings .action_buttons .button.up').click();
   });
   await page.waitForFunction(() => window.sentBlePayloads.length > 0);
   
-  // ACTION 2: Set First Gear
-  await page.evaluate(() => {
-    console.log('TEST: clicking set first gear');
-    $('.txsettings .gear_values .vcontent .content .gear:nth-child(1) .button.set').click();
-  });
+  // ACTION 2: Set First Gear (Now in Lit component)
+  console.log('TEST: clicking set first gear');
+  await page.locator('.txsettings gear-list[type="rear"] gear-input-row').nth(0).locator('.button.set').click({ force: true });
   await page.waitForFunction(() => window.sentBlePayloads.length > 1);
 
-  // ACTION 3: Set All Gears
-  await page.evaluate(() => {
-    console.log('TEST: clicking set all gears');
-    $('.txsettings .gear_values .vcontent .button.set_all').click();
-  });
+  // ACTION 3: Set All Gears (Now in Lit component)
+  console.log('TEST: clicking set all gears');
+  await page.locator('.txsettings gear-list[type="rear"]').locator('.button.set_all').click({ force: true });
   await page.waitForFunction(() => window.sentBlePayloads.length > 2);
 
   const currentPayloads = await page.evaluate(() => window.sentBlePayloads);

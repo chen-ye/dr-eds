@@ -4,7 +4,7 @@ import {
     cmd_rearLifting, cmd_setGearUpValue, cmd_setFrontGearLimit, cmd_setTotalGear, 
     cmd_getCurrentGear, cmd_frontLifting, cmd_shutdown, cmd_backDialSleep,
     log, setup, _setItem, _getItem, qalert, error, startBlock, endBlock, closePopup, _dialog,
-    characteristic_TX, setCRC16, buildPresets, buildFrontValues, bindActionButtons, updateSparklines, detectDoubleTap, timeoutCheck
+    characteristic_TX, setCRC16, buildPresets, detectDoubleTap, timeoutCheck
 } from './ble-client.js';
 
 $(document).ready(function() {

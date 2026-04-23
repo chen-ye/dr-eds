@@ -19,7 +19,7 @@ async function connectAndPopulateGears(page) {
     window.startBlock = () => { console.log('MOCK: startBlock'); };
     window.endBlock = () => { 
         console.log('MOCK: endBlock');
-        $('.dim').hide(); 
+        if (window.$) $('.dim').hide(); 
     };
     window.qalert = (msg) => { console.log('MOCK: qalert', msg); };
   });
@@ -35,6 +35,9 @@ async function connectAndPopulateGears(page) {
     // 13 bytes
     window.simulateBleNotification(0x01, 0x33, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   });
+
+  // Wait for appState to be initialized by main.js
+  await page.waitForFunction(() => window.appState !== undefined && window.bleClient !== undefined);
 
   // Manually construct the connection state and trigger parseData 
   // to avoid mocking the complex block-chunking read protocol.
@@ -53,19 +56,20 @@ async function connectAndPopulateGears(page) {
       'Q_GEA[2]': 2000
     };
     
-    $('.scan').hide();
-    $('.txsettings').show();
-    $('.txsettings .gear_values .vcontent .content').html('');
-    for (let t = 0; t < parseInt(appState.info['TOTAL_CNT']); t++) {
-        let r = parseInt(appState.info['TOTAL_CNT']) - t;
-        $('.txsettings .gear_values .vcontent .content').append('<div class="gear" gear="' + (t + 1) + '"><div class="sparkline"><div class="dot"></div></div><div class="button minus">-</div><input type="text" inputmode="numeric" pattern="[0-9]*" value="' + parseInt(appState.info['H_GEA[' + (t + 1) + ']']) + '"><div class="button plus gear' + r + '">+</div><div class="button set">Set</div></div>');
+    if (window.$) {
+        $('.scan').hide();
+        $('.txsettings').show();
+        $('.dim').hide();
     }
-    if (typeof window.bindActionButtons === 'function') window.bindActionButtons();
-    $('.dim').hide();
+    
+    // Notify the components that state has changed
+    window.bleClient.notifyStateChanged();
   });
   
   // Ensure the settings view is visible
   await expect(page.locator('.txsettings')).toBeVisible();
+  // Wait for the components to render
+  await expect(page.locator('.txsettings gear-list[type="rear"] gear-input-row')).toHaveCount(5);
 }
 
 test.beforeEach(async ({ page }) => {
@@ -73,17 +77,13 @@ test.beforeEach(async ({ page }) => {
   await page.addInitScript(bleMockScript);
   await page.goto('/');
   await page.waitForLoadState('networkidle');
-  await page.evaluate(() => {
-    const style = document.createElement('style');
-    style.innerHTML = '.dim { display: none !important; pointer-events: none !important; }';
-    document.head.appendChild(style);
-  });
+  await page.addStyleTag({ content: '.dim { display: none !important; pointer-events: none !important; }' });
 });
 
 test('Test 1: Device Connection and Initial State', async ({ page }) => {
   await connectAndPopulateGears(page);
 
-  const gearInputs = page.locator('.txsettings .gear_values .gear input');
+  const gearInputs = page.locator('.txsettings gear-list[type="rear"] gear-input-row input');
   await expect(gearInputs).toHaveCount(5);
   await expect(gearInputs.nth(0)).toHaveValue('1280');
   await expect(gearInputs.nth(4)).toHaveValue('6400');
@@ -92,8 +92,8 @@ test('Test 1: Device Connection and Initial State', async ({ page }) => {
 test('Test 2: Gear Adjustment (Plus/Minus)', async ({ page }) => {
   await connectAndPopulateGears(page);
 
-  const firstGearPlus = page.locator('.txsettings .gear_values .gear').nth(0).locator('.button.plus');
-  const firstGearInput = page.locator('.txsettings .gear_values .gear input').nth(0);
+  const firstGearPlus = page.locator('.txsettings gear-list[type="rear"] gear-input-row').nth(0).locator('.button.plus');
+  const firstGearInput = page.locator('.txsettings gear-list[type="rear"] gear-input-row input').nth(0);
   
   await firstGearPlus.click({ force: true });
 
@@ -104,11 +104,13 @@ test('Test 2: Gear Adjustment (Plus/Minus)', async ({ page }) => {
 test('Test 3: Segmented Stepper Control', async ({ page }) => {
   await connectAndPopulateGears(page);
 
-  const stepThreeBtn = page.locator('.txsettings .gear_values .segmented-control .step-btn[data-step="3"]').first();
+  const stepThreeBtn = page.locator('.txsettings gear-list[type="rear"] stepper-control .step-btn[data-step="3"]');
+  // Wait for stepper to be visible
+  await expect(stepThreeBtn).toBeVisible();
   await stepThreeBtn.click({ force: true });
 
-  const firstGearPlus = page.locator('.txsettings .gear_values .gear').nth(0).locator('.button.plus');
-  const firstGearInput = page.locator('.txsettings .gear_values .gear input').nth(0);
+  const firstGearPlus = page.locator('.txsettings gear-list[type="rear"] gear-input-row').nth(0).locator('.button.plus');
+  const firstGearInput = page.locator('.txsettings gear-list[type="rear"] gear-input-row input').nth(0);
 
   await firstGearPlus.click({ force: true });
 
@@ -119,8 +121,9 @@ test('Test 3: Segmented Stepper Control', async ({ page }) => {
 test('Test 4: Sparkline Rendering', async ({ page }) => {
   await connectAndPopulateGears(page);
 
-  const firstSparklineDot = page.locator('.txsettings .gear_values .gear .sparkline .dot').nth(0);
-  const lastSparklineDot = page.locator('.txsettings .gear_values .gear .sparkline .dot').nth(4);
+  // We need to look into the shadow DOM of gear-sparkline
+  const firstSparklineDot = page.locator('.txsettings gear-list[type="rear"] gear-input-row gear-sparkline').nth(0).locator('.dot');
+  const lastSparklineDot = page.locator('.txsettings gear-list[type="rear"] gear-input-row gear-sparkline').nth(4).locator('.dot');
 
   // lowest gear should be near 0%, highest near 100%
   await expect(firstSparklineDot).toHaveAttribute('style', /left: 0%/);
